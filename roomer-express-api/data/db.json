@@ -1,0 +1,119 @@
+{
+  "basic": [
+    {
+      "id": 0,
+      "name": "Nicole",
+      "age": 20,
+      "location": "Boston, MA",
+      "occupation": "Student"
+    },
+    {
+      "id": 1,
+      "name": "Sophia",
+      "age": 21,
+      "location": "Ann Arbor, MI",
+      "occupation": "Student"
+    },
+    {
+      "id": 2,
+      "name": "Bob",
+      "age": 22,
+      "location": "Cambridge, MA",
+      "occupation": "Student"
+    },
+    {
+      "id": 3,
+      "name": "Pedro",
+      "age": 23,
+      "location": "Palo Alto, CA",
+      "occupation": "Student"
+    },
+    {
+      "id": 4,
+      "name": "Abby",
+      "age": 20,
+      "location": "Boston, MA",
+      "occupation": "Student"
+    },
+    {
+      "id": 5,
+      "name": "Mo",
+      "age": 21,
+      "location": "Ann Arbor, MI",
+      "occupation": "Student"
+    },
+    {
+      "id": 6,
+      "name": "Stanley",
+      "age": 22,
+      "location": "Cambridge, MA",
+      "occupation": "Student"
+    },
+    {
+      "id": 7,
+      "name": "Peter",
+      "age": 23,
+      "location": "Palo Alto, CA",
+      "occupation": "Student"
+    }
+  ],
+  "extended": [
+    {
+      "id": 0,
+      "profession": "Teacher",
+      "radius": "10 mi",
+      "gender_pref": "Female",
+      "age_pref": "18-22"
+    },
+    {
+      "id": 1,
+      "profession": "UCLA",
+      "radius": "10 mi",
+      "gender_pref": "Male",
+      "age_pref": "18-22"
+    },
+    {
+      "id": 2,
+      "profession": "UMich",
+      "radius": "35 mi",
+      "gender_pref": "Female",
+      "age_pref": "25-35"
+    },
+    {
+      "id": 3,
+      "profession": "Doctor",
+      "radius": "5 mi",
+      "gender_pref": "Male",
+      "age_pref": "35-50"
+    },
+    {
+      "id": 4,
+      "profession": "Plumber",
+      "radius": "15 mi",
+      "gender_pref": "Male",
+      "age_pref": "50-65"
+    },
+    {
+      "id": 5,
+      "profession": "ASU",
+      "radius": "7 mi",
+      "gender_pref": "Female",
+      "age_pref": "25-35"
+    },
+    {
+      "id": 6,
+      "profession": "UT Austin",
+      "radius": "20 mi",
+      "gender_pref": "Female",
+      "age_pref": "25-35"
+    },
+    {
+      "id": 7,
+      "profession": "BU",
+      "radius": "10 mi",
+      "gender_pref": "Male",
+      "age_pref": "18_25"
+    }
+  ],
+  "optional": []
+}

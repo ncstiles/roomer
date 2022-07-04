@@ -1,11 +1,13 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: Montserrat, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: white;
-  background-color: #E8E8E8;
+  color: #f5f5f5;
+  font-size: 15px;
+  background-color: #e8e8e8;
+  min-width: 300px;
 }
 
 * {
@@ -17,5 +19,5 @@ html {
 
 a {
   text-decoration: none;
+  pointer-events: none;
 }
-

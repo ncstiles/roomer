@@ -1,0 +1,61 @@
+.detail-card {
+  width: 500px;
+  height: 625px;
+  margin: auto 10px;
+}
+
+.basic {
+  display: grid;
+  grid-template-rows: 2fr 3fr;
+  align-items: center;
+}
+
+.non-basic {
+  display: grid;
+  grid-template-rows: 1fr;
+  align-items: center;
+}
+
+.detail-pfp {
+  transform: scale(10);
+  margin: auto;
+  margin-top:150px;
+  color: white;
+}
+
+.descriptions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.label {
+  text-align: end;
+  padding-right: 10px;
+}
+.value {
+  text-align: start;
+  padding-left: 15px;
+}
+
+.details {
+  margin-top: 10px;
+  padding-top: 10px;
+  overflow: auto;
+}
+
+@media (max-width: 640px) {
+  .detail-card {
+    margin-top: 180px;
+    width: 325px;
+    height: 400px;
+  }
+  .detail-pfp {
+    transform: scale(5);
+  }
+  .text-info {
+    font-size: 15px;
+  } 
+  .detail-pfp {
+    margin:auto;
+  }
+}

@@ -1,0 +1,14 @@
+.not-found-text {
+  width: 70vw;
+  margin: auto;
+  margin-top: 100px;
+  color: #b7a196;
+  font-size: 30px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .not-found {
+    margin-top: 170px;
+  }
+}
