@@ -3,8 +3,9 @@
   padding: 20px;
   border-radius: 10px;
   text-align: center;
-  border: 2px solid #959292;
+  border: none;
   text-decoration: none;
+  box-shadow: rgba(99, 99, 99, 0.4) 0px 0px 10px 5px;
 }
 
 .text-info {
@@ -16,7 +17,7 @@
 }
 
 .text-info > span {
-  line-height: 120%;
+  line-height: 150%;
   margin-top: 5px;
   color: white;
 }
