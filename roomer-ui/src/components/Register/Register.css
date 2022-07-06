@@ -1,0 +1,29 @@
+.register {
+  background-color: #a2c5d3;
+  color: #686666;
+  padding: 20px;
+  text-align: start;
+  margin: 100px;
+}
+
+.register h2 {
+  margin: 20px 0px;
+}
+
+.register-header {
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 640px) {
+  .register {
+    margin: 170px;
+  }
+  h1, h2 {
+    text-align: center;
+  }
+}
+
+.bio {
+  margin-top: 20px;
+}

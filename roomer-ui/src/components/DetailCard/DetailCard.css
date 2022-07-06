@@ -4,13 +4,13 @@
   margin: auto 10px;
 }
 
-.basic {
+.card-two-rows {
   display: grid;
   grid-template-rows: 2fr 3fr;
   align-items: center;
 }
 
-.non-basic {
+.card-one-row {
   display: grid;
   grid-template-rows: 1fr;
   align-items: center;
@@ -23,7 +23,7 @@
   color: white;
 }
 
-.descriptions {
+.two-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
