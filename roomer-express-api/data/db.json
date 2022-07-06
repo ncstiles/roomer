@@ -1,119 +1,148 @@
 {
   "basic": [
     {
-      "id": 0,
-      "name": "Nicole",
-      "age": 20,
-      "location": "Boston, MA",
+      "username": "nstiles",
+      "firstName": "Nicole",
+      "lastName": "Stiles",
+      "email": "",
+      "age": 80,
+      "gender": "Female",
       "occupation": "Student"
     },
     {
-      "id": 1,
-      "name": "Sophia",
-      "age": 21,
-      "location": "Ann Arbor, MI",
-      "occupation": "Student"
+      "username": "sstiles",
+      "firstName": "Sophia",
+      "lastName": "Stiles",
+      "email": "sstiles@caltech.edu",
+      "age": "17",
+      "gender": "Female",
+      "occupation": "College student"
     },
     {
-      "id": 2,
-      "name": "Bob",
-      "age": 22,
-      "location": "Cambridge, MA",
-      "occupation": "Student"
+      "username": "bross",
+      "firstName": "Bob",
+      "lastName": "Ross",
+      "email": "",
+      "age": "40",
+      "gender": "Male",
+      "occupation": "Postgrad"
     },
     {
-      "id": 3,
-      "name": "Pedro",
-      "age": 23,
-      "location": "Palo Alto, CA",
-      "occupation": "Student"
-    },
-    {
-      "id": 4,
-      "name": "Abby",
-      "age": 20,
-      "location": "Boston, MA",
-      "occupation": "Student"
-    },
-    {
-      "id": 5,
-      "name": "Mo",
-      "age": 21,
-      "location": "Ann Arbor, MI",
-      "occupation": "Student"
-    },
-    {
-      "id": 6,
-      "name": "Stanley",
-      "age": 22,
-      "location": "Cambridge, MA",
-      "occupation": "Student"
-    },
-    {
-      "id": 7,
-      "name": "Peter",
-      "age": 23,
-      "location": "Palo Alto, CA",
-      "occupation": "Student"
+      "username": "rho",
+      "firstName": "Roger",
+      "lastName": "Ho",
+      "email": "rho@happy.com",
+      "age": "22",
+      "gender": "Male",
+      "occupation": "College student"
     }
   ],
-  "extended": [
+  "housing": [
     {
-      "id": 0,
-      "profession": "Teacher",
-      "radius": "10 mi",
-      "gender_pref": "Female",
-      "age_pref": "18-22"
+      "username": "nstiles",
+      "rentRange": "$1,000-$2,000",
+      "addr": "",
+      "city": "San Ramon",
+      "state": "CA",
+      "zip": 94582
     },
     {
-      "id": 1,
-      "profession": "UCLA",
-      "radius": "10 mi",
-      "gender_pref": "Male",
-      "age_pref": "18-22"
+      "username": "sstiles",
+      "rentRange": "$5,000+",
+      "addr": "",
+      "city": "Pasadena",
+      "state": "CA",
+      "zip": ""
     },
     {
-      "id": 2,
-      "profession": "UMich",
-      "radius": "35 mi",
-      "gender_pref": "Female",
-      "age_pref": "25-35"
+      "username": "bross",
+      "rentRange": "$1,000-$2,000",
+      "addr": "Happy Place",
+      "city": "Happyville",
+      "state": "Oregon",
+      "zip": ""
     },
     {
-      "id": 3,
-      "profession": "Doctor",
-      "radius": "5 mi",
-      "gender_pref": "Male",
-      "age_pref": "35-50"
-    },
-    {
-      "id": 4,
-      "profession": "Plumber",
-      "radius": "15 mi",
-      "gender_pref": "Male",
-      "age_pref": "50-65"
-    },
-    {
-      "id": 5,
-      "profession": "ASU",
-      "radius": "7 mi",
-      "gender_pref": "Female",
-      "age_pref": "25-35"
-    },
-    {
-      "id": 6,
-      "profession": "UT Austin",
-      "radius": "20 mi",
-      "gender_pref": "Female",
-      "age_pref": "25-35"
-    },
-    {
-      "id": 7,
-      "profession": "BU",
-      "radius": "10 mi",
-      "gender_pref": "Male",
-      "age_pref": "18_25"
+      "username": "rho",
+      "rentRange": "$3,000 - $5,000",
+      "addr": "",
+      "city": "Redding",
+      "state": "CA",
+      "zip": ""
     }
   ],
-  "optional": []
+  "preferences": [
+    {
+      "username": "nstiles",
+      "profession": "",
+      "agePref": "<18",
+      "genderPref": "Female",
+      "locRad": "<5 mi"
+    },
+    {
+      "username": "sstiles",
+      "profession": "Designer",
+      "agePref": "18-22",
+      "genderPref": "Female",
+      "locRad": "<5 mi"
+    },
+    {
+      "username": "bross",
+      "profession": "Engineer",
+      "agePref": "36-50",
+      "genderPref": "Male",
+      "locRad": "26-40 mi"
+    },
+    {
+      "username": "rho",
+      "profession": "",
+      "agePref": "27-35",
+      "genderPref": "Male",
+      "locRad": "16-25 mi"
+    }
+  ],
+  "extra": [
+    {
+      "username": "nstiles",
+      "insta": "",
+      "fb": "",
+      "bio": "This is Nicole's short bio.  Looking forward to meeting everyone!"
+    },
+    {
+      "username": "sstiles",
+      "insta": "",
+      "fb": "",
+      "bio": "Hi!  I'm Sophia.  I'm looking for a quieter roommate, and preferably someone who likes to watch Studio Ghibli movies.  Looking forward to meeting you!"
+    },
+    {
+      "username": "bross",
+      "insta": "",
+      "fb": "",
+      "bio": "Hi!  I'm Bob.  I'm a really easygoing guy and am flexible in terms of rent and location.  Really looking forward to meeting you!"
+    },
+    {
+      "username": "rho",
+      "insta": "",
+      "fb": "",
+      "bio": "Hey!  I'm Roger, and I'm super excited to meet you soon! Please ping if ur interested in rooming starting in the fall."
+    }
+  ],
+  "auth": [
+    {
+      "username": "nstiles",
+      "password": "nicolepassword"
+    },
+    {
+      "username": "sstiles",
+      "password": "sophia'spassword"
+    },
+    {
+      "username": "bross",
+      "password": "bross'spassword"
+    },
+    {
+      "username": "rho",
+      "password": "rogerpassword"
+    }
+  ]
 }
