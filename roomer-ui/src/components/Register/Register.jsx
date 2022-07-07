@@ -8,7 +8,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 export default function Register({ registerForm, setRegisterForm }) {
   let [validated, setValidated] = useState(false);
   const regFormKeys = Object.keys(registerForm);
-  let [successMsg, setSuccessMsg] = useState('hidden')
+  let [successMsg, setSuccessMsg] = useState("hidden");
 
   // Check all required form fields are correctly filled out
   // If all required fields filled, update the `registerForm` state variable to reflect the new inputs
@@ -18,7 +18,7 @@ export default function Register({ registerForm, setRegisterForm }) {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-      setSuccessMsg('hidden')
+      setSuccessMsg("hidden");
     }
     setValidated(true);
     if (form.checkValidity() === true) {
@@ -31,16 +31,15 @@ export default function Register({ registerForm, setRegisterForm }) {
         setRegisterForm((registerForm = { ...registerForm, [curKey]: curVal }));
       }
       postRegisterForm();
-      setSuccessMsg('success')
+      setSuccessMsg("success");
     }
   };
 
-  // PosPOSTt request to send the updated registration form contents to the database
+  // POST request to send the updated registration form contents to the database
   let postRegisterForm = () => {
-    axios
-      .post(BASE_API_URL + "/register", {
-        registerForm,
-      })
+    axios.post(BASE_API_URL + "/register", {
+      registerForm,
+    });
   };
 
   return (
@@ -50,8 +49,8 @@ export default function Register({ registerForm, setRegisterForm }) {
       <Form
         noValidate
         validated={validated}
-        onSubmit={(event) => handleSubmit(event)}>
-
+        onSubmit={(event) => handleSubmit(event)}
+      >
         <Row>
           <h2>Register</h2>
         </Row>
@@ -327,7 +326,10 @@ export default function Register({ registerForm, setRegisterForm }) {
           Submit
         </Button>
 
-        <p className={successMsg}> Congratulations! You're now registered for an account.</p>
+        <p className={successMsg}>
+          {" "}
+          Congratulations! You're now registered for an account.
+        </p>
       </Form>
     </div>
   );
