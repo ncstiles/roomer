@@ -2,17 +2,17 @@ import * as React from "react";
 import "./UserGrid.css";
 import GridCard from "../GridCard/GridCard";
 
-export default function UserGrid({ users }) {
+export default function UserGrid({ allUsers }) {
   return (
     <div id="user-grid">
-      {users.map((user) => {
+      {allUsers.map((user) => {
         return (
           <GridCard
-            key = {user.id}
-            id = {user.id}
-            name={user.name}
+            key={user.username}
+            username={user.username}
+            firstName={user.firstName}
             age={user.age}
-            location={user.location}
+            gender={user.gender}
             occupation={user.occupation}
           />
         );

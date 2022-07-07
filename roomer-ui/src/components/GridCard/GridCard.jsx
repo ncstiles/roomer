@@ -4,15 +4,16 @@ import "../../css/card.css";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-export default function GridCard({id, name, age, location, occupation}) {
+// display of card in main grid view.  Directs to DetailCard if card is clicked
+export default function GridCard({username, firstName, age, gender, occupation}) {
   const nav = useNavigate();
   return (
-    <div className="card user-card" onClick={() => nav(`/connect/${id}`)}>
+    <div className="card user-card" onClick={() => nav(`/basic/${username}`)}>
       <AccountCircleIcon id="grid-pfp" />
       <div className="text-info">
-        <span className="bold-text">{name}</span>
+        <span className="bold-text">{firstName}</span>
         <span> {age}</span>
-        <span>{location}</span>
+        <span>{gender}</span>
         <span>{occupation}</span>
       </div>
     </div>

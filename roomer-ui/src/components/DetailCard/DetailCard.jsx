@@ -3,10 +3,13 @@ import "./DetailCard.css";
 import "../../css/card.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-export default function DetailCard({ cardId, cardType, labels, allInfo }) {
-  // basic card display has two rows to include the pfp,
-  // while extended and optional display have 1 row of content
-  const basicClass = cardType === "basic" ? "basic" : "non-basic";
+// DetailCard has 4 views: basic, housing, preferences, and extra info.
+// Only the basic view includes a profile picture, so there is a unique className `card-two-rows` to account for its styling.
+// All classes but extra info have two columns of text, so there is a unique className `two-cols` to account for their styling.
+export default function DetailCard({ cardType, labels, allInfo }) {
+  // basic card includes pfp, so we need two "rows" of content on the card.
+  // toggle className appropriately
+  const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
   return (
     <div className={`card detail-card ${basicClass}`}>
       {allInfo && allInfo[0] ? (
@@ -17,11 +20,10 @@ export default function DetailCard({ cardId, cardType, labels, allInfo }) {
           ) : null}
 
           <div className="details">
-            {/* name is included in all displays, put in bold text as well */}
-            <span className="bold-text name">{allInfo[0]}</span>
-            {/* basic/ extended displays have two columns: labels and values. ex: age: 20 */} 
-            {cardType !== "optional" ? (
-              <div className="descriptions">
+            <span className="bold-text">{allInfo[0]}</span>
+            {/* basic, housing, and preference displays have two columns: labels and values. ex: age: 20 */}
+            {cardType !== "extra" ? (
+              <div className="two-cols">
                 <div className="text-info label">
                   {labels.map((label, ix) => (
                     <span key={ix}>{label}: </span>
@@ -34,7 +36,7 @@ export default function DetailCard({ cardId, cardType, labels, allInfo }) {
                 </div>
               </div>
             ) : (
-              // Optional display includes short biography, so no columns of text exist
+              // the "extra" card includes a biography, so no need to style for two columns of text.
               <div className="text-info value">
                 {allInfo.slice(1).map((info, ix) => (
                   <span key={ix}>{info}</span>

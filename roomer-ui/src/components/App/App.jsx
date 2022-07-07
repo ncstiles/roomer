@@ -8,9 +8,33 @@ import Home from "../Home/Home";
 import UserDetail from "../UserDetail/UserDetail";
 import NotFound from "../NotFound/NotFound";
 import Navbar from "../Navbar/NavBar";
+import Register from "../Register/Register";
+import Login from "../Login/Login";
 
 export default function App() {
-  let [users, setUsers] = useState([]);
+  let [allUsers, setAllUsers] = useState([]);
+  let [registerForm, setRegisterForm] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+    age: "",
+    gender: "",
+    rentRange: "",
+    occupation: "",
+    profession: "",
+    addr: "",
+    city: "",
+    state: "",
+    zip: "",
+    agePref: "",
+    genderPref: "",
+    locRad: "",
+    insta: "",
+    fb: "",
+    bio: "",
+  });
 
   /**
    * Get all basic profile information of people in the db.
@@ -18,16 +42,15 @@ export default function App() {
   const populatePeople = () => {
     axios({
       method: "get",
-      url: BASE_API_URL + "/basic",
-    })
-      .then((res) => {
-        setUsers((users = [...res.data.users]));
-      })
+      url: BASE_API_URL + "/allBasic",
+    }).then((res) => {
+      setAllUsers((allUsers = [...res.data.allBasicData]));
+    });
   };
 
   useEffect(() => {
     populatePeople();
-  }, []);
+  }, [registerForm]);
 
   return (
     <div className="app">
@@ -35,11 +58,26 @@ export default function App() {
         <Navbar />
         <main>
           <Routes>
-            <Route path="/" element={<Home users={users} />} />
+            <Route path="/" element={<Home allUsers={allUsers} />} />
+
             <Route
-              path="/connect/:userId"
+              path="/basic/:username"
               element={<UserDetail className="user-detail" />}
             />
+
+            <Route
+              path="/register"
+              element={
+                <Register
+                  className="register"
+                  registerForm={registerForm}
+                  setRegisterForm={setRegisterForm}
+                />
+              }
+            />
+
+            <Route path="/login" element={<Login className="login" />} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
