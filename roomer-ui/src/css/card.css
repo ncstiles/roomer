@@ -1,0 +1,29 @@
+.card {
+  background-color: #80abbd;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #959292;
+  text-decoration: none;
+}
+
+.text-info {
+  border-top: 1px;
+  margin-top: 10px;
+  display: grid;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.text-info > span {
+  line-height: 120%;
+  margin-top: 5px;
+  color: white;
+}
+
+.bold-text {
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 10px;
+  margin-bottom: 10px;
+}

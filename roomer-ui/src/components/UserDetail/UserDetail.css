@@ -1,0 +1,89 @@
+.user-detail {
+  display: flex;
+  flex-direction: row;
+}
+.user-detail #user-card {
+  margin: auto auto;
+  margin-top: 100px;
+  width: 350px;
+  height: 500px;
+}
+
+@media (max-width: 640px) {
+  .user-detail {
+    margin-top: 170px;
+  }
+}
+
+.three-dots {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.num-text {
+  text-align: center;
+  margin-top: 10px;
+  color: #888;
+  font-size: 18px;
+}
+
+.slideshow-container {
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  position: relative;
+  margin-top: 100px;
+}
+
+.within-card {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  top: 50%;
+  width: 50px;
+  color: #888;
+  font-weight: bold;
+  font-size: 30px;
+  transition: 0.6s ease;
+  border: 0px;
+  background-color: #E8E8E8;
+}
+
+.prev {
+  transform: rotate(180deg);
+  justify-self: end;
+  margin: auto;
+  margin-right:0px;
+  border-radius: 10px 0px 0px 10px;
+  border-right: 0px;
+}
+
+.next {
+  justify-self: start;
+  margin: auto;
+  margin-left:0px;
+  border-radius: 0 10px 10px 0;
+  border-left: 0px;
+}
+
+.prev:hover, .next:hover {
+  color: #363636;
+}
+
+/* the three dot pagination indicators */
+.dot {
+  border: 0px;
+  height: 15px;
+  width: 15px;
+  margin: 0 4px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
