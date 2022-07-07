@@ -37,7 +37,7 @@ export default function DetailCard({ cardType, labels, allInfo }) {
               </div>
             ) : (
               // the "extra" card includes a biography, so no need to style for two columns of text.
-              <div className="text-info value">
+              <div className="text-info bio">
                 {allInfo.slice(1).map((info, ix) => (
                   <span key={ix}>{info}</span>
                 ))}

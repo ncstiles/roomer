@@ -5,7 +5,7 @@
       "firstName": "Nicole",
       "lastName": "Stiles",
       "email": "",
-      "age": 80,
+      "age": "80",
       "gender": "Female",
       "occupation": "Student"
     },
@@ -34,6 +34,33 @@
       "email": "rho@happy.com",
       "age": "22",
       "gender": "Male",
+      "occupation": "College student"
+    },
+    {
+      "username": "rmoeykens",
+      "firstName": "Riley",
+      "lastName": "Moeykens",
+      "email": "",
+      "age": "20",
+      "gender": "Female",
+      "occupation": "College student"
+    },
+    {
+      "username": "jzhu",
+      "firstName": "Jinmei",
+      "lastName": "Zhu",
+      "email": "",
+      "age": "40",
+      "gender": "Female",
+      "occupation": "Postgrad"
+    },
+    {
+      "username": "billyj",
+      "firstName": "Billy",
+      "lastName": "Joe",
+      "email": "billyj@gmail.com",
+      "age": "18",
+      "gender": "Non-binary",
       "occupation": "College student"
     }
   ],
@@ -69,6 +96,30 @@
       "city": "Redding",
       "state": "CA",
       "zip": ""
+    },
+    {
+      "username": "rmoeykens",
+      "rentRange": "$2,000 - $3,000",
+      "addr": "",
+      "city": "Marshfield",
+      "state": "WA",
+      "zip": ""
+    },
+    {
+      "username": "jzhu",
+      "rentRange": "$2,000 - $3,000",
+      "addr": "",
+      "city": "Danville",
+      "state": "CA",
+      "zip": ""
+    },
+    {
+      "username": "billyj",
+      "rentRange": "$2,000 - $3,000",
+      "addr": "",
+      "city": "Reno",
+      "state": "NV",
+      "zip": ""
     }
   ],
   "preferences": [
@@ -99,6 +150,27 @@
       "agePref": "27-35",
       "genderPref": "Male",
       "locRad": "16-25 mi"
+    },
+    {
+      "username": "rmoeykens",
+      "profession": "",
+      "agePref": "18-22",
+      "genderPref": "Female",
+      "locRad": "11-15 mi"
+    },
+    {
+      "username": "jzhu",
+      "profession": "",
+      "agePref": "36-50",
+      "genderPref": "Female",
+      "locRad": "11-15 mi"
+    },
+    {
+      "username": "billyj",
+      "profession": "Landscaper",
+      "agePref": "18-22",
+      "genderPref": "Non-binary",
+      "locRad": "6-10 mi"
     }
   ],
   "extra": [
@@ -125,6 +197,24 @@
       "insta": "",
       "fb": "",
       "bio": "Hey!  I'm Roger, and I'm super excited to meet you soon! Please ping if ur interested in rooming starting in the fall."
+    },
+    {
+      "username": "rmoeykens",
+      "insta": "",
+      "fb": "",
+      "bio": "Hi! I'm Riley.  Looking forward to meeting you!"
+    },
+    {
+      "username": "jzhu",
+      "insta": "",
+      "fb": "",
+      "bio": "Hi! Im Jinmei, looking forward to meeting you."
+    },
+    {
+      "username": "billyj",
+      "insta": "",
+      "fb": "",
+      "bio": "Hey everyone! I'm Billy, and I'm from Nevada. I'm really looking forward to getting to know everyone!!"
     }
   ],
   "auth": [
@@ -143,6 +233,18 @@
     {
       "username": "rho",
       "password": "rogerpassword"
+    },
+    {
+      "username": "rmoeykens",
+      "password": "newpassword"
+    },
+    {
+      "username": "jzhu",
+      "password": "hello"
+    },
+    {
+      "username": "billyj",
+      "password": "billyj"
     }
   ]
 }

@@ -19,13 +19,17 @@
 .detail-pfp {
   transform: scale(10);
   margin: auto;
-  margin-top:150px;
+  margin-top: 150px;
   color: white;
 }
 
 .two-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.bio {
+  text-align: center;
 }
 
 .label {
@@ -54,8 +58,8 @@
   }
   .text-info {
     font-size: 15px;
-  } 
+  }
   .detail-pfp {
-    margin:auto;
+    margin: auto;
   }
 }

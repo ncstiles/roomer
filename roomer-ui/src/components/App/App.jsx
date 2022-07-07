@@ -13,6 +13,7 @@ import Login from "../Login/Login";
 
 export default function App() {
   let [allUsers, setAllUsers] = useState([]);
+  let [isLoading, setIsLoading] = useState(false);
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -40,12 +41,17 @@ export default function App() {
    * Get all basic profile information of people in the db.
    */
   const populatePeople = () => {
+    setIsLoading(true);
     axios({
       method: "get",
       url: BASE_API_URL + "/allBasic",
-    }).then((res) => {
-      setAllUsers((allUsers = [...res.data.allBasicData]));
-    });
+    })
+      .then((res) => {
+        setAllUsers((allUsers = [...res.data.allBasicData]));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -58,13 +64,20 @@ export default function App() {
         <Navbar />
         <main>
           <Routes>
-            <Route path="/" element={<Home allUsers={allUsers} />} />
-
+            <Route
+              path="/"
+              element={
+                <Home
+                  allUsers={allUsers}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                />
+              }
+            />
             <Route
               path="/basic/:username"
               element={<UserDetail className="user-detail" />}
             />
-
             <Route
               path="/register"
               element={
@@ -75,9 +88,7 @@ export default function App() {
                 />
               }
             />
-
             <Route path="/login" element={<Login className="login" />} />
-
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
