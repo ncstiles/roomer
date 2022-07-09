@@ -1,9 +1,17 @@
 const express = require("express");
 const morgan = require("morgan");
 const matchRoute = require("./routes/matches");
+const cookieParser = require("cookie-parser");
+
 const app = express();
+app.use(cookieParser());
 const cors = require("cors");
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(morgan("tiny"));
 app.use(express.json());
 

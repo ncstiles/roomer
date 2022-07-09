@@ -7,9 +7,10 @@ import { BASE_API_URL } from "../../constants";
 import NotFound from "../NotFound/NotFound";
 import DetailCard from "../DetailCard/DetailCard";
 import Loading from "../Loading/Loading";
+import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail() {
+export default function UserDetail({ isLoggedIn }) {
   let { username } = useParams();
   let [basicInfo, setBasicInfo] = useState({});
   let [preferenceInfo, setPreferenceInfo] = useState({});
@@ -33,10 +34,10 @@ export default function UserDetail() {
       method: "get",
       url: `${BASE_API_URL}/basic/${username}`,
     })
-      .then((response) => {
-        setBasicInfo((basicInfo = response.data.basicData));
+      .then((res) => {
+        setBasicInfo((basicInfo = res.data.basicData));
       })
-      .catch((e) => {
+      .catch(() => {
         setSuccess(false);
       });
   };
@@ -50,10 +51,10 @@ export default function UserDetail() {
       method: "get",
       url: `${BASE_API_URL}/housing/${username}`,
     })
-      .then((response) => {
-        setHousingInfo((housingInfo = response.data.housingData));
+      .then((res) => {
+        setHousingInfo((housingInfo = res.data.housingData));
       })
-      .catch((e) => {
+      .catch(() => {
         setSuccess(false);
       });
   };
@@ -67,10 +68,10 @@ export default function UserDetail() {
       method: "get",
       url: `${BASE_API_URL}/preferences/${username}`,
     })
-      .then((response) => {
-        setPreferenceInfo((preferenceInfo = response.data.preferenceData));
+      .then((res) => {
+        setPreferenceInfo((preferenceInfo = res.data.preferenceData));
       })
-      .catch((e) => {
+      .catch(() => {
         setSuccess(false);
       });
   };
@@ -84,10 +85,10 @@ export default function UserDetail() {
       method: "get",
       url: `${BASE_API_URL}/extra/${username}`,
     })
-      .then((response) => {
-        setExtraInfo((extraInfo = response.data.extraData));
+      .then((res) => {
+        setExtraInfo((extraInfo = res.data.extraData));
       })
-      .catch((e) => {
+      .catch(() => {
         setSuccess(false);
       });
   };
@@ -187,62 +188,68 @@ export default function UserDetail() {
 
   return (
     <>
-      {isLoading ? (
-        <Loading />
-      ) : (
+      {isLoggedIn ? (
         <>
-          {/* after all information is finished loading render the card */}
-          {success && allInfo ? (
-            <>
-              <div className="slideshow-container">
-                {/* back arrow */}
-                <ArrowForwardIosRoundedIcon
-                  fontSize="large"
-                  className="prev"
-                  onClick={() => setSlideIx((prevIx) => prevIx - 1)}
-                />
-                {/* card area: card, numerical page indicator, and dot indicator */}
-                <div className="within-card">
-                  {/* card */}
-                  <DetailCard
-                    cardType={cardType}
-                    labels={labels}
-                    allInfo={allInfo}
-                  />
-                  {/* numerical indicator */}
-                  <span className="num-text">{slideIx + 1}/4</span>
-                  {/* dot indicator */}
-                  <div className="three-dots">
-                    <button
-                      className={activeDot === 1 ? "active dot" : "dot"}
-                      onClick={() => setSlideIx(0)}
-                    ></button>
-                    <button
-                      className={activeDot === 2 ? "active dot" : "dot"}
-                      onClick={() => setSlideIx(1)}
-                    ></button>
-                    <button
-                      className={activeDot === 3 ? "active dot" : "dot"}
-                      onClick={() => setSlideIx(2)}
-                    ></button>
-                    <button
-                      className={activeDot === 4 ? "active dot" : "dot"}
-                      onClick={() => setSlideIx(23)}
-                    ></button>
-                  </div>
-                </div>
-                {/* next arrow */}
-                <ArrowForwardIosRoundedIcon
-                  fontSize="large"
-                  className="next"
-                  onClick={() => setSlideIx((prevIx) => prevIx + 1)}
-                />
-              </div>
-            </>
+          {isLoading ? (
+            <Loading />
           ) : (
-            <NotFound />
+            <>
+              {/* after all information is finished loading render the card */}
+              {success && allInfo ? (
+                <>
+                  <div className="slideshow-container">
+                    {/* back arrow */}
+                    <ArrowForwardIosRoundedIcon
+                      fontSize="large"
+                      className="prev"
+                      onClick={() => setSlideIx((prevIx) => prevIx - 1)}
+                    />
+                    {/* card area: card, numerical page indicator, and dot indicator */}
+                    <div className="within-card">
+                      {/* card */}
+                      <DetailCard
+                        cardType={cardType}
+                        labels={labels}
+                        allInfo={allInfo}
+                      />
+                      {/* numerical indicator */}
+                      <span className="num-text">{slideIx + 1}/4</span>
+                      {/* dot indicator */}
+                      <div className="three-dots">
+                        <button
+                          className={activeDot === 1 ? "active dot" : "dot"}
+                          onClick={() => setSlideIx(0)}
+                        ></button>
+                        <button
+                          className={activeDot === 2 ? "active dot" : "dot"}
+                          onClick={() => setSlideIx(1)}
+                        ></button>
+                        <button
+                          className={activeDot === 3 ? "active dot" : "dot"}
+                          onClick={() => setSlideIx(2)}
+                        ></button>
+                        <button
+                          className={activeDot === 4 ? "active dot" : "dot"}
+                          onClick={() => setSlideIx(23)}
+                        ></button>
+                      </div>
+                    </div>
+                    {/* next arrow */}
+                    <ArrowForwardIosRoundedIcon
+                      fontSize="large"
+                      className="next"
+                      onClick={() => setSlideIx((prevIx) => prevIx + 1)}
+                    />
+                  </div>
+                </>
+              ) : (
+                <NotFound />
+              )}
+            </>
           )}
         </>
+      ) : (
+        <NotAuthorized />
       )}
     </>
   );

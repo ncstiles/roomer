@@ -28,14 +28,11 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.bio {
-  text-align: center;
-}
-
 .label {
   text-align: end;
   padding-right: 10px;
 }
+
 .value {
   text-align: start;
   padding-left: 15px;
@@ -47,7 +44,7 @@
   overflow: auto;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .detail-card {
     margin-top: 180px;
     width: 325px;
