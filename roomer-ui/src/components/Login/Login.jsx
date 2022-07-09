@@ -3,35 +3,52 @@ import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import axios from "axios";
+import { BASE_API_URL } from "../../constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-export default function Login() {
+export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn }) {
   const nav = useNavigate();
   let [validated, setValidated] = useState(false);
-  let [signInForm, setSignInForm] = useState({ username: "", password: "" });
-  let [successMsg, setSuccessMsg] = useState('hidden');
+  let [showMsg, setShowMsg] = useState(false);
+
   // Checks that all required form inputs are entered
-  // Updates `signInForm` state variable to reflect only the correctly submitted new inputs
+  // Updates `loginForm` state variable to reflect only the correctly submitted new inputs
   const handleSubmit = (event) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-      setSuccessMsg('hidden')
     }
     setValidated(true);
     if (form.checkValidity() === true) {
       event.preventDefault();
       event.stopPropagation();
-      setSignInForm(
-        (signInForm = {
+      setLoginForm(
+        (loginForm = {
           username: event.target.username.value,
           password: event.target.password.value,
         })
       );
-      setSuccessMsg('success')
+      postSigninForm(loginForm);
     }
+  };
+
+  // Submit username+password and if authorized+authenticated properly, allow user to view their recommended matches
+  const postSigninForm = (loginForm) => {
+    axios
+      .post(BASE_API_URL + "/login", loginForm)
+      .then(() => {
+        setIsLoggedIn(true);
+        nav("/matches");
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+      })
+      .finally(() => {
+        setShowMsg(true);
+      });
   };
 
   return (
@@ -39,10 +56,11 @@ export default function Login() {
       <h1 className="login-header">SIGN IN</h1>
 
       <Form
+        className="login-form"
         noValidate
         validated={validated}
-        onSubmit={(event) => handleSubmit(event)}>
-
+        onSubmit={(event) => handleSubmit(event)}
+      >
         {/* username */}
         <Form.Group controlId="username" className="mb-3">
           <Form.Label>Username</Form.Label>
@@ -51,7 +69,7 @@ export default function Login() {
             Please enter your username
           </Form.Control.Feedback>
         </Form.Group>
-        
+
         {/* password */}
         <Form.Group controlId="password" className="mb-3">
           <Form.Label>Password</Form.Label>
@@ -63,13 +81,13 @@ export default function Login() {
 
         {/* remember me, forgot password */}
         <Row>
-          <Col className="mb-3 center-text" xs={12} sm={6}>
+          <Col className="mb-3 center-text" lg={12}>
             <Form.Group controlId="rememberMe">
               <Form.Check type="checkbox" label="Remember me" />
             </Form.Group>
           </Col>
 
-          <Col className="mb-3 center-text" xs={12} sm={6}>
+          <Col className="mb-3 center-text" lg={12}>
             <Form.Group controlId="Forgot password?">
               <a href="#!">Forgot password?</a>
             </Form.Group>
@@ -81,7 +99,19 @@ export default function Login() {
           Sign in
         </Button>
 
-        <p className={successMsg}>Login successful!</p>
+        <Row>
+          {showMsg ? (
+            <>
+              {isLoggedIn ? (
+                <p className="login-success">Login successful!</p>
+              ) : (
+                <p className="login-failure">Incorrect login credentials</p>
+              )}
+            </>
+          ) : (
+            <></>
+          )}
+        </Row>
 
         {/* not a member register */}
         <div className="redirect-register">

@@ -1,9 +1,23 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import "./NavBar.css";
+import { useNavigate } from "react-router-dom";
+import { BASE_API_URL } from "../../constants";
+import axios from "axios";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-export default function NavBar() {
+
+export default function NavBar({ setIsLoggedIn }) {
   const nav = useNavigate();
+
+  const logout = () => {
+    axios({
+      method: "get",
+      url: BASE_API_URL + "/logout",
+    })
+      .then(() => {
+        setIsLoggedIn(false);
+      })
+  };
+
   return (
     <>
       <nav className="navbar">
@@ -11,7 +25,9 @@ export default function NavBar() {
           ROOMER
         </span>
         <div className="navbar-links">
-          <span className="link">MATCHES</span>
+          <span className="link" onClick={() => nav("/matches")}>
+            MATCHES
+          </span>
           <span className="link">RECENTS</span>
           <span className="link">GROUPS</span>
         </div>
@@ -23,6 +39,9 @@ export default function NavBar() {
           </span>
           <span className="link" onClick={() => nav("/register")}>
             REGISTER
+          </span>
+          <span className="link" onClick={logout}>
+            LOGOUT
           </span>
           <AccountCircleIcon className="link navbar-pfp" fontSize="large" />
         </div>

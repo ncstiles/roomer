@@ -1,7 +1,7 @@
+const { mongo_pw } = require("../constants");
 const { BadRequestError } = require("../utils/errors");
 const { MongoClient } = require("mongodb");
-const mongoPW = "nstiles";
-const uri = `mongodb+srv://nstiles:${mongoPW}@cluster0.rlw7w8u.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://nstiles:${mongo_pw}@cluster0.rlw7w8u.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 
 class Roomer {
@@ -17,7 +17,7 @@ class Roomer {
         .toArray();
       return allBasicData;
     } catch (e) {
-        return new BadRequestError(`Getting single user's basic data request didn't go through: ${e}`);
+      return new BadRequestError(`Getting single user's basic data request didn't go through: ${e}`);
     }
   }
 
@@ -85,34 +85,67 @@ class Roomer {
     }
   }
 
-    //given a submitted registration form, take the submission inputs and append to their corresponding databases
-    static async registerNewUser(form) {
-        try {
-            await client.connect();
-            const {username,firstName, lastName, email, age, gender, occupation, ...leftover} = form;
-            const basicInfo = {username,firstName, lastName, email, age, gender, occupation};
+  //given a submitted registration form, take the submission inputs and append to their corresponding databases
+  static async registerNewUser(form) {
+    try {
+      await client.connect();
+      const {
+        username,
+        firstName,
+        lastName,
+        email,
+        age,
+        gender,
+        occupation,
+        ...leftover
+      } = form;
+      const basicInfo = {
+        username,
+        firstName,
+        lastName,
+        email,
+        age,
+        gender,
+        occupation,
+      };
 
-            const {rentRange, addr, city, state, zip, ...leftover1} = leftover;
-            const housingInfo = Object.assign({}, {username: form.username}, {rentRange, addr, city, state, zip});
+      const { rentRange, addr, city, state, zip, ...leftover1 } = leftover;
+      const housingInfo = Object.assign({}, { username: form.username }, { rentRange, addr, city, state, zip });
 
-            const {profession, agePref, genderPref, locRad, ...leftover2} = leftover1;
-            const prefInfo = Object.assign({}, {username: form.username}, {profession, agePref, genderPref, locRad});
+      const { profession, agePref, genderPref, locRad, ...leftover2 } = leftover1;
+      const prefInfo = Object.assign({}, { username: form.username }, { profession, agePref, genderPref, locRad });
 
-            const {insta, fb, bio, ...leftover3} = leftover2;
-            const extraInfo = Object.assign({}, {username: form.username}, {insta, fb, bio});
+      const { insta, fb, bio, ...leftover3 } = leftover2;
+      const extraInfo = Object.assign({}, { username: form.username }, { insta, fb, bio });
 
-            const {password, ...leftover4} = leftover3;
-            const authInfo = Object.assign({}, {username: form.username}, {password});
+      const { password, ...leftover4 } = leftover3;
+      const authInfo = Object.assign({}, { username: form.username }, { password });
 
-            await client.db("roomer").collection("basic").insertOne(basicInfo);
-            await client.db("roomer").collection("housing").insertOne(housingInfo);
-            await client.db("roomer").collection("preferences").insertOne(prefInfo);
-            await client.db("roomer").collection("extra").insertOne(extraInfo);
-            await client.db("roomer").collection("auth").insertOne(authInfo);
-        } catch (e) {
-            return new BadRequestError(`Posting ${form.username}'s registration request didn't go through.`);
-        }
+      await client.db("roomer").collection("basic").insertOne(basicInfo);
+      await client.db("roomer").collection("housing").insertOne(housingInfo);
+      await client.db("roomer").collection("preferences").insertOne(prefInfo);
+      await client.db("roomer").collection("extra").insertOne(extraInfo);
+      await client.db("roomer").collection("auth").insertOne(authInfo);
+    } catch (e) {
+      return new BadRequestError(`Posting ${form.username}'s registration request didn't go through.`);
     }
+  }
+
+  // determine whether user inputted username and password match what's stored in the db
+  static async getAuthorizationStatus(username, password) {
+    try {
+      await client.connect();
+      const actualPW = await client
+        .db("roomer")
+        .collection("auth")
+        .find({ username })
+        .project({ _id: 0, username: 0 })
+        .toArray();
+      return actualPW[0].password === password;
+    } catch (e) {
+      return new BadRequestError(`Getting single user's password request didn't go through: ${e}`);
+    }
+  }
 }
 
 module.exports = Roomer;

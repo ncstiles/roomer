@@ -15,9 +15,9 @@
   font-style: italic;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .register {
-    margin: 170px;
+    margin: 200px;
   }
   h1, h2 {
     text-align: center;

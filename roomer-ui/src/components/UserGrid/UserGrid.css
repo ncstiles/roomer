@@ -4,11 +4,21 @@
   gap: 40px;
   place-items: center;
   margin: 40px;
-  margin-top: 100px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   #user-grid {
     margin-top: 180px;
   }
+}
+
+.matches {
+  margin-top: 100px;
+}
+
+.matches-header {
+  text-align: center;
+  color: #80abbd;
+  font-style: bold;
+  letter-spacing: 2px;
 }

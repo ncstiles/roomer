@@ -25,8 +25,3 @@ a {
 .hidden {
   visibility: hidden;
 }
-
-.success {
-  color: #198754;
-  font-size: 16px;
-}

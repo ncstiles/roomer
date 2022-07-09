@@ -1,11 +1,13 @@
 import * as React from "react";
 import "./Register.css";
-import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BASE_API_URL } from "../../constants";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import axios from "axios";
 
-export default function Register({ registerForm, setRegisterForm }) {
+export default function Register({ registerForm, setRegisterForm, setIsLoggedIn }) {
+  const nav = useNavigate();
   let [validated, setValidated] = useState(false);
   const regFormKeys = Object.keys(registerForm);
   let [successMsg, setSuccessMsg] = useState("hidden");
@@ -25,21 +27,47 @@ export default function Register({ registerForm, setRegisterForm }) {
       event.preventDefault();
       event.stopPropagation();
 
+      // update the `registerForm` state variable entry by entry with the new user-inputted values
       for (let i = 0; i < regFormKeys.length; i++) {
         const curKey = regFormKeys[i];
         const curVal = event.target[i].value;
         setRegisterForm((registerForm = { ...registerForm, [curKey]: curVal }));
       }
-      postRegisterForm();
+
+      loginAndRegister(registerForm, event);
       setSuccessMsg("success");
     }
   };
 
-  // POST request to send the updated registration form contents to the database
-  let postRegisterForm = () => {
-    axios.post(BASE_API_URL + "/register", {
-      registerForm,
-    });
+  /**
+   * Attempt to register and then log in the user.  Only when registration is successful is logging in in attempted.
+   * If successful with login, redirect so the new user can view their suggested matches.
+   * Otherwise, we redirect the user back to the welcome homepage.
+   *
+   * @param {Object} registerForm a form containing the values the user just submitted for registration
+   * @param {Event} event event instance
+   */
+  const loginAndRegister = (registerForm, event) => {
+    axios
+      .post(BASE_API_URL + "/register", { registerForm })
+      .then(() => {
+        const loginForm = {
+          username: event.target.username.value,
+          password: event.target.password.value,
+        };
+        axios
+          .post(BASE_API_URL + "/login", loginForm)
+          .then(() => {
+            setIsLoggedIn(true);
+            nav("/matches");
+          })
+          .catch(() => {
+            setIsLoggedIn(false);
+          });
+      })
+      .catch(() => {
+        nav("*");
+      });
   };
 
   return (
@@ -191,7 +219,7 @@ export default function Register({ registerForm, setRegisterForm }) {
         </Row>
 
         {/* addr */}
-        <Form.Group className="mb-3" controlId="addr">
+        <Form.Group className="mb-3" controlId="addr" sm={12} md={6}>
           <Form.Label> Rooming Address (optional, only if known)</Form.Label>
           <Form.Control />
         </Form.Group>
