@@ -2,7 +2,13 @@
 
 Implemented:
 
-[CURRENT] Feature 3: Moving to MongoDB
+[Current] Feature 4: Authentication + authorization
+- Implemented login and logout backend functionality. 
+- Now requires successful verification of JWT token in order to login and view other user's info.
+- Created "Welcome" and "NotAuthorized" components to help redirect user to login in order to view pages (both components are reactive). 
+- Updated media query screen sizes to reflect standard breakpoints.
+
+Feature 3: Moving to MongoDB
 - Moved database from db.json to MongoDB
 
 Feature 2: Login + registration forms
@@ -16,4 +22,4 @@ Feature 1: Card views
 
 Quick demo:
 
-[![demo youtube video](https://img.youtube.com/vi/slvs3-Ej5dk/0.jpg)](https://youtu.be/slvs3-Ej5dk)
+[![demo youtube video](https://img.youtube.com/vi/ugqH8ef-2ng/0.jpg)](https://youtu.be/ugqH8ef-2ng)
