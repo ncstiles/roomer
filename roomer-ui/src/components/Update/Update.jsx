@@ -33,12 +33,6 @@ export default function Update({ username, setIsUpdated }) {
     setSuccessMsg("success");
   };
 
-  // display the image file that was just uploaded
-  const loadFile = (event) => {
-    const image = document.getElementById("myAvatar");
-    image.src = URL.createObjectURL(event.target.files[0]);
-  };
-
   /**
    * Update a user `username` with their newly inputted preferences/data
    *

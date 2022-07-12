@@ -6,6 +6,8 @@ import Update from "../Update/Update";
 import Logout from "../Logout/Logout";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import UserDetail from "../UserDetail/UserDetail";
+import UploadPfp from "../UploadPfp/UploadPfp";
+import { useEffect } from "react";
 
 // depending on tab that is toggled, display the correct component
 function Subview({
@@ -18,6 +20,8 @@ function Subview({
   setIsLoggedIn,
   username,
   setIsUpdated,
+  avatarFile,
+  setAvatarFile
 }) {
   switch (viewComponent) {
     case "own":
@@ -45,7 +49,7 @@ function Subview({
         />
       );
     case "pfp":
-      return <h1>Placeholder for uploading profile picture</h1>;
+      return <UploadPfp username={username} setIsUpdated={setIsUpdated} avatarFile={avatarFile} setAvatarFile={setAvatarFile}/>;
     case "logout":
       return <Logout setIsLoggedIn={setIsLoggedIn} />;
     default:
@@ -56,6 +60,16 @@ function Subview({
 export default function Profile({ allUsers, isLoading, registerForm, setRegisterForm, isLoggedIn, setIsLoggedIn, username, setIsUpdated }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
+  const [avatarFile, setAvatarFile] = useState(null);
+  let [pfpDisplay, setPfpDisplay] = useState('pfp-hidden');
+  useEffect(() => {
+    if (avatarFile) {
+      const image = document.getElementById("pfp");
+      image.src = URL.createObjectURL(avatarFile);
+      // only when there's no uploaded profile picture do we want to hide the img container, otherwise normal image styling
+      setPfpDisplay(''); 
+    }
+  }, [avatarFile])
 
   return isLoggedIn ? (
     <div className="profile">
@@ -63,6 +77,7 @@ export default function Profile({ allUsers, isLoading, registerForm, setRegister
         <span className="nav-link text-white heading">
           {username.toUpperCase()}'S PROFILE
         </span>
+        <img className={`pfp ${pfpDisplay}`} id='pfp'/>
         <hr />
         <ul className="sidebar-items nav flex-column mb-auto">
           <li className={`${viewComponent === "own" ? "highlight" : ""}`}>
@@ -83,7 +98,7 @@ export default function Profile({ allUsers, isLoading, registerForm, setRegister
             <span
               className="nav-link text-white"
               onClick={() => setViewComponent("pfp")}>
-              Upload profile picture
+              Change profile picture
             </span>
           </li>
           <li className={`${viewComponent === "matches" ? "highlight" : ""}`}>
@@ -128,6 +143,8 @@ export default function Profile({ allUsers, isLoading, registerForm, setRegister
           setIsLoggedIn={setIsLoggedIn}
           username={username}
           setIsUpdated={setIsUpdated}
+          avatarFile={avatarFile}
+          setAvatarFile={setAvatarFile}
         />
       </div>
     </div>

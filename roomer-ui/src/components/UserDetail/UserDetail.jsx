@@ -12,15 +12,16 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 
 export default function UserDetail({ isLoggedIn, username }) {
   let newUsername = '';
-  //default for `username` state variable is '' (set in App.jsx)
+  // default for `username` state variable is '' (set in App.jsx)
   // `username` is only not empty string when being called by the Profile compnent
   if (username) {
     newUsername = username;
-    console.log('passed username not nothing:', newUsername)
-  } else {
+  } 
+  // the usual way UserDetail is called is thru useNavigate, in this case update
+  // username state variable using the params
+  else {
     let {username} = useParams();
     newUsername = username;
-    console.log('no passed username, using useParams', newUsername);
   }
   let [basicInfo, setBasicInfo] = useState({});
   let [preferenceInfo, setPreferenceInfo] = useState({});
@@ -40,7 +41,6 @@ export default function UserDetail({ isLoggedIn, username }) {
    * Set the `basicInfo` state variable to the contents of the response.
    */
   const getBasicInfo = async () => {
-    console.log('new username:', newUsername)
     return axios({
       method: "get",
       url: `${BASE_API_URL}/basic/${newUsername}`,

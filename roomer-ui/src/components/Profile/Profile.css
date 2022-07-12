@@ -60,3 +60,14 @@ hr {
   border-radius: 10px;
   margin: 3px;
 }
+
+.pfp {
+  border-radius: 50%;
+  width: 250px;
+  height: 250px;
+}
+
+.pfp-hidden {
+  width: 0px;
+  height: 0px;
+}
