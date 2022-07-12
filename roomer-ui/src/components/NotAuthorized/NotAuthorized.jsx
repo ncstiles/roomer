@@ -9,8 +9,8 @@ export default function NotAuthorized() {
   return (
     <div className='unauthorized-page'>
       <h1 className='not-authorized'>Sorry, you are not authorized to view this page.</h1>
-      <Button size='lg' className='redirect' onClick={()=>{nav('/')}}> Go back to home </Button>
-      <Button size='lg' className='redirect' onClick={()=>{nav('/login')}}> Go to Login </Button>
+      <Button size='lg' className='redirect' onClick={()=>{nav('/login')}}> Login </Button>
+      <Button size='lg' className='redirect' onClick={()=>{nav('/')}}> Return to home </Button>
     </div>
   );
 }

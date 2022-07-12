@@ -17,7 +17,9 @@ class Roomer {
         .toArray();
       return allBasicData;
     } catch (e) {
-      return new BadRequestError(`Getting single user's basic data request didn't go through: ${e}`);
+      return new BadRequestError(
+        `Getting single user's basic data request didn't go through: ${e}`
+      );
     }
   }
 
@@ -33,7 +35,9 @@ class Roomer {
         .toArray();
       return basicInfo[0];
     } catch (e) {
-      return new BadRequestError(`Getting single user's basic data request didn't go through: ${e}`);
+      return new BadRequestError(
+        `Getting single user's basic data request didn't go through: ${e}`
+      );
     }
   }
 
@@ -49,7 +53,9 @@ class Roomer {
         .toArray();
       return housingInfo[0];
     } catch (e) {
-      return new BadRequestError(`Getting single user's housing data request didn't go through: ${e}`);
+      return new BadRequestError(
+        `Getting single user's housing data request didn't go through: ${e}`
+      );
     }
   }
 
@@ -65,7 +71,9 @@ class Roomer {
         .toArray();
       return preferenceInfo[0];
     } catch (e) {
-      return new BadRequestError(`Getting single user's preference data request didn't go through: ${e}`);
+      return new BadRequestError(
+        `Getting single user's preference data request didn't go through: ${e}`
+      );
     }
   }
 
@@ -81,7 +89,9 @@ class Roomer {
         .toArray();
       return extraInfo[0];
     } catch (e) {
-      return new BadRequestError(`Getting single user's extra data request didn't go through: ${e}`);
+      return new BadRequestError(
+        `Getting single user's extra data request didn't go through: ${e}`
+      );
     }
   }
 
@@ -110,16 +120,33 @@ class Roomer {
       };
 
       const { rentRange, addr, city, state, zip, ...leftover1 } = leftover;
-      const housingInfo = Object.assign({}, { username: form.username }, { rentRange, addr, city, state, zip });
+      const housingInfo = Object.assign(
+        {},
+        { username: form.username },
+        { rentRange, addr, city, state, zip }
+      );
 
-      const { profession, agePref, genderPref, locRad, ...leftover2 } = leftover1;
-      const prefInfo = Object.assign({}, { username: form.username }, { profession, agePref, genderPref, locRad });
+      const { profession, agePref, genderPref, locRad, ...leftover2 } =
+        leftover1;
+      const prefInfo = Object.assign(
+        {},
+        { username: form.username },
+        { profession, agePref, genderPref, locRad }
+      );
 
       const { insta, fb, bio, ...leftover3 } = leftover2;
-      const extraInfo = Object.assign({}, { username: form.username }, { insta, fb, bio });
+      const extraInfo = Object.assign(
+        {},
+        { username: form.username },
+        { insta, fb, bio }
+      );
 
       const { password, ...leftover4 } = leftover3;
-      const authInfo = Object.assign({}, { username: form.username }, { password });
+      const authInfo = Object.assign(
+        {},
+        { username: form.username },
+        { password }
+      );
 
       await client.db("roomer").collection("basic").insertOne(basicInfo);
       await client.db("roomer").collection("housing").insertOne(housingInfo);
@@ -127,7 +154,9 @@ class Roomer {
       await client.db("roomer").collection("extra").insertOne(extraInfo);
       await client.db("roomer").collection("auth").insertOne(authInfo);
     } catch (e) {
-      return new BadRequestError(`Posting ${form.username}'s registration request didn't go through.`);
+      return new BadRequestError(
+        `Posting ${form.username}'s registration request didn't go through.`
+      );
     }
   }
 
@@ -143,7 +172,28 @@ class Roomer {
         .toArray();
       return actualPW[0].password === password;
     } catch (e) {
-      return new BadRequestError(`Getting single user's password request didn't go through: ${e}`);
+      return new BadRequestError(
+        `Getting single user's password request didn't go through: ${e}`
+      );
+    }
+  }
+
+  // update the specified collection with data/preferences the user wants updated.  
+  static async updateUserInfo(updateForm, username) {
+    try {
+      for (let [category, updateObj] of Object.entries(updateForm)) {
+        const result = await client
+          .db("roomer")
+          .collection(category)
+          .updateOne(
+            { username: username },
+            { $set: updateObj },
+            { upsert: true }
+          );
+      }
+      return `Successfully updated ${username}'s info!`;
+    } catch (e) {
+      return new BadRequestError(`Failed to update ${username}'s info.`);
     }
   }
 }

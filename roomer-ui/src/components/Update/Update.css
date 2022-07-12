@@ -1,0 +1,32 @@
+.update {
+  color: #686666;
+  padding: 20px;
+  text-align: start;
+  margin: 100px;
+}
+
+.update-header {
+  text-align: center;
+}
+
+.update-card {
+  background-color: #c6d3d9;
+  padding: 20px;
+  margin: 30px 0px;
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.4) 0px 0px 2px 2px;
+}
+
+.upload-image {
+  text-align: center;
+}
+
+.success {
+  color: rgb(125, 154, 125);
+}
+
+#myAvatar {
+  border-radius: 50%;
+  width: 400px;
+  height: 400px;
+}

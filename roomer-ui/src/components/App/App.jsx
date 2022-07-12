@@ -11,12 +11,18 @@ import Navbar from "../Navbar/NavBar";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import Welcome from "../Welcome/Welcome";
+import Profile from "../Profile/Profile";
+import Logout from "../Logout/Logout";
+import Update from "../Update/Update";
 
 export default function App() {
   axios.defaults.withCredentials = true;
   let [allUsers, setAllUsers] = useState([]);
   let [isLoading, setIsLoading] = useState(false);
   let [isLoggedIn, setIsLoggedIn] = useState(false);
+  let [username, setUsername] = useState("");
+  let [isUpdated, setIsUpdated] = useState(false);
+
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -52,22 +58,21 @@ export default function App() {
     axios({
       method: "get",
       url: BASE_API_URL + "/allBasic",
-    })
-      .then((res) => {
-        setAllUsers((allUsers = [...res.data.allBasicData]));
-      })
+    }).then((res) => {
+      setAllUsers((allUsers = [...res.data.allBasicData]));
+    });
   };
 
   useEffect(() => {
     setIsLoading(true);
     populatePeople();
     setIsLoading(false);
-  }, [registerForm]);
+  }, [registerForm, loginForm, isUpdated]); //updates on loginForm because upon first access of site user is not authenticated therefore don't have access to allUser informationg
 
   return (
     <div className="app">
       <BrowserRouter>
-        <Navbar setIsLoggedIn={setIsLoggedIn} />
+        <Navbar setIsLoggedIn={setIsLoggedIn} username={username} />
         <main>
           <Routes>
             <Route
@@ -78,6 +83,7 @@ export default function App() {
                   setLoginForm={setLoginForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
+                  setUsername={setUsername}
                 />
               }
             />
@@ -94,7 +100,11 @@ export default function App() {
             <Route
               path="/introduce/:username"
               element={
-                <UserDetail className="user-detail" isLoggedIn={isLoggedIn} />
+                <UserDetail
+                  className="user-detail"
+                  isLoggedIn={isLoggedIn}
+                  username={""}
+                />
               }
             />
             <Route
@@ -109,6 +119,19 @@ export default function App() {
               }
             />
             <Route
+              path="/update"
+              element={
+                <Update
+                  updateForm={registerForm}
+                  setUpdateForm={setRegisterForm}
+                  setIsLoggedIn={setIsLoggedIn}
+                  username={username}
+                  isUpdated={isUpdated}
+                  setIsUpdated={setIsUpdated}
+                />
+              }
+            />
+            <Route
               path="/login"
               element={
                 <Login
@@ -117,6 +140,31 @@ export default function App() {
                   setLoginForm={setLoginForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
+                  setUsername={setUsername}
+                />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <Profile
+                  allUsers={allUsers}
+                  isLoading={isLoading}
+                  registerForm={registerForm}
+                  setRegisterForm={setRegisterForm}
+                  isLoggedIn={isLoggedIn}
+                  setIsLoggedIn={setIsLoggedIn}
+                  username={username}
+                  setIsUpdated={setIsUpdated}
+                />
+              }
+            />
+            <Route
+              path="/logout"
+              element={
+                <Logout
+                  setIsLoggedIn={setIsLoggedIn}
+                  setUsername={setUsername}
                 />
               }
             />
