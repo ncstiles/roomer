@@ -45,18 +45,6 @@ export default function NavBar({ setIsLoggedIn, username }) {
               {username}
             </Button>
           )}
-
-          {/* <AccountCircleIcon className="link navbar-pfp" fontSize="large" onClick={()=> nav('/profile')}/> */}
-
-          {/* <Dropdown variant='secondary' className='dropdown'>
-            <Dropdown.Toggle variant='secondary' className="dropdown-toggle">
-              NICOLE
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#/matches">Logout</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">View Profile</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>   */}
         </div>
       </nav>
     </>

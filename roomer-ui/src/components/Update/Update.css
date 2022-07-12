@@ -17,16 +17,6 @@
   box-shadow: rgba(99, 99, 99, 0.4) 0px 0px 2px 2px;
 }
 
-.upload-image {
-  text-align: center;
-}
-
 .success {
   color: rgb(125, 154, 125);
-}
-
-#myAvatar {
-  border-radius: 50%;
-  width: 400px;
-  height: 400px;
 }
