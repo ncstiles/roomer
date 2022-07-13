@@ -42,70 +42,22 @@ export default function UserDetail({ isLoggedIn, username }) {
    * Execute a GET request to get an individual user's basic info.
    * Set the `basicInfo` state variable to the contents of the response.
    */
-  const getBasicInfo = async () => {
+  const getAllUserInfo = async () => {
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/basic/${newUsername}`,
+      url: `${BASE_API_URL}/allInfo/${newUsername}`,
     })
       .then((res) => {
-        const basicData = res.data.basicData;
-        setContentType(basicData.contentType);
-        setPfpSrc(basicData.pfpSrc);
-        delete basicData.contentType;
-        delete basicData.pfpSrc;
-        setBasicInfo((basicInfo = basicData));
-
-      })
-      .catch((e) => {
-        setSuccess(false);
-      });
-  };
-
-  /**
-   * Execute a GET request to get an individual housing information.
-   * Set the `housingInfo` state variable to the contents of the response.
-   */
-  const getHousingInfo = async () => {
-    return axios({
-      method: "get",
-      url: `${BASE_API_URL}/housing/${newUsername}`,
-    })
-      .then((res) => {
-        setHousingInfo((housingInfo = res.data.housingData));
-      })
-      .catch((e) => {
-        setSuccess(false);
-      });
-  };
-
-  /**
-   * Execute a GET request to get an individual user's preferences.
-   * Set the `preferenceInfo` state variable to the contents of the response.
-   */
-  const getPreferenceInfo = async () => {
-    return axios({
-      method: "get",
-      url: `${BASE_API_URL}/preferences/${newUsername}`,
-    })
-      .then((res) => {
-        setPreferenceInfo((preferenceInfo = res.data.preferenceData));
-      })
-      .catch((e) => {
-        setSuccess(false);
-      });
-  };
-
-  /**
-   * Execute a GET request to get an individual user's extra info.
-   * Set the `extraInfo` state variable to the contents of the response.
-   */
-  const getExtraInfo = async () => {
-    return axios({
-      method: "get",
-      url: `${BASE_API_URL}/extra/${newUsername}`,
-    })
-      .then((res) => {
-        setExtraInfo((extraInfo = res.data.extraData));
+        const allInfo = res.data.allInfo
+        const basicInfo = allInfo.basic;
+        setContentType(basicInfo.contentType);
+        setPfpSrc(basicInfo.pfpSrc);
+        delete basicInfo.contentType;
+        delete basicInfo.pfpSrc;
+        setBasicInfo(basicInfo);
+        setPreferenceInfo(allInfo.preferences);
+        setHousingInfo(allInfo.housing);
+        setExtraInfo(allInfo.extra);
       })
       .catch((e) => {
         setSuccess(false);
@@ -117,12 +69,7 @@ export default function UserDetail({ isLoggedIn, username }) {
    */
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([
-      getBasicInfo(),
-      getHousingInfo(),
-      getPreferenceInfo(),
-      getExtraInfo(),
-    ]).then(() => {
+    getAllUserInfo().then(() => {
       setIsLoading(false);
     });
   }, []);

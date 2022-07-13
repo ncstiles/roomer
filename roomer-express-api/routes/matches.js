@@ -59,50 +59,6 @@ router.get("/allInfo/:username", authorization, async(req, res, next) => {
   }
 })
 
-// get single user's basic info
-router.get("/basic/:username", authorization, async (req, res, next) => {
-  const username = req.params.username;
-  try {
-    res.status(200).send({ basicData: await Roomer.getBasicInfo(username) });
-  } catch (e) {
-    return next(e);
-  }
-});
-
-// get single user's housing info
-router.get("/housing/:username", authorization, async (req, res, next) => {
-  try {
-    const username = req.params.username;
-    res
-      .status(200)
-      .send({ housingData: await Roomer.getHousingInfo(username) });
-  } catch (e) {
-    return next(e);
-  }
-});
-
-// get single user's preference info
-router.get("/preferences/:username", authorization, async (req, res, next) => {
-  try {
-    const username = req.params.username;
-    res
-      .status(200)
-      .send({ preferenceData: await Roomer.getPreferenceInfo(username) });
-  } catch (e) {
-    return next(e);
-  }
-});
-
-// get single user's bio + insta/fb handles
-router.get("/extra/:username", authorization, async (req, res, next) => {
-  try {
-    const username = req.params.username;
-    res.status(200).send({ extraData: await Roomer.getExtraInfo(username) });
-  } catch (e) {
-    return next(e);
-  }
-});
-
 // update database with new user's info
 router.post("/register", async (req, res, next) => {
   try {

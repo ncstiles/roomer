@@ -30,17 +30,18 @@ class Roomer {
       const allInfoArr = await client
         .db('roomer')
         .collection('all')
-        .find()
+        .find({ username })
         .project({_id: 0})
         .toArray();
-      const allInfo = allInfoArr[0]; //allDataArr is just a one-element list
+      const allInfo = allInfoArr[0]; 
       const allData = {
-        'username': allInfo.username,
         'basic': {
           firstName: allInfo.firstName,
           age: allInfo.age,
           gender: allInfo.gender,
-          occupation: allInfo.occupation
+          occupation: allInfo.occupation,
+          pfpSrc: allInfo.pfpSrc,
+          contentType: allInfo.contentType
         },
         'housing': {
           city: allInfo.city,
@@ -66,78 +67,6 @@ class Roomer {
     }
   }
 
-  // single user's basic information (first name, username, age, gender, occupation) as identified by their username
-  static async getBasicInfo(username) {
-    try {
-      await client.connect();
-      const basicInfo = await client
-        .db("roomer")
-        .collection("basic")
-        .find({ username })
-        .project({ _id: 0, lastName: 0, email: 0 })
-        .toArray();
-      return basicInfo[0];
-    } catch (e) {
-      return new BadRequestError(
-        `Getting single user's basic data request didn't go through: ${e}`
-      );
-    }
-  }
-
-  // single user's housing information (rent/mont, address, city, state, zip) as identified by their username
-  static async getHousingInfo(username) {
-    try {
-      await client.connect();
-      const housingInfo = await client
-        .db("roomer")
-        .collection("housing")
-        .find({ username })
-        .project({ _id: 0, username: 0 })
-        .toArray();
-      return housingInfo[0];
-    } catch (e) {
-      return new BadRequestError(
-        `Getting single user's housing data request didn't go through: ${e}`
-      );
-    }
-  }
-
-  // single user's profession + preferences (their own profession, location radius, age/gender preference) as identified by their username
-  static async getPreferenceInfo(username) {
-    try {
-      await client.connect();
-      const preferenceInfo = await client
-        .db("roomer")
-        .collection("preferences")
-        .find({ username })
-        .project({ _id: 0, username: 0 })
-        .toArray();
-      return preferenceInfo[0];
-    } catch (e) {
-      return new BadRequestError(
-        `Getting single user's preference data request didn't go through: ${e}`
-      );
-    }
-  }
-
-  // single user's instagram and fb handle, as well as a short bio, where the user's identified by their username
-  static async getExtraInfo(username) {
-    try {
-      await client.connect();
-      const extraInfo = await client
-        .db("roomer")
-        .collection("extra")
-        .find({ username })
-        .project({ _id: 0, username: 0 })
-        .toArray();
-      return extraInfo[0];
-    } catch (e) {
-      return new BadRequestError(
-        `Getting single user's extra data request didn't go through: ${e}`
-      );
-    }
-  }
-
   // upload submitted registration form to db
   static async registerNewUser(form) {
     try {
@@ -145,7 +74,7 @@ class Roomer {
       const password = form.password;
       delete form["password"];
       await client.db("roomer").collection("all").insertOne(form);
-      await client.db("roomer").collection('newAuth').insertOne({username: form.username, password: password})
+      await client.db("roomer").collection('auth').insertOne({username: form.username, password: password})
     } catch (e) {
       return new BadRequestError(
         `Posting ${form.username}'s registration request didn't go through.`
@@ -159,7 +88,7 @@ class Roomer {
       await client.connect();
       const actualPW = await client
         .db("roomer")
-        .collection("newAuth")
+        .collection("auth")
         .find({ username })
         .project({ _id: 0, username: 0 })
         .toArray();

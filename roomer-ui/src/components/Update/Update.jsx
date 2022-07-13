@@ -2,7 +2,7 @@ import * as React from "react";
 import "./Update.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BASE_API_URL, collectionCategories, keyToCollection } from "../../constants";
+import { BASE_API_URL, updateFormKeys } from "../../constants";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
@@ -11,22 +11,16 @@ export default function Update({ username, setIsUpdated }) {
   let [successMsg, setSuccessMsg] = useState("hidden");
 
   const handleSubmit = (event) => {
+    console.log('within handle submit:')
     const updateForm = {};
-    const formKeys = Object.keys(keyToCollection); //ids of inputs in the form
-
-    // Create 5 empty placeholder objects, one for each collection name
-    for (let collectionCategory of collectionCategories) {
-      updateForm[collectionCategory] = {};
-    }
     event.preventDefault();
 
     //only add to the update form values that the user has changed (non-empty)
-    for (let i = 0; i < formKeys.length; i++) {
-      const curKey = formKeys[i];
+    for (let i = 0; i < updateFormKeys.length; i++) {
+      const curKey = updateFormKeys[i];
       const curVal = event.target[i].value;
       if (curVal !== "" && curVal !== " ") {
-        const collectionCategory = keyToCollection[curKey];
-        updateForm[collectionCategory][curKey] = curVal;
+        updateForm[curKey] = curVal;
       }
     }
     updateInfo(updateForm);
