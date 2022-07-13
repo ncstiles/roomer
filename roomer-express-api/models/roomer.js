@@ -140,64 +140,14 @@ class Roomer {
     }
   }
 
-  // given a submitted registration form, take the submission inputs and append to their corresponding databases
+  // upload submitted registration form to db
   static async registerNewUser(form) {
     try {
-      await client.connect();
-      const {
-        username,
-        firstName,
-        lastName,
-        email,
-        age,
-        gender,
-        occupation,
-        ...leftover
-      } = form;
-      const basicInfo = {
-        username,
-        firstName,
-        lastName,
-        email,
-        age,
-        gender,
-        occupation,
-      };
-
-      const { rentRange, addr, city, state, zip, ...leftover1 } = leftover;
-      const housingInfo = Object.assign(
-        {},
-        { username: form.username },
-        { rentRange, addr, city, state, zip }
-      );
-
-      const { profession, agePref, genderPref, locRad, ...leftover2 } =
-        leftover1;
-      const prefInfo = Object.assign(
-        {},
-        { username: form.username },
-        { profession, agePref, genderPref, locRad }
-      );
-
-      const { insta, fb, bio, ...leftover3 } = leftover2;
-      const extraInfo = Object.assign(
-        {},
-        { username: form.username },
-        { insta, fb, bio }
-      );
-
-      const { password, ...leftover4 } = leftover3;
-      const authInfo = Object.assign(
-        {},
-        { username: form.username },
-        { password }
-      );
-
-      await client.db("roomer").collection("basic").insertOne(basicInfo);
-      await client.db("roomer").collection("housing").insertOne(housingInfo);
-      await client.db("roomer").collection("preferences").insertOne(prefInfo);
-      await client.db("roomer").collection("extra").insertOne(extraInfo);
-      await client.db("roomer").collection("auth").insertOne(authInfo);
+      client.connect();
+      const password = form.password;
+      delete form["password"];
+      await client.db("roomer").collection("all").insertOne(form);
+      await client.db("roomer").collection('newAuth').insertOne({username: form.username, password: password})
     } catch (e) {
       return new BadRequestError(
         `Posting ${form.username}'s registration request didn't go through.`
