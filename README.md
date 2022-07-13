@@ -2,7 +2,13 @@
 
 Implemented:
 
-[Current] Feature 4: Authentication + authorization
+[Current] Feature 5: Profile tab + modify information
+- Created profile tab within navbar
+- Within the profile page, created sidebar for user to navigate to different functionalities - viewing their own profile, modifying their profile, uploading a profile picture, viewing their matches and "liked" list, as well as logging out.
+- Profile picture gets stored to and pulled from MongoDB, and the profile picture is displayed in the profile tab, as well as in grid, detail, and self view. 
+- Users can go into their profile tab and modify their information - changes propgated to their self view, grid view, and detail view. 
+
+Feature 4: Authentication + authorization
 - Implemented login and logout backend functionality. 
 - Now requires successful verification of JWT token in order to login and view other user's info.
 - Created "Welcome" and "NotAuthorized" components to help redirect user to login in order to view pages (both components are reactive). 
@@ -21,5 +27,4 @@ Feature 1: Card views
 - Single card view containing a user-controlled (reactive) slideshow of basic information, preferences, and a short bio.  Numbers and dots indicate which page of the slideshow the user is on.  Scrollbar added in the case of overfill text.
 
 Quick demo:
-
-[![demo youtube video](https://img.youtube.com/vi/ugqH8ef-2ng/0.jpg)](https://youtu.be/ugqH8ef-2ng)
+[![demo youtube video](https://img.youtube.com/vi/SImqPO9U26c/0.jpg)](https://youtu.be/SImqPO9U26c)
