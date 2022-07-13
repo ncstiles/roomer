@@ -175,16 +175,14 @@ class Roomer {
   static async updateUserInfo(updateForm, username) {
     try {
       await client.connect();
-      for (let [category, updateObj] of Object.entries(updateForm)) {
-        await client
-          .db("roomer")
-          .collection(category)
-          .updateOne(
-            { username: username },
-            { $set: updateObj },
-            { upsert: true }
-          );
-      }
+      await client
+        .db("roomer")
+        .collection('all')
+        .updateOne(
+          { username: username },
+          { $set: updateForm },
+          { upsert: true }
+        );
       return `Successfully updated ${username}'s info!`;
     } catch (e) {
       return new BadRequestError(`Failed to update ${username}'s info.`);
