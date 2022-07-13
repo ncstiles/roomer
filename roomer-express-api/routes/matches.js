@@ -28,7 +28,7 @@ const authorization = (req, res, next) => {
 const login = async (username, password, res) => {
   const authorized = await Roomer.getAuthorizationStatus(username, password);
   if (!authorized) {
-    res.sendStatus(403);
+    return res.sendStatus(403);
   }
   const token = jwt.sign(username, private_key);
   res.cookie("token", token, {

@@ -11,11 +11,9 @@ class Roomer {
       await client.connect();
       const allBasicData = await client
         .db("roomer")
-        .collection("basic")
+        .collection("all")
         .find()
-        //TODO: IF ERROR MAKE SURE THAT THE CONTENT TYPE AND PROFILE SOURCE ARE NOT NULL. 
-        .project({ _id: 0, lastName: 0, email: 0 })
-        // .project({ _id: 0, username: 1, firstName: 1, age: 1, gender: 1, occupation: 1, pfpSrc: 1, contentType:1 })
+        .project({ _id: 0, username: 1, firstName: 1, age: 1, gender: 1, occupation: 1, pfpSrc: 1, contentType:1 })
         .toArray();
       return allBasicData;
     } catch (e) {
@@ -161,11 +159,11 @@ class Roomer {
       await client.connect();
       const actualPW = await client
         .db("roomer")
-        .collection("auth")
+        .collection("newAuth")
         .find({ username })
         .project({ _id: 0, username: 0 })
         .toArray();
-      return actualPW[0].password === password;
+      return actualPW.length !== 0 && actualPW[0].password === password;
     } catch (e) {
       return new BadRequestError(
         `Getting single user's password request didn't go through: ${e}`
@@ -200,7 +198,7 @@ class Roomer {
       await client.connect();
       await client
           .db("roomer")
-          .collection('basic')
+          .collection('all')
           .updateOne(
             { username: imageFile.username },
             { $set: imageFile },
@@ -218,7 +216,7 @@ class Roomer {
       await client.connect();
       const pfp = await client
         .db("roomer")
-        .collection("basic")
+        .collection("all")
         .find({ username })
         .project({ _id: 0, contentType: 1, pfpSrc: 1 })
         .toArray();
