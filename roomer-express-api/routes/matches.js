@@ -49,6 +49,16 @@ router.get("/allBasic", authorization, async (req, res, next) => {
   }
 });
 
+// get all of a single user's info
+router.get("/allInfo/:username", authorization, async(req, res, next) => {
+  const username = req.params.username;
+  try {
+    res.status(200).send({ allInfo: await Roomer.getAllInfo(username) });
+  } catch (e) {
+    return next(e);
+  }
+})
+
 // get single user's basic info
 router.get("/basic/:username", authorization, async (req, res, next) => {
   const username = req.params.username;

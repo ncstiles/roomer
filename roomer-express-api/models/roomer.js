@@ -13,13 +13,58 @@ class Roomer {
         .db("roomer")
         .collection("basic")
         .find()
+        //TODO: IF ERROR MAKE SURE THAT THE CONTENT TYPE AND PROFILE SOURCE ARE NOT NULL. 
         .project({ _id: 0, lastName: 0, email: 0 })
+        // .project({ _id: 0, username: 1, firstName: 1, age: 1, gender: 1, occupation: 1, pfpSrc: 1, contentType:1 })
         .toArray();
       return allBasicData;
     } catch (e) {
       return new BadRequestError(
         `Getting single user's basic data request didn't go through: ${e}`
       );
+    }
+  }
+
+  // get information associated a user and break it up into the chunks that are displayed on separate cards in detail view
+  static async getAllInfo(username) {
+    try {
+      await client.connect();
+      const allInfoArr = await client
+        .db('roomer')
+        .collection('all')
+        .find()
+        .project({_id: 0})
+        .toArray();
+      const allInfo = allInfoArr[0]; //allDataArr is just a one-element list
+      const allData = {
+        'username': allInfo.username,
+        'basic': {
+          firstName: allInfo.firstName,
+          age: allInfo.age,
+          gender: allInfo.gender,
+          occupation: allInfo.occupation
+        },
+        'housing': {
+          city: allInfo.city,
+          state: allInfo.state,
+          zip: allInfo.zip,
+          addr: allInfo.addr,
+          rentRange: allInfo.rentRange
+        },
+        'preferences': {
+          locRad: allInfo.locRad,
+          genderPref: allInfo.genderPref,
+          agePref: allInfo.agePref,
+          profession: allInfo.profession
+        },
+        'extra': {
+          bio: allInfo.bio,
+          insta: allInfo.insta
+        }
+      }
+      return allData;
+    } catch (e) {
+      return new BadRequestError(`Getting all of ${username}'s information failed.`)
     }
   }
 
