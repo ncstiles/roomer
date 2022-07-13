@@ -10,3 +10,10 @@
   margin: auto;
   color: white;
 }
+
+.card-pfp {
+  border-radius: 50%;
+  width: 175px;
+  height: 175px;
+  margin: 30px auto;
+}

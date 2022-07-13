@@ -95,7 +95,7 @@ class Roomer {
     }
   }
 
-  //given a submitted registration form, take the submission inputs and append to their corresponding databases
+  // given a submitted registration form, take the submission inputs and append to their corresponding databases
   static async registerNewUser(form) {
     try {
       await client.connect();
@@ -181,8 +181,9 @@ class Roomer {
   // update the specified collection with data/preferences the user wants updated.  
   static async updateUserInfo(updateForm, username) {
     try {
+      await client.connect();
       for (let [category, updateObj] of Object.entries(updateForm)) {
-        const result = await client
+        await client
           .db("roomer")
           .collection(category)
           .updateOne(
@@ -194,6 +195,43 @@ class Roomer {
       return `Successfully updated ${username}'s info!`;
     } catch (e) {
       return new BadRequestError(`Failed to update ${username}'s info.`);
+    }
+  }
+
+  // update db with user's profile picture - either update existing pfp if user has one
+  // or create a new entry for their pfp
+  static async uploadPfp(imageFile) {
+    try {
+      await client.connect();
+      await client
+          .db("roomer")
+          .collection('basic')
+          .updateOne(
+            { username: imageFile.username },
+            { $set: imageFile },
+            { upsert: true }
+          );
+      return 'Success! Profile picture uploaded!'
+    } catch (e) {
+      return new BadRequestError(`Failed to update info.`)
+    }
+  }
+
+  // get user's profile picture.
+  static async getPfp(username) {
+    try {
+      await client.connect();
+      const pfp = await client
+        .db("roomer")
+        .collection("basic")
+        .find({ username })
+        .project({ _id: 0, contentType: 1, pfpSrc: 1 })
+        .toArray();
+      return pfp[0];
+    } catch (e) {
+      return new BadRequestError(
+        `Getting ${username}'s profile picture didn't go through: ${e}`
+      );
     }
   }
 }

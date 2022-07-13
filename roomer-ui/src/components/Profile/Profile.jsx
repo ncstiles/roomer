@@ -1,13 +1,14 @@
 import * as React from "react";
 import "./Profile.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { BASE_API_URL } from "../../constants";
 import UserGrid from "../UserGrid/UserGrid";
 import Update from "../Update/Update";
 import Logout from "../Logout/Logout";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import UserDetail from "../UserDetail/UserDetail";
 import UploadPfp from "../UploadPfp/UploadPfp";
-import { useEffect } from "react";
+import axios from "axios";
 
 // depending on tab that is toggled, display the correct component
 function Subview({
@@ -21,7 +22,7 @@ function Subview({
   username,
   setIsUpdated,
   avatarFile,
-  setAvatarFile
+  setAvatarFile,
 }) {
   switch (viewComponent) {
     case "own":
@@ -49,7 +50,13 @@ function Subview({
         />
       );
     case "pfp":
-      return <UploadPfp username={username} setIsUpdated={setIsUpdated} avatarFile={avatarFile} setAvatarFile={setAvatarFile}/>;
+      return (
+        <UploadPfp
+          username={username}
+          setIsUpdated={setIsUpdated}
+          setAvatarFile={setAvatarFile}
+        />
+      );
     case "logout":
       return <Logout setIsLoggedIn={setIsLoggedIn} />;
     default:
@@ -57,19 +64,39 @@ function Subview({
   }
 }
 
-export default function Profile({ allUsers, isLoading, registerForm, setRegisterForm, isLoggedIn, setIsLoggedIn, username, setIsUpdated }) {
+export default function Profile({
+  allUsers,
+  isLoading,
+  registerForm,
+  setRegisterForm,
+  isLoggedIn,
+  setIsLoggedIn,
+  username,
+  setIsUpdated,
+}) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
   const [avatarFile, setAvatarFile] = useState(null);
-  let [pfpDisplay, setPfpDisplay] = useState('pfp-hidden');
+  let [pfpDisplay, setPfpDisplay] = useState("pfp-hidden");
+
+  //Whenever a user's profile picture changes,
+  //execute GET request to display their updated picture.
   useEffect(() => {
-    if (avatarFile) {
-      const image = document.getElementById("pfp");
-      image.src = URL.createObjectURL(avatarFile);
-      // only when there's no uploaded profile picture do we want to hide the img container, otherwise normal image styling
-      setPfpDisplay(''); 
-    }
-  }, [avatarFile])
+    axios({
+      method: "get",
+      url: `${BASE_API_URL}/getPfp/${username}`,
+    })
+      .then((res) => {
+        const file = res.data.file;
+        const type = file.contentType;
+        const src = file.pfpSrc.toString("base64");
+        const img = document.getElementById("pfp");
+        if (file) {
+          img.src = `data:${type};base64,${src}`;
+          setPfpDisplay("");
+        }
+      })
+  }, [avatarFile]);
 
   return isLoggedIn ? (
     <div className="profile">
@@ -77,48 +104,54 @@ export default function Profile({ allUsers, isLoading, registerForm, setRegister
         <span className="nav-link text-white heading">
           {username.toUpperCase()}'S PROFILE
         </span>
-        <img className={`pfp ${pfpDisplay}`} id='pfp'/>
+        <img className={`pfp ${pfpDisplay}`} id="pfp" />
         <hr />
         <ul className="sidebar-items nav flex-column mb-auto">
           <li className={`${viewComponent === "own" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("own")}>
+              onClick={() => setViewComponent("own")}
+            >
               My profile
             </span>
           </li>
           <li className={`${viewComponent === "modify" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("modify")}>
+              onClick={() => setViewComponent("modify")}
+            >
               Modify information
             </span>
           </li>
           <li className={`${viewComponent === "pfp" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("pfp")}>
+              onClick={() => setViewComponent("pfp")}
+            >
               Change profile picture
             </span>
           </li>
           <li className={`${viewComponent === "matches" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("matches")}>
+              onClick={() => setViewComponent("matches")}
+            >
               Matches
             </span>
           </li>
           <li className={`${viewComponent === "liked" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("liked")}>
+              onClick={() => setViewComponent("liked")}
+            >
               Liked
             </span>
           </li>
           <li className={`${viewComponent === "messages" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("messages")}>
+              onClick={() => setViewComponent("messages")}
+            >
               Messages
             </span>
           </li>
@@ -126,7 +159,8 @@ export default function Profile({ allUsers, isLoading, registerForm, setRegister
           <li className={`${viewComponent === "logout" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("logout")}>
+              onClick={() => setViewComponent("logout")}
+            >
               Log out
             </span>
           </li>

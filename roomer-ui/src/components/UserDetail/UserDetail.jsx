@@ -35,6 +35,8 @@ export default function UserDetail({ isLoggedIn, username }) {
   let [cardType, setCardType] = useState("basic");
   let [labels, setLabels] = useState([]);
   let [allInfo, setAllInfo] = useState([]);
+  let [contentType, setContentType] = useState(null);
+  let [pfpSrc, setPfpSrc] = useState(null);
 
   /**
    * Execute a GET request to get an individual user's basic info.
@@ -46,9 +48,15 @@ export default function UserDetail({ isLoggedIn, username }) {
       url: `${BASE_API_URL}/basic/${newUsername}`,
     })
       .then((res) => {
-        setBasicInfo((basicInfo = res.data.basicData));
+        const basicData = res.data.basicData;
+        setContentType(basicData.contentType);
+        setPfpSrc(basicData.pfpSrc);
+        delete basicData.contentType;
+        delete basicData.pfpSrc;
+        setBasicInfo((basicInfo = basicData));
+
       })
-      .catch(() => {
+      .catch((e) => {
         setSuccess(false);
       });
   };
@@ -65,7 +73,7 @@ export default function UserDetail({ isLoggedIn, username }) {
       .then((res) => {
         setHousingInfo((housingInfo = res.data.housingData));
       })
-      .catch(() => {
+      .catch((e) => {
         setSuccess(false);
       });
   };
@@ -82,7 +90,7 @@ export default function UserDetail({ isLoggedIn, username }) {
       .then((res) => {
         setPreferenceInfo((preferenceInfo = res.data.preferenceData));
       })
-      .catch(() => {
+      .catch((e) => {
         setSuccess(false);
       });
   };
@@ -99,7 +107,7 @@ export default function UserDetail({ isLoggedIn, username }) {
       .then((res) => {
         setExtraInfo((extraInfo = res.data.extraData));
       })
-      .catch(() => {
+      .catch((e) => {
         setSuccess(false);
       });
   };
@@ -119,6 +127,8 @@ export default function UserDetail({ isLoggedIn, username }) {
     });
   }, []);
 
+
+  // for each card, upload the requisite data and labels, and set the correct "dot" indicator
   useEffect(() => {
     // only update `labels` and `allInfo` after we've received all our information
     if (!isLoading) {
@@ -222,6 +232,8 @@ export default function UserDetail({ isLoggedIn, username }) {
                         cardType={cardType}
                         labels={labels}
                         allInfo={allInfo}
+                        contentType = {contentType}
+                        pfpSrc = {pfpSrc}
                       />
                       {/* numerical indicator */}
                       <span className="num-text">{slideIx + 1}/4</span>
