@@ -6,7 +6,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 // DetailCard has 4 views: basic, housing, preferences, and extra info.
 // Only the basic view includes a profile picture, so there is a unique className `card-two-rows` to account for its styling.
 // All classes but extra info have two columns of text, so there is a unique className `two-cols` to account for their styling.
-export default function DetailCard({ cardType, labels, allInfo }) {
+export default function DetailCard({
+  cardType,
+  labels,
+  allInfo,
+  pfpSrc,
+  contentType,
+}) {
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
   const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
@@ -16,7 +22,17 @@ export default function DetailCard({ cardType, labels, allInfo }) {
         <>
           {/* only include pfp on basic display  */}
           {cardType === "basic" ? (
-            <AccountCircleIcon className="detail-pfp" />
+            <>
+              {/* default is just a profile pic icon, but if user has uploaded picture, they can use that */}
+              {pfpSrc ? (
+                <img
+                  className="pfp center"
+                  src={`data:${contentType};base64,${pfpSrc}`}
+                />
+              ) : (
+                <AccountCircleIcon id="detail-pfp" />
+              )}
+            </>
           ) : null}
 
           <div className="details">

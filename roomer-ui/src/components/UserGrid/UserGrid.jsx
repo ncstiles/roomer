@@ -25,6 +25,8 @@ export default function UserGrid({ allUsers, isLoading, isLoggedIn }) {
                       age={user.age}
                       gender={user.gender}
                       occupation={user.occupation}
+                      pfpSrc = {user.pfpSrc? user.pfpSrc.toString('base64') : null}
+                      contentType = {user.contentType? user.contentType: null}
                     />
                   );
                 })}

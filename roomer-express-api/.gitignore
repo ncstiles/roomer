@@ -1,5 +1,5 @@
 node_modules
 mongodb-transfer
-
+uploads
 *-lock.*
 *.lock

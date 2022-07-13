@@ -1,6 +1,11 @@
 const { private_key } = require("../constants");
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
+const dir = "uploads/";
+const upload = multer({ dest: dir });
 const Roomer = require("../models/roomer");
 const jwt = require("jsonwebtoken");
 
@@ -37,7 +42,7 @@ const login = async (username, password, res) => {
 
 // get all users basic info
 router.get("/allBasic", authorization, async (req, res, next) => {
-  try{
+  try {
     res.status(200).send({ allBasicData: await Roomer.getAllBasic() });
   } catch (e) {
     return next(e);
@@ -47,10 +52,10 @@ router.get("/allBasic", authorization, async (req, res, next) => {
 // get single user's basic info
 router.get("/basic/:username", authorization, async (req, res, next) => {
   const username = req.params.username;
-  try{
+  try {
     res.status(200).send({ basicData: await Roomer.getBasicInfo(username) });
   } catch (e) {
-    return next(e)
+    return next(e);
   }
 });
 
@@ -58,7 +63,9 @@ router.get("/basic/:username", authorization, async (req, res, next) => {
 router.get("/housing/:username", authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send({ housingData: await Roomer.getHousingInfo(username) });
+    res
+      .status(200)
+      .send({ housingData: await Roomer.getHousingInfo(username) });
   } catch (e) {
     return next(e);
   }
@@ -72,7 +79,7 @@ router.get("/preferences/:username", authorization, async (req, res, next) => {
       .status(200)
       .send({ preferenceData: await Roomer.getPreferenceInfo(username) });
   } catch (e) {
-    return next(e)
+    return next(e);
   }
 });
 
@@ -96,17 +103,62 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-// // update database with new user's info
-router.post("/update/:username", async (req, res, next) => {
+// update database with new user's info
+router.post("/update/:username", authorization, async (req, res, next) => {
   try {
     const updateForm = req.body.updateForm;
-    const username=req.params.username;
-    res.status(200).send({ update: await Roomer.updateUserInfo(updateForm, username)});
+    const username = req.params.username;
+    res
+      .status(200)
+      .send({ update: await Roomer.updateUserInfo(updateForm, username) });
   } catch (e) {
     return next(e);
   }
 });
 
+// change or add a user's selected profile picture
+//TODO: do authorization
+router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function (req, res, next) {
+    try {
+      const img = fs.readFileSync(req.file.path);
+      const encodeImg = img.toString("base64");
+      const finalImg = {
+        contentType: req.file.mimetype,
+        pfpSrc: Buffer.from(encodeImg, "base64"), // mongoDB allows files < 16MB in BSON format to be in a document
+        username: req.body.username,
+      };
+
+      // multer uses the "uploads" dir to get the filepath
+      // files store
+      fs.readdir(dir, (err, files) => {
+        if (err) {
+          throw err;
+        }
+
+        for (const file of files) {
+          fs.unlink(path.join(dir, file), (err) => {
+            if (err) throw err;
+          });
+        }
+      });
+
+      res.status(201).send({ uploadStatus: await Roomer.uploadPfp(finalImg) });
+    } catch (e) {
+      return next(e);
+    }
+  }
+);
+
+// Given a user, return their profile picture.
+router.get("/getPfp/:username", authorization, async (req, res, next) => {
+  const username = req.params.username;
+  try {
+    const ret = await Roomer.getPfp(username);
+    res.status(200).send({ file: ret });
+  } catch (e) {
+    return next(e);
+  }
+});
 
 router.post("/login", async (req, res, next) => {
   try {
@@ -117,7 +169,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.get("/logout", authorization, async (req, res) => {
-  try{
+  try {
     return res.clearCookie("token").status(200).send("Successfully logged out");
   } catch (e) {
     return next(e);
