@@ -8,6 +8,7 @@ import Logout from "../Logout/Logout";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import UserDetail from "../UserDetail/UserDetail";
 import UploadPfp from "../UploadPfp/UploadPfp";
+import Liked from "../Liked/Liked";
 import axios from "axios";
 
 // depending on tab that is toggled, display the correct component
@@ -21,22 +22,23 @@ function Subview({
   setIsLoggedIn,
   username,
   setIsUpdated,
-  avatarFile,
   setAvatarFile,
+  currentUser
 }) {
   switch (viewComponent) {
     case "own":
-      return <UserDetail isLoggedIn={isLoggedIn} username={username} />;
+      return <UserDetail isLoggedIn={isLoggedIn} username={username} showLikeIcon={false} currentUser={currentUser}/>;
     case "matches":
       return (
         <UserGrid
           allUsers={allUsers}
           isLoading={isLoading}
           isLoggedIn={isLoggedIn}
+          currentUser={currentUser}
         />
       );
     case "liked":
-      return <h1>Placeholder for list of previously liked contacts</h1>;
+      return <Liked currentUser={currentUser}/>;
     case "messages":
       return <h1>Placeholder for message contacts</h1>;
     case "modify":
@@ -73,6 +75,7 @@ export default function Profile({
   setIsLoggedIn,
   username,
   setIsUpdated,
+  currentUser
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -177,8 +180,8 @@ export default function Profile({
           setIsLoggedIn={setIsLoggedIn}
           username={username}
           setIsUpdated={setIsUpdated}
-          avatarFile={avatarFile}
           setAvatarFile={setAvatarFile}
+          currentUser={currentUser}
         />
       </div>
     </div>
