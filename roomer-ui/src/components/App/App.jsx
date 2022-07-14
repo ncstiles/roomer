@@ -85,6 +85,7 @@ export default function App() {
                   setLoginForm={setLoginForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
+                  setIsUpdated={setIsUpdated}
                   setUsername={setUsername}
                 />
               }
@@ -144,7 +145,7 @@ export default function App() {
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
                   setUsername={setUsername}
-                  setIsUpdatd={setIsUpdated}
+                  setIsUpdated={setIsUpdated}
                 />
               }
             />
