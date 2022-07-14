@@ -121,6 +121,8 @@ export default function App() {
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}
+                  addLike={addLike}
+                  removeLike={removeLike}
                 />
               }
             />
@@ -131,7 +133,8 @@ export default function App() {
                   className="user-detail"
                   isLoggedIn={isLoggedIn}
                   fromProfileCardUsername={null}
-                  currentUser={currentUser}
+                  addLike={addLike}
+                  removeLike={removeLike}
                 />
               }
             />
@@ -186,6 +189,8 @@ export default function App() {
                   setIsLoggedIn={setIsLoggedIn}
                   setIsUpdated={setIsUpdated}
                   currentUser={currentUser}
+                  addLike={addLike}
+                  removeLike={removeLike}
                 />
               }
             />

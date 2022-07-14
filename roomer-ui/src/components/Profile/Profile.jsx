@@ -22,12 +22,20 @@ function Subview({
   setIsLoggedIn,
   setIsUpdated,
   setAvatarFile,
-  currentUser
+  currentUser,
+  addLike,
+  removeLike
 }) {
   switch (viewComponent) {
     case "own":
       // cardUsername is current user because within Profile we display the user's own info
-      return <UserDetail isLoggedIn={isLoggedIn} showLikeIcon={false} fromProfileCardUsername={currentUser} currentUser={currentUser}/>;
+      return <UserDetail 
+        isLoggedIn={isLoggedIn} 
+        showLikeIcon={false} 
+        fromProfileCardUsername={currentUser} 
+        addLike={addLike}
+        removeLike={removeLike}
+        />;
     case "matches":
       return (
         <UserGrid
@@ -35,6 +43,8 @@ function Subview({
           isLoading={isLoading}
           isLoggedIn={isLoggedIn}
           currentUser={currentUser}
+          addLike={addLike}
+          removeLike={removeLike}
         />
       );
     case "liked":
@@ -74,7 +84,9 @@ export default function Profile({
   isLoggedIn,
   setIsLoggedIn,
   setIsUpdated,
-  currentUser
+  currentUser,
+  addLike,
+  removeLike
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -180,6 +192,8 @@ export default function Profile({
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
           currentUser={currentUser}
+          addLike={addLike}
+          removeLike={removeLike}
         />
       </div>
     </div>

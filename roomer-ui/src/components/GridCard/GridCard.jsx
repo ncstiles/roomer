@@ -16,21 +16,32 @@ export default function GridCard({
   occupation,
   pfpSrc,
   contentType,
+  addLike,
+  removeLike,
 }) {
   const nav = useNavigate();
   let [clickedLike, setClickedLike] = useState(false);
+  const like = () => {
+    addLike(cardUsername);
+    setClickedLike(true);
+  }
+
+  const unlike = () => {
+    removeLike(cardUsername);
+    setClickedLike(false);
+  }
   return (
     <>
       <div className="card user-card">
         {clickedLike ? (
           <FavoriteIcon
             className="heart"
-            onClick={() => setClickedLike(false)}
+            onClick={unlike}
           />
         ) : (
           <FavoriteBorderOutlinedIcon
             className="heart"
-            onClick={() => setClickedLike(true)}
+            onClick={like}
           />
         )}
         <div onClick={() => nav(`/introduce/${cardUsername}`)}>
