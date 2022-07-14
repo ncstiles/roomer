@@ -1,10 +1,6 @@
 import * as React from "react";
 import "./NavBar.css";
 import { useNavigate } from "react-router-dom";
-import { BASE_API_URL } from "../../constants";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Dropdown } from "react-bootstrap";
-import axios from "axios";
 import { Button } from "react-bootstrap";
 
 export default function NavBar({ currentUser }) {
@@ -20,7 +16,7 @@ export default function NavBar({ currentUser }) {
           <span className="link" onClick={() => nav("/matches")}>
             MATCHES
           </span>
-          <span className="link">LIKED</span>
+          <span className="link" onClick={() => nav("/liked")}>LIKED</span>
           <span className="link">GROUPS</span>
         </div>
         {/*spacer to add distance between left/right sides of navbar */}

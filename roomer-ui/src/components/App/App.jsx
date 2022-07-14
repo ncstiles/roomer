@@ -14,6 +14,7 @@ import Welcome from "../Welcome/Welcome";
 import Profile from "../Profile/Profile";
 import Logout from "../Logout/Logout";
 import Update from "../Update/Update";
+import Liked from "../Liked/Liked";
 
 export default function App() {
   axios.defaults.withCredentials = true;
@@ -123,6 +124,7 @@ export default function App() {
                   currentUser={currentUser}
                   addLike={addLike}
                   removeLike={removeLike}
+                  setIsUpdated={setIsUpdated}
                 />
               }
             />
@@ -133,8 +135,10 @@ export default function App() {
                   className="user-detail"
                   isLoggedIn={isLoggedIn}
                   fromProfileCardUsername={null}
+                  showLikeIcon={true}
                   addLike={addLike}
                   removeLike={removeLike}
+                  setIsUpdated={setIsUpdated}
                 />
               }
             />
@@ -187,10 +191,20 @@ export default function App() {
                   setRegisterForm={setRegisterForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
+                  isUpdated={isUpdated}
                   setIsUpdated={setIsUpdated}
                   currentUser={currentUser}
                   addLike={addLike}
                   removeLike={removeLike}
+                />
+              }
+            />
+            <Route
+              path="/liked"
+              element={
+                <Liked 
+                  currentUser={currentUser}
+                  isUpdated={isUpdated}
                 />
               }
             />

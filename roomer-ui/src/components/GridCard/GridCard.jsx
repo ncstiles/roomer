@@ -18,17 +18,20 @@ export default function GridCard({
   contentType,
   addLike,
   removeLike,
+  setIsUpdated
 }) {
   const nav = useNavigate();
   let [clickedLike, setClickedLike] = useState(false);
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
+    setIsUpdated(prevVal=> !prevVal)
   }
 
   const unlike = () => {
     removeLike(cardUsername);
     setClickedLike(false);
+    setIsUpdated(prevVal=> !prevVal)
   }
   return (
     <>
