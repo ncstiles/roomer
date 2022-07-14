@@ -20,6 +20,7 @@ function Subview({
   setRegisterForm,
   isLoggedIn,
   setIsLoggedIn,
+  isUpdated,
   setIsUpdated,
   setAvatarFile,
   currentUser,
@@ -35,6 +36,7 @@ function Subview({
         fromProfileCardUsername={currentUser} 
         addLike={addLike}
         removeLike={removeLike}
+        setIsUpdated={setIsUpdated}
         />;
     case "matches":
       return (
@@ -45,10 +47,11 @@ function Subview({
           currentUser={currentUser}
           addLike={addLike}
           removeLike={removeLike}
+          setIsUpdated={setIsUpdated}
         />
       );
     case "liked":
-      return <Liked currentUser={currentUser}/>;
+      return <Liked currentUser={currentUser} isUpdated={isUpdated} />;
     case "messages":
       return <h1>Placeholder for message contacts</h1>;
     case "modify":
@@ -83,6 +86,7 @@ export default function Profile({
   setRegisterForm,
   isLoggedIn,
   setIsLoggedIn,
+  isUpdated, 
   setIsUpdated,
   currentUser,
   addLike,
@@ -189,6 +193,7 @@ export default function Profile({
           setRegisterForm={setRegisterForm}
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
+          isUpdated={isUpdated}
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
           currentUser={currentUser}

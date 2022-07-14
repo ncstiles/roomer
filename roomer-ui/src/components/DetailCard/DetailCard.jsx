@@ -18,6 +18,7 @@ export default function DetailCard({
   showLikeIcon,
   addLike,
   removeLike,
+  setIsUpdated
 }) {
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
@@ -27,11 +28,13 @@ export default function DetailCard({
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
+    setIsUpdated(prevVal => !prevVal)
   };
 
   const unlike = () => {
     removeLike(cardUsername);
     setClickedLike(false);
+    setIsUpdated(prevVal => !prevVal)
   };
   return (
     <div className={`card detail-card ${basicClass}`}>

@@ -213,6 +213,23 @@ class Roomer {
       );
     }
   }
+
+  static async getLikes(username) {
+    try {
+      await client.connect();
+      const likedUsers = await client
+        .db("roomer")
+        .collection("all")
+        .find({ username })
+        .project( { _id: 0, liked: 1 })
+        .toArray();
+      return likedUsers[0].liked? likedUsers[0].liked : [];
+    } catch(e) {
+      return new BadRequestError(
+        `Failed to get likes for ${username}: ${e}`
+      )
+    }
+  }
 }
 
 module.exports = Roomer;

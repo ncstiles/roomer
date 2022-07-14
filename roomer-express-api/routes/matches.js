@@ -172,4 +172,13 @@ router.get("/logout", authorization, async (req, res) => {
   }
 });
 
+router.get("/likedUsers/:username", authorization, async(req, res, next) => {
+  try {
+    const username = req.params.username;
+    res.status(200).send( { likedUsers: await Roomer.getLikes(username) })
+  } catch (e) {
+    return next(e);
+  }
+})
+
 module.exports = router;
