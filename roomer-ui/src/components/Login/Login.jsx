@@ -8,7 +8,7 @@ import { BASE_API_URL } from "../../constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn, setUsername, setIsUpdated }) {
+export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn, setUsername, setIsUpdated, setCurrentUser }) {
   const nav = useNavigate();
   let [validated, setValidated] = useState(false);
   let [showMsg, setShowMsg] = useState(false);
@@ -43,6 +43,7 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
         setIsLoggedIn(true);
         setUsername(loginForm.username);
         setIsUpdated((prevVal)=> !prevVal);
+        setCurrentUser(loginForm.username)
       })
       .catch((e) => {
         setIsLoggedIn(false);

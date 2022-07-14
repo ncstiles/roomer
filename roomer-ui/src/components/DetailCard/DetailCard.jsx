@@ -14,6 +14,8 @@ export default function DetailCard({
   allInfo,
   pfpSrc,
   contentType,
+  showLikeIcon,
+  currentUser
 }) {
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
@@ -24,7 +26,9 @@ export default function DetailCard({
       {allInfo && allInfo[0] ? (
         <>
         {
-          clickedLike ?
+          // showLikeIcon exists because the self view of a user's profile shouldn't have the like icon
+          // in all cases but within the profile, showLikeIcon is true. 
+          clickedLike && showLikeIcon?
           <FavoriteIcon
             className="heart"
             onClick={() => setClickedLike(false)}

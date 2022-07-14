@@ -11,7 +11,7 @@ import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn, username }) {
+export default function UserDetail({ isLoggedIn, username, currentUser }) {
   let newUsername = "";
   // default for `username` state variable is '' (set in App.jsx)
   // `username` is only not empty string when being called by the Profile compnent
@@ -181,6 +181,8 @@ export default function UserDetail({ isLoggedIn, username }) {
                         allInfo={allInfo}
                         contentType={contentType}
                         pfpSrc={pfpSrc}
+                        showLikeIcon={true}
+                        currentUser={currentUser}
                       />
                       {/* numerical indicator */}
                       <span className="num-text">{slideIx + 1}/4</span>

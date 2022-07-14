@@ -22,7 +22,7 @@ export default function App() {
   let [isLoggedIn, setIsLoggedIn] = useState(false);
   let [username, setUsername] = useState("");
   let [isUpdated, setIsUpdated] = useState(false);
-
+  let [currentUser, setCurrentUser] = useState(null);
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -55,8 +55,6 @@ export default function App() {
    * Get all basic profile information of people in the db.
    */
   const populatePeople = () => {
-    console.log('re-rendering grid')
-    console.log('grid rerendered')
     axios({
       method: "get",
       url: BASE_API_URL + "/allBasic",
@@ -97,6 +95,7 @@ export default function App() {
                   allUsers={allUsers}
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
+                  currentUser={currentUser}
                 />
               }
             />
@@ -107,6 +106,7 @@ export default function App() {
                   className="user-detail"
                   isLoggedIn={isLoggedIn}
                   username={""}
+                  currentUser={currentUser}
                 />
               }
             />
@@ -146,6 +146,7 @@ export default function App() {
                   setIsLoggedIn={setIsLoggedIn}
                   setUsername={setUsername}
                   setIsUpdated={setIsUpdated}
+                  setCurrentUser={setCurrentUser}
                 />
               }
             />
@@ -161,6 +162,7 @@ export default function App() {
                   setIsLoggedIn={setIsLoggedIn}
                   username={username}
                   setIsUpdated={setIsUpdated}
+                  currentUser={currentUser}
                 />
               }
             />
