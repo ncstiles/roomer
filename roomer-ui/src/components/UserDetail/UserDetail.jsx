@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { BASE_API_URL } from "../../constants";
+import { Toast, Button, Row, Col } from "react-bootstrap";
 import NotFound from "../NotFound/NotFound";
 import DetailCard from "../DetailCard/DetailCard";
 import Loading from "../Loading/Loading";
@@ -11,16 +12,16 @@ import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
 export default function UserDetail({ isLoggedIn, username }) {
-  let newUsername = '';
+  let newUsername = "";
   // default for `username` state variable is '' (set in App.jsx)
   // `username` is only not empty string when being called by the Profile compnent
   if (username) {
     newUsername = username;
-  } 
+  }
   // the usual way UserDetail is called is thru useNavigate, in this case update
   // username state variable using the params
   else {
-    let {username} = useParams();
+    let { username } = useParams();
     newUsername = username;
   }
   let [basicInfo, setBasicInfo] = useState({});
@@ -48,7 +49,7 @@ export default function UserDetail({ isLoggedIn, username }) {
       url: `${BASE_API_URL}/allInfo/${newUsername}`,
     })
       .then((res) => {
-        const allInfo = res.data.allInfo
+        const allInfo = res.data.allInfo;
         const basicInfo = allInfo.basic;
         setContentType(basicInfo.contentType);
         setPfpSrc(basicInfo.pfpSrc);
@@ -73,7 +74,6 @@ export default function UserDetail({ isLoggedIn, username }) {
       setIsLoading(false);
     });
   }, []);
-
 
   // for each card, upload the requisite data and labels, and set the correct "dot" indicator
   useEffect(() => {
@@ -165,7 +165,7 @@ export default function UserDetail({ isLoggedIn, username }) {
               {/* after all information is finished loading render the card */}
               {success && allInfo ? (
                 <>
-                  <div className="slideshow-container">
+                  <div className="slideshow-container">       
                     {/* back arrow */}
                     <ArrowForwardIosRoundedIcon
                       fontSize="large"
@@ -179,8 +179,8 @@ export default function UserDetail({ isLoggedIn, username }) {
                         cardType={cardType}
                         labels={labels}
                         allInfo={allInfo}
-                        contentType = {contentType}
-                        pfpSrc = {pfpSrc}
+                        contentType={contentType}
+                        pfpSrc={pfpSrc}
                       />
                       {/* numerical indicator */}
                       <span className="num-text">{slideIx + 1}/4</span>

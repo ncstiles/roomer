@@ -1,9 +1,9 @@
 import * as React from "react";
+import "./App.css";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BASE_API_URL } from "../../constants";
-import "./App.css";
 import Home from "../Home/Home";
 import UserDetail from "../UserDetail/UserDetail";
 import NotFound from "../NotFound/NotFound";
@@ -55,6 +55,8 @@ export default function App() {
    * Get all basic profile information of people in the db.
    */
   const populatePeople = () => {
+    console.log('re-rendering grid')
+    console.log('grid rerendered')
     axios({
       method: "get",
       url: BASE_API_URL + "/allBasic",
