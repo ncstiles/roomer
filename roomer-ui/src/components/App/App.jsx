@@ -21,7 +21,6 @@ export default function App() {
   let [isLoading, setIsLoading] = useState(false);
   let [isLoggedIn, setIsLoggedIn] = useState(false);
   let [likeUpdate, setLikeUpdate] = useState(false);
-  let [username, setUsername] = useState("");
   let [isUpdated, setIsUpdated] = useState(false);
   let [currentUser, setCurrentUser] = useState(null);
   let [registerForm, setRegisterForm] = useState({
@@ -61,6 +60,8 @@ export default function App() {
       url: BASE_API_URL + "/allBasic",
     }).then((res) => {
       setAllUsers((allUsers = [...res.data.allBasicData]));
+    }).finally(() => {
+      setIsLoading(false);
     });
   };
 
@@ -89,15 +90,14 @@ export default function App() {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    populatePeople();
-    setIsLoading(false);
+      setIsLoading(true);
+      populatePeople();
   }, [isUpdated]);
 
   return (
     <div className="app">
       <BrowserRouter>
-        <Navbar setIsLoggedIn={setIsLoggedIn} username={username} />
+        <Navbar currentUser={currentUser} />
         <main>
           <Routes>
             <Route
@@ -109,7 +109,7 @@ export default function App() {
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
                   setIsUpdated={setIsUpdated}
-                  setUsername={setUsername}
+                  setCurrentUser={setCurrentUser}
                 />
               }
             />
@@ -125,12 +125,12 @@ export default function App() {
               }
             />
             <Route
-              path="/introduce/:username"
+              path="/introduce/:cardUsername"
               element={
                 <UserDetail
                   className="user-detail"
                   isLoggedIn={isLoggedIn}
-                  username={""}
+                  fromProfileCardUsername={null}
                   currentUser={currentUser}
                 />
               }
@@ -154,7 +154,7 @@ export default function App() {
                   updateForm={registerForm}
                   setUpdateForm={setRegisterForm}
                   setIsLoggedIn={setIsLoggedIn}
-                  username={username}
+                  currentUser={currentUser}
                   isUpdated={isUpdated}
                   setIsUpdated={setIsUpdated}
                 />
@@ -169,7 +169,6 @@ export default function App() {
                   setLoginForm={setLoginForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
-                  setUsername={setUsername}
                   setIsUpdated={setIsUpdated}
                   setCurrentUser={setCurrentUser}
                 />
@@ -185,7 +184,6 @@ export default function App() {
                   setRegisterForm={setRegisterForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
-                  username={username}
                   setIsUpdated={setIsUpdated}
                   currentUser={currentUser}
                 />
@@ -196,7 +194,7 @@ export default function App() {
               element={
                 <Logout
                   setIsLoggedIn={setIsLoggedIn}
-                  setUsername={setUsername}
+                  setCurrentUser={setCurrentUser}
                 />
               }
             />

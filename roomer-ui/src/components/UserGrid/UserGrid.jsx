@@ -20,7 +20,8 @@ export default function UserGrid({ allUsers, isLoading, isLoggedIn, currentUser 
                   return (
                     <GridCard
                       key={user.username}
-                      username={user.username}
+                      currentUser={currentUser}
+                      cardUsername={user.username}
                       firstName={user.firstName}
                       age={user.age}
                       gender={user.gender}

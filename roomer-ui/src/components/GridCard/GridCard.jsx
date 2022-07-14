@@ -9,7 +9,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 
 // display of card in main grid view.  Directs to DetailCard if card is clicked
 export default function GridCard({
-  username,
+  cardUsername,
   firstName,
   age,
   gender,
@@ -33,7 +33,7 @@ export default function GridCard({
             onClick={() => setClickedLike(true)}
           />
         )}
-        <div onClick={() => nav(`/introduce/${username}`)}>
+        <div onClick={() => nav(`/introduce/${cardUsername}`)}>
           {pfpSrc ? (
             <img
               className="card-pfp"

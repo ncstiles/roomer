@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-export default function Logout({ setIsLoggedIn, setUsername }) {
+export default function Logout({ setIsLoggedIn, setCurrentUser }) {
   const nav = useNavigate();
   useEffect(() => {
     axios({
@@ -14,7 +14,7 @@ export default function Logout({ setIsLoggedIn, setUsername }) {
       url: BASE_API_URL + "/logout",
     }).then(() => {
       setIsLoggedIn(false);
-      setUsername("");
+      setCurrentUser(null);
     }, []);
   });
   return (

@@ -5,7 +5,7 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import { BASE_API_URL } from "../../constants";
 import axios from "axios";
 
-export default function UploadPfp({ username, setIsUpdated, setAvatarFile }) {
+export default function UploadPfp({ currentUser, setIsUpdated, setAvatarFile }) {
   let [toShow, setToShow] = useState(false);
   let [submitted, setSubmitted] = useState(false);
   let [curAvatarFile, setCurAvatarFile] = useState(null);
@@ -37,7 +37,7 @@ export default function UploadPfp({ username, setIsUpdated, setAvatarFile }) {
     event.preventDefault();
     const formData = new FormData();
     formData.append("pfpSrc", curAvatarFile);
-    formData.append("username", username);
+    formData.append("username", currentUser);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
