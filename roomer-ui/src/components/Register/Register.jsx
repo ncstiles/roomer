@@ -6,7 +6,7 @@ import { BASE_API_URL } from "../../constants";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
-export default function Register({ registerForm, setRegisterForm, setIsLoggedIn }) {
+export default function Register({ registerForm, setRegisterForm, setIsLoggedIn, setIsUpdated }) {
   const nav = useNavigate();
   let [validated, setValidated] = useState(false);
   const regFormKeys = Object.keys(registerForm);
@@ -59,6 +59,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
           .post(BASE_API_URL + "/login", loginForm)
           .then(() => {
             setIsLoggedIn(true);
+            setIsUpdated(prevVal => !prevVal);
             nav("/matches");
           })
           .catch(() => {
