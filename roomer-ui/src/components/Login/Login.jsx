@@ -41,15 +41,15 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
       .post(BASE_API_URL + "/login", loginForm)
       .then(() => {
         setIsLoggedIn(true);
-        setUsername(loginForm.username)
-        nav("/matches");
-        setIsUpdated(prevVal=> !prevVal);
+        setUsername(loginForm.username);
+        setIsUpdated((prevVal)=> !prevVal);
       })
-      .catch(() => {
+      .catch((e) => {
         setIsLoggedIn(false);
       })
       .finally(() => {
         setShowMsg(true);
+        nav("/matches");
       });
   };
 
