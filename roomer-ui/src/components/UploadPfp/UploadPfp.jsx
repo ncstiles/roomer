@@ -14,10 +14,16 @@ export default function UploadPfp({ username, setIsUpdated, setAvatarFile }) {
   const loadFile = (event) => {
     const image = document.getElementById("pfpPreview");
     const avatar = event.target.files[0];
-    image.src = URL.createObjectURL(avatar);
-    setCurAvatarFile(avatar);
-    setToShow(true);
-    setSubmitted(false);
+    const fileSize = avatar.size/1024/1024;
+    if (avatar.size/1024/1024 >= 16) {
+      alert(`This ${Math.round(fileSize * 100) / 100} MB file is too large, above our 16MB threshold. Please upload a smaller image.`);
+    } else {
+        image.src = URL.createObjectURL(avatar);
+        setCurAvatarFile(avatar);
+        setToShow(true);
+        setSubmitted(false);
+    }
+
   };
 
   /**

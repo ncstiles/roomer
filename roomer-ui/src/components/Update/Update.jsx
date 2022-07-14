@@ -11,7 +11,6 @@ export default function Update({ username, setIsUpdated }) {
   let [successMsg, setSuccessMsg] = useState("hidden");
 
   const handleSubmit = (event) => {
-    console.log('within handle submit:')
     const updateForm = {};
     event.preventDefault();
 
