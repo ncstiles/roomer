@@ -4,7 +4,7 @@ import GridCard from "../GridCard/GridCard";
 import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 
-export default function UserGrid({ allUsers, isLoading, isLoggedIn, currentUser }) {
+export default function UserGrid({ allUsers, isLoading, isLoggedIn, currentUser, addLike, removeLike }) {
   return (
     <>
       {/* is possible for user to be authenticated but userinfo isn't populated */}
@@ -28,6 +28,8 @@ export default function UserGrid({ allUsers, isLoading, isLoggedIn, currentUser 
                       occupation={user.occupation}
                       pfpSrc = {user.pfpSrc? user.pfpSrc.toString('base64') : null}
                       contentType = {user.contentType? user.contentType: null}
+                      addLike={addLike}
+                      removeLike={removeLike}
                     />
                   );
                 })}

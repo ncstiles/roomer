@@ -4,7 +4,7 @@ import "../../css/card.css";
 import { useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 // DetailCard has 4 views: basic, housing, preferences, and extra info.
 // Only the basic view includes a profile picture, so there is a unique className `card-two-rows` to account for its styling.
 // All classes but extra info have two columns of text, so there is a unique className `two-cols` to account for their styling.
@@ -13,32 +13,47 @@ export default function DetailCard({
   labels,
   allInfo,
   pfpSrc,
+  cardUsername,
   contentType,
   showLikeIcon,
-  currentUser
+  addLike,
+  removeLike,
 }) {
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
   const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
   let [clickedLike, setClickedLike] = useState(false);
+  
+  const like = () => {
+    addLike(cardUsername);
+    setClickedLike(true);
+  };
+
+  const unlike = () => {
+    removeLike(cardUsername);
+    setClickedLike(false);
+  };
   return (
     <div className={`card detail-card ${basicClass}`}>
       {allInfo && allInfo[0] ? (
         <>
-        {
-          // showLikeIcon exists because the self view of a user's profile shouldn't have the like icon
-          // in all cases but within the profile, showLikeIcon is true. 
-          clickedLike && showLikeIcon?
-          <FavoriteIcon
-            className="heart"
-            onClick={() => setClickedLike(false)}
-          />
-          :
-          <FavoriteBorderOutlinedIcon
-            className="heart"
-            onClick={()=>setClickedLike(true)}/>
-        }
-          
+          {
+            // showLikeIcon exists because the self view of a user's profile shouldn't have the like icon
+            // in all cases but within the profile, showLikeIcon is true.
+            showLikeIcon ? (
+              <>
+                {clickedLike ? (
+                  <FavoriteIcon className="heart" onClick={unlike} />
+                ) : (
+                  <FavoriteBorderOutlinedIcon
+                    className="heart"
+                    onClick={like}
+                  />
+                )}
+              </>
+            ) : null
+          }
+
           {/* only include pfp on basic display  */}
           {cardType === "basic" ? (
             <>
