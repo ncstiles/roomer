@@ -1,8 +1,10 @@
 import * as React from "react";
 import "./DetailCard.css";
 import "../../css/card.css";
+import { useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 // DetailCard has 4 views: basic, housing, preferences, and extra info.
 // Only the basic view includes a profile picture, so there is a unique className `card-two-rows` to account for its styling.
 // All classes but extra info have two columns of text, so there is a unique className `two-cols` to account for their styling.
@@ -16,10 +18,23 @@ export default function DetailCard({
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
   const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
+  let [clickedLike, setClickedLike] = useState(false);
   return (
     <div className={`card detail-card ${basicClass}`}>
       {allInfo && allInfo[0] ? (
         <>
+        {
+          clickedLike ?
+          <FavoriteIcon
+            className="heart"
+            onClick={() => setClickedLike(false)}
+          />
+          :
+          <FavoriteBorderOutlinedIcon
+            className="heart"
+            onClick={()=>setClickedLike(true)}/>
+        }
+          
           {/* only include pfp on basic display  */}
           {cardType === "basic" ? (
             <>

@@ -1,6 +1,7 @@
 .card {
   background-color: #80abbd;
   padding: 20px;
+  padding-bottom: 0px;
   border-radius: 10px;
   text-align: center;
   border: none;
@@ -27,4 +28,15 @@
   font-size: 30px;
   line-height: 10px;
   margin-bottom: 10px;
+}
+
+.heart {
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  transform: scale(1.3);
+}
+
+.heart:hover {
+  color: #d4c0d5;
 }

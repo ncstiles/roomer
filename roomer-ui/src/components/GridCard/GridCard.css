@@ -1,7 +1,5 @@
 .user-card {
   width: 300px;
-  display: grid;
-  grid-template-rows: auto auto;
 }
 
 #grid-pfp {
