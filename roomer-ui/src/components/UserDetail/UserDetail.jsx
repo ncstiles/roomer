@@ -11,19 +11,12 @@ import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn, username, currentUser }) {
-  let newUsername = "";
-  // default for `username` state variable is '' (set in App.jsx)
-  // `username` is only not empty string when being called by the Profile compnent
-  if (username) {
-    newUsername = username;
-  }
-  // the usual way UserDetail is called is thru useNavigate, in this case update
-  // username state variable using the params
-  else {
-    let { username } = useParams();
-    newUsername = username;
-  }
+export default function UserDetail({ isLoggedIn, fromProfileCardUsername, currentUser }) {
+  // Iin Profile view we don't use useNavigate to get to the UserDetail component to display the card.
+  // Therefore to get the username of the person that the card is about, we must pass their username using the `cardUsername` prop.
+  // In all other instances `cardUsername` is retrieved through useParams() (from within the useNavigate)
+
+  const cardUsername = fromProfileCardUsername ? fromProfileCardUsername : useParams().cardUsername;
   let [basicInfo, setBasicInfo] = useState({});
   let [preferenceInfo, setPreferenceInfo] = useState({});
   let [housingInfo, setHousingInfo] = useState({});
@@ -46,7 +39,7 @@ export default function UserDetail({ isLoggedIn, username, currentUser }) {
   const getAllUserInfo = async () => {
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/allInfo/${newUsername}`,
+      url: `${BASE_API_URL}/allInfo/${cardUsername}`,
     })
       .then((res) => {
         const allInfo = res.data.allInfo;

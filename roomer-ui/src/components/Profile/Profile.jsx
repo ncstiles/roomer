@@ -20,14 +20,14 @@ function Subview({
   setRegisterForm,
   isLoggedIn,
   setIsLoggedIn,
-  username,
   setIsUpdated,
   setAvatarFile,
   currentUser
 }) {
   switch (viewComponent) {
     case "own":
-      return <UserDetail isLoggedIn={isLoggedIn} username={username} showLikeIcon={false} currentUser={currentUser}/>;
+      // cardUsername is current user because within Profile we display the user's own info
+      return <UserDetail isLoggedIn={isLoggedIn} showLikeIcon={false} fromProfileCardUsername={currentUser} currentUser={currentUser}/>;
     case "matches":
       return (
         <UserGrid
@@ -47,14 +47,14 @@ function Subview({
           updateForm={registerForm}
           setUpdateForm={setRegisterForm}
           isLoggedIn={isLoggedIn}
-          username={username}
+          currentUser={currentUser}
           setIsUpdated={setIsUpdated}
         />
       );
     case "pfp":
       return (
         <UploadPfp
-          username={username}
+          currentUser={currentUser}
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
         />
@@ -73,7 +73,6 @@ export default function Profile({
   setRegisterForm,
   isLoggedIn,
   setIsLoggedIn,
-  username,
   setIsUpdated,
   currentUser
 }) {
@@ -87,7 +86,7 @@ export default function Profile({
   useEffect(() => {
     axios({
       method: "get",
-      url: `${BASE_API_URL}/getPfp/${username}`,
+      url: `${BASE_API_URL}/getPfp/${currentUser}`,
     })
       .then((res) => {
         const file = res.data.file;
@@ -105,7 +104,7 @@ export default function Profile({
     <div className="profile">
       <div className="sidebar">
         <span className="nav-link text-white heading">
-          {username.toUpperCase()}'S PROFILE
+          {currentUser.toUpperCase()}'S PROFILE
         </span>
         <img className={`pfp ${pfpDisplay}`} id="pfp" />
         <hr />
@@ -178,7 +177,6 @@ export default function Profile({
           setRegisterForm={setRegisterForm}
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
-          username={username}
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
           currentUser={currentUser}

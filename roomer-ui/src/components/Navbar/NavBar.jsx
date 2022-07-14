@@ -7,7 +7,7 @@ import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 
-export default function NavBar({ setIsLoggedIn, username }) {
+export default function NavBar({ currentUser }) {
   const nav = useNavigate();
 
   return (
@@ -36,13 +36,13 @@ export default function NavBar({ setIsLoggedIn, username }) {
             LOGOUT
           </span>
 
-          {username === "" ? null : (
+          {!currentUser ? null : (
             <Button
               className="link navbar-pfp"
               variant="secondary"
               onClick={() => nav("/profile")}
             >
-              {username}
+              {currentUser}
             </Button>
           )}
         </div>

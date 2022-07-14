@@ -6,7 +6,7 @@ import { BASE_API_URL, updateFormKeys } from "../../constants";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
-export default function Update({ username, setIsUpdated }) {
+export default function Update({ currentUser, setIsUpdated }) {
   const nav = useNavigate();
   let [successMsg, setSuccessMsg] = useState("hidden");
 
@@ -27,13 +27,13 @@ export default function Update({ username, setIsUpdated }) {
   };
 
   /**
-   * Update a user `username` with their newly inputted preferences/data
+   * Update a user `currentUser` with their newly inputted preferences/data
    *
    * @param {Object} updateForm a form containing the values the user just submitted for update
    */
   const updateInfo = (updateForm) => {
     axios
-      .post(BASE_API_URL + "/update/" + username, { updateForm })
+      .post(BASE_API_URL + "/update/" + currentUser, { updateForm })
       .then((res) => {
         setIsUpdated((prevVal) => !prevVal);
       });
