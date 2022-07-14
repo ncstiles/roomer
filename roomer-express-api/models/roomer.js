@@ -174,6 +174,45 @@ class Roomer {
       );
     }
   }
+
+  // add person to current user's list of liked people
+  static async addLike(currentUser, likedUser) {
+    try {
+      await client.connect();
+      await client
+        .db("roomer")
+        .collection("all")
+        .updateOne(
+          { username: currentUser },
+          { $addToSet: { liked: likedUser } },
+          { upsert: true }
+        );
+      return `Added ${likedUser} to list of ${currentUser}'s liked people`;
+    } catch (e) {
+      return new BadRequestError(
+        `Failed to add ${likedUser} to list of ${currentUser}'s liked people: ${e}`
+      );
+    }
+  }
+
+  // remove person from current user's list of liked people
+  static async removeLike(currentUser, unlikedUser) {
+    try {
+      await client.connect();
+      await client
+        .db("roomer")
+        .collection("all")
+        .updateOne(
+          { username: currentUser },
+          { $pull: { liked: unlikedUser } }
+        );
+      return `Removed ${unlikedUser} from list of ${currentUser}'s liked people`;
+    } catch (e) {
+      return new BadRequestError(
+        `Failed to remove ${unlikedUser} from list of ${currentUser}'s liked people: ${e}`
+      );
+    }
+  }
 }
 
 module.exports = Roomer;

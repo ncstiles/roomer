@@ -50,14 +50,14 @@ router.get("/allBasic", authorization, async (req, res, next) => {
 });
 
 // get all of a single user's info
-router.get("/allInfo/:username", authorization, async(req, res, next) => {
+router.get("/allInfo/:username", authorization, async (req, res, next) => {
   const username = req.params.username;
   try {
     res.status(200).send({ allInfo: await Roomer.getAllInfo(username) });
   } catch (e) {
     return next(e);
   }
-})
+});
 
 // update database with new user's info
 router.post("/register", async (req, res, next) => {
@@ -84,7 +84,11 @@ router.post("/update/:username", authorization, async (req, res, next) => {
 
 // change or add a user's selected profile picture
 //TODO: do authorization
-router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function (req, res, next) {
+router.post(
+  "/uploadPfp",
+  authorization,
+  upload.single("pfpSrc"),
+  async function (req, res, next) {
     try {
       const img = fs.readFileSync(req.file.path);
       const encodeImg = img.toString("base64");
@@ -121,6 +125,32 @@ router.get("/getPfp/:username", authorization, async (req, res, next) => {
   try {
     const ret = await Roomer.getPfp(username);
     res.status(200).send({ file: ret });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+// Add liked user to current user's list of liked people
+router.post("/addLike", authorization, async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .send({
+        update: await Roomer.addLike(req.body.currentUser, req.body.likedUser),
+      });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+// Remove liked user from current user's list of liked people
+router.post("/removeLike", authorization, async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .send({
+        update: await Roomer.removeLike(req.body.currentUser, req.body.unlikedUser),
+      });
   } catch (e) {
     return next(e);
   }

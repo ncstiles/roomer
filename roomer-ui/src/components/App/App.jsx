@@ -20,6 +20,7 @@ export default function App() {
   let [allUsers, setAllUsers] = useState([]);
   let [isLoading, setIsLoading] = useState(false);
   let [isLoggedIn, setIsLoggedIn] = useState(false);
+  let [likeUpdate, setLikeUpdate] = useState(false);
   let [username, setUsername] = useState("");
   let [isUpdated, setIsUpdated] = useState(false);
   let [currentUser, setCurrentUser] = useState(null);
@@ -60,7 +61,31 @@ export default function App() {
       url: BASE_API_URL + "/allBasic",
     }).then((res) => {
       setAllUsers((allUsers = [...res.data.allBasicData]));
-    })
+    });
+  };
+
+  // Add user to current user's list of liked people
+  const addLike = (likedUser) => {
+    axios
+      .post(BASE_API_URL + "/addLike", {
+        currentUser: currentUser,
+        likedUser: likedUser,
+      })
+      .then((res) => {
+        setLikeUpdate((prevVal) => !prevVal);
+      });
+  };
+
+  // Remove user from current user's list of liked people
+  const removeLike = (unlikedUser) => {
+    axios
+      .post(BASE_API_URL + "/removeLike", {
+        currentUser: currentUser,
+        unlikedUser: unlikedUser,
+      })
+      .then((res) => {
+        setLikeUpdate((prevVal) => !prevVal);
+      });
   };
 
   useEffect(() => {
