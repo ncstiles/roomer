@@ -60,14 +60,14 @@ export default function App() {
       url: BASE_API_URL + "/allBasic",
     }).then((res) => {
       setAllUsers((allUsers = [...res.data.allBasicData]));
-    });
+    })
   };
 
   useEffect(() => {
     setIsLoading(true);
     populatePeople();
     setIsLoading(false);
-  }, [registerForm, loginForm, isUpdated]); //updates on loginForm because upon first access of site user is not authenticated therefore don't have access to allUser informationg
+  }, [isUpdated]);
 
   return (
     <div className="app">
@@ -115,6 +115,7 @@ export default function App() {
                   registerForm={registerForm}
                   setRegisterForm={setRegisterForm}
                   setIsLoggedIn={setIsLoggedIn}
+                  setIsUpdated={setIsUpdated}
                 />
               }
             />
@@ -141,6 +142,7 @@ export default function App() {
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
                   setUsername={setUsername}
+                  setIsUpdatd={setIsUpdated}
                 />
               }
             />

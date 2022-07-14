@@ -1,5 +1,6 @@
 const { mongo_pw } = require("../constants");
 const { BadRequestError } = require("../utils/errors");
+const bcrypt = require("bcrypt");
 const { MongoClient } = require("mongodb");
 const uri = `mongodb+srv://nstiles:${mongo_pw}@cluster0.rlw7w8u.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
@@ -13,7 +14,16 @@ class Roomer {
         .db("roomer")
         .collection("all")
         .find()
-        .project({ _id: 0, username: 1, firstName: 1, age: 1, gender: 1, occupation: 1, pfpSrc: 1, contentType:1 })
+        .project({
+          _id: 0,
+          username: 1,
+          firstName: 1,
+          age: 1,
+          gender: 1,
+          occupation: 1,
+          pfpSrc: 1,
+          contentType: 1,
+        })
         .toArray();
       return allBasicData;
     } catch (e) {
@@ -28,42 +38,44 @@ class Roomer {
     try {
       await client.connect();
       const allInfoArr = await client
-        .db('roomer')
-        .collection('all')
+        .db("roomer")
+        .collection("all")
         .find({ username })
-        .project({_id: 0})
+        .project({ _id: 0 })
         .toArray();
-      const allInfo = allInfoArr[0]; 
+      const allInfo = allInfoArr[0];
       const allData = {
-        'basic': {
+        basic: {
           firstName: allInfo.firstName,
           age: allInfo.age,
           gender: allInfo.gender,
           occupation: allInfo.occupation,
           pfpSrc: allInfo.pfpSrc,
-          contentType: allInfo.contentType
+          contentType: allInfo.contentType,
         },
-        'housing': {
+        housing: {
           city: allInfo.city,
           state: allInfo.state,
           zip: allInfo.zip,
           addr: allInfo.addr,
-          rentRange: allInfo.rentRange
+          rentRange: allInfo.rentRange,
         },
-        'preferences': {
+        preferences: {
           locRad: allInfo.locRad,
           genderPref: allInfo.genderPref,
           agePref: allInfo.agePref,
-          profession: allInfo.profession
+          profession: allInfo.profession,
         },
-        'extra': {
+        extra: {
           bio: allInfo.bio,
-          insta: allInfo.insta
-        }
-      }
+          insta: allInfo.insta,
+        },
+      };
       return allData;
     } catch (e) {
-      return new BadRequestError(`Getting all of ${username}'s information failed.`)
+      return new BadRequestError(
+        `Getting all of ${username}'s information failed.`
+      );
     }
   }
 
@@ -71,10 +83,14 @@ class Roomer {
   static async registerNewUser(form) {
     try {
       client.connect();
-      const password = form.password;
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(form.password, salt);
       delete form["password"];
       await client.db("roomer").collection("all").insertOne(form);
-      await client.db("roomer").collection('auth').insertOne({username: form.username, password: password})
+      await client
+        .db("roomer")
+        .collection("auth")
+        .insertOne({ username: form.username, password: password });
     } catch (e) {
       return new BadRequestError(
         `Posting ${form.username}'s registration request didn't go through.`
@@ -92,7 +108,11 @@ class Roomer {
         .find({ username })
         .project({ _id: 0, username: 0 })
         .toArray();
-      return actualPW.length !== 0 && actualPW[0].password === password;
+      if (actualPW.length === 0) {
+        return false;
+      }
+      const pwMatches = await bcrypt.compare(password, actualPW[0]);
+      return pwMatches;
     } catch (e) {
       return new BadRequestError(
         `Getting single user's password request didn't go through: ${e}`
@@ -100,13 +120,13 @@ class Roomer {
     }
   }
 
-  // update the specified collection with data/preferences the user wants updated.  
+  // update the specified collection with data/preferences the user wants updated.
   static async updateUserInfo(updateForm, username) {
     try {
       await client.connect();
       await client
         .db("roomer")
-        .collection('all')
+        .collection("all")
         .updateOne(
           { username: username },
           { $set: updateForm },
@@ -124,16 +144,16 @@ class Roomer {
     try {
       await client.connect();
       await client
-          .db("roomer")
-          .collection('all')
-          .updateOne(
-            { username: imageFile.username },
-            { $set: imageFile },
-            { upsert: true }
-          );
-      return 'Success! Profile picture uploaded!'
+        .db("roomer")
+        .collection("all")
+        .updateOne(
+          { username: imageFile.username },
+          { $set: imageFile },
+          { upsert: true }
+        );
+      return "Success! Profile picture uploaded!";
     } catch (e) {
-      return new BadRequestError(`Failed to update info.`)
+      return new BadRequestError(`Failed to update info.`);
     }
   }
 
