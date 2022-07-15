@@ -26,6 +26,7 @@ function Subview({
   addLike,
   removeLike,
   likedUsers,
+  likedUserInfo
 }) {
   switch (viewComponent) {
     case "own":
@@ -54,7 +55,16 @@ function Subview({
         />
       );
     case "liked":
-      return <Liked likedUsers={likedUsers} />;
+      return <Liked 
+        isLoading={isLoading}
+        isLoggedIn={isLoggedIn}
+        currentUser={currentUser}
+        addLike={addLike}
+        removeLike={removeLike}
+        setIsUpdated={setIsUpdated}
+        likedUsers={likedUsers}
+        likedUserInfo={likedUserInfo}
+        />;
     case "messages":
       return <h1>Placeholder for message contacts</h1>;
     case "modify":
@@ -94,6 +104,7 @@ export default function Profile({
   addLike,
   removeLike,
   likedUsers,
+  likedUserInfo
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -201,6 +212,7 @@ export default function Profile({
           addLike={addLike}
           removeLike={removeLike}
           likedUsers={likedUsers}
+          likedUserInfo={likedUserInfo}
         />
       </div>
     </div>
