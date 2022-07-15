@@ -21,9 +21,10 @@ export default function App() {
   let [allUsers, setAllUsers] = useState([]);
   let [isLoading, setIsLoading] = useState(false);
   let [isLoggedIn, setIsLoggedIn] = useState(false);
-  let [likeUpdate, setLikeUpdate] = useState(false);
   let [isUpdated, setIsUpdated] = useState(false);
+  let [updateLikes, setUpdateLikes] = useState(false);
   let [currentUser, setCurrentUser] = useState(null);
+  let [likedUsers, setLikedUsers] = useState([]);
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -52,20 +53,6 @@ export default function App() {
     password: "",
   });
 
-  /**
-   * Get all basic profile information of people in the db.
-   */
-  const populatePeople = () => {
-    axios({
-      method: "get",
-      url: BASE_API_URL + "/allBasic",
-    }).then((res) => {
-      setAllUsers((allUsers = [...res.data.allBasicData]));
-    }).finally(() => {
-      setIsLoading(false);
-    });
-  };
-
   // Add user to current user's list of liked people
   const addLike = (likedUser) => {
     axios
@@ -73,8 +60,8 @@ export default function App() {
         currentUser: currentUser,
         likedUser: likedUser,
       })
-      .then((res) => {
-        setLikeUpdate((prevVal) => !prevVal);
+      .then(() => {
+        setUpdateLikes((prevVal) => !prevVal);
       });
   };
 
@@ -85,15 +72,47 @@ export default function App() {
         currentUser: currentUser,
         unlikedUser: unlikedUser,
       })
-      .then((res) => {
-        setLikeUpdate((prevVal) => !prevVal);
+      .then(() => {
+        setUpdateLikes((prevVal) => !prevVal);
       });
   };
 
+  // Get all basic profile information of people in the db.
+  const updateInfo = () => {
+    axios({
+      method: "get",
+      url: BASE_API_URL + "/allBasic",
+    })
+      .then((res) => {
+        setAllUsers((allUsers = [...res.data.allBasicData]));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  // Get the list of usernames associated with liked profiles by the currently logged in user
+  const getLikedUsers = () => {
+    axios({
+      method: "get",
+      url: `${BASE_API_URL}/likedUsers/${currentUser}`,
+    }).then((res) => {
+      setLikedUsers(res.data.likedUsers);
+    });
+  };
+
+  // Only when a new user is registered or the current user's information is updated is all basic information re-pulled.
   useEffect(() => {
-      setIsLoading(true);
-      populatePeople();
+    setIsLoading(true);
+    updateInfo();
   }, [isUpdated]);
+
+  // Get list of the current user's liked usernames whenever we have new or changed users, or when we navigate between pages (which is when we `updateLikes`)
+  useEffect(() => {
+    if (currentUser) {
+      getLikedUsers();
+    }
+  }, [currentUser, isUpdated, updateLikes]);
 
   return (
     <div className="app">
@@ -125,6 +144,7 @@ export default function App() {
                   addLike={addLike}
                   removeLike={removeLike}
                   setIsUpdated={setIsUpdated}
+                  likedUsers={likedUsers}
                 />
               }
             />
@@ -139,6 +159,7 @@ export default function App() {
                   addLike={addLike}
                   removeLike={removeLike}
                   setIsUpdated={setIsUpdated}
+                  likedUsers={likedUsers}
                 />
               }
             />
@@ -191,23 +212,15 @@ export default function App() {
                   setRegisterForm={setRegisterForm}
                   isLoggedIn={isLoggedIn}
                   setIsLoggedIn={setIsLoggedIn}
-                  isUpdated={isUpdated}
                   setIsUpdated={setIsUpdated}
                   currentUser={currentUser}
                   addLike={addLike}
                   removeLike={removeLike}
+                  likedUsers={likedUsers}
                 />
               }
             />
-            <Route
-              path="/liked"
-              element={
-                <Liked 
-                  currentUser={currentUser}
-                  isUpdated={isUpdated}
-                />
-              }
-            />
+            <Route path="/liked" element={<Liked likedUsers={likedUsers} />} />
             <Route
               path="/logout"
               element={

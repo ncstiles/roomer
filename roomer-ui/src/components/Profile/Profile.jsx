@@ -20,24 +20,26 @@ function Subview({
   setRegisterForm,
   isLoggedIn,
   setIsLoggedIn,
-  isUpdated,
   setIsUpdated,
   setAvatarFile,
   currentUser,
   addLike,
-  removeLike
+  removeLike,
+  likedUsers,
 }) {
   switch (viewComponent) {
     case "own":
       // cardUsername is current user because within Profile we display the user's own info
-      return <UserDetail 
-        isLoggedIn={isLoggedIn} 
-        showLikeIcon={false} 
-        fromProfileCardUsername={currentUser} 
-        addLike={addLike}
-        removeLike={removeLike}
-        setIsUpdated={setIsUpdated}
-        />;
+      return (
+        <UserDetail
+          isLoggedIn={isLoggedIn}
+          showLikeIcon={false}
+          fromProfileCardUsername={currentUser}
+          addLike={addLike}
+          removeLike={removeLike}
+          setIsUpdated={setIsUpdated}
+        />
+      );
     case "matches":
       return (
         <UserGrid
@@ -48,10 +50,11 @@ function Subview({
           addLike={addLike}
           removeLike={removeLike}
           setIsUpdated={setIsUpdated}
+          likedUsers={likedUsers}
         />
       );
     case "liked":
-      return <Liked currentUser={currentUser} isUpdated={isUpdated} />;
+      return <Liked likedUsers={likedUsers} />;
     case "messages":
       return <h1>Placeholder for message contacts</h1>;
     case "modify":
@@ -86,11 +89,11 @@ export default function Profile({
   setRegisterForm,
   isLoggedIn,
   setIsLoggedIn,
-  isUpdated, 
   setIsUpdated,
   currentUser,
   addLike,
-  removeLike
+  removeLike,
+  likedUsers,
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -103,17 +106,16 @@ export default function Profile({
     axios({
       method: "get",
       url: `${BASE_API_URL}/getPfp/${currentUser}`,
-    })
-      .then((res) => {
-        const file = res.data.file;
-        const type = file.contentType;
-        const src = file.pfpSrc.toString("base64");
-        const img = document.getElementById("pfp");
-        if (file) {
-          img.src = `data:${type};base64,${src}`;
-          setPfpDisplay("");
-        }
-      })
+    }).then((res) => {
+      const file = res.data.file;
+      const type = file.contentType;
+      const src = file.pfpSrc.toString("base64");
+      const img = document.getElementById("pfp");
+      if (file) {
+        img.src = `data:${type};base64,${src}`;
+        setPfpDisplay("");
+      }
+    });
   }, [avatarFile]);
 
   return isLoggedIn ? (
@@ -193,12 +195,12 @@ export default function Profile({
           setRegisterForm={setRegisterForm}
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
-          isUpdated={isUpdated}
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
           currentUser={currentUser}
           addLike={addLike}
           removeLike={removeLike}
+          likedUsers={likedUsers}
         />
       </div>
     </div>

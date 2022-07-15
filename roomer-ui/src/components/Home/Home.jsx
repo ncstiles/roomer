@@ -3,7 +3,7 @@ import "./Home.css";
 import UserGrid from "../UserGrid/UserGrid";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 
-export default function Home({ allUsers, isLoading, isLoggedIn, currentUser, addLike, removeLike, setIsUpdated }) {
+export default function Home({ allUsers, isLoading, isLoggedIn, currentUser, addLike, removeLike, setIsUpdated, likedUsers }) {
   return (
     <>
       {isLoggedIn ? (
@@ -15,6 +15,7 @@ export default function Home({ allUsers, isLoading, isLoggedIn, currentUser, add
           addLike={addLike}
           removeLike={removeLike}
           setIsUpdated={setIsUpdated}
+          likedUsers={likedUsers}
         />
       ) : (
         <NotAuthorized />
