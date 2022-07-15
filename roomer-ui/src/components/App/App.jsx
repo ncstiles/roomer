@@ -25,6 +25,7 @@ export default function App() {
   let [updateLikes, setUpdateLikes] = useState(false);
   let [currentUser, setCurrentUser] = useState(null);
   let [likedUsers, setLikedUsers] = useState([]);
+  let [likedUserInfo, setLikedUserInfo] = useState([]);;
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -217,10 +218,20 @@ export default function App() {
                   addLike={addLike}
                   removeLike={removeLike}
                   likedUsers={likedUsers}
+                  likedUserInfo={likedUserInfo}
                 />
               }
             />
-            <Route path="/liked" element={<Liked likedUsers={likedUsers} />} />
+            <Route path="/liked" element={<Liked 
+              isLoading={isLoading}
+              isLoggedIn={isLoggedIn}
+              currentUser={currentUser}
+              addLike={addLike}
+              removeLike={removeLike}
+              setIsUpdated={setIsUpdated}
+              likedUsers={likedUsers}
+              likedUserInfo={likedUserInfo}
+               />} />
             <Route
               path="/logout"
               element={
