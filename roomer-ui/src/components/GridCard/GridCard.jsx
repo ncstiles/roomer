@@ -21,7 +21,7 @@ export default function GridCard({
   removeLike,
 }) {
   const nav = useNavigate();
-  
+
   let [clickedLike, setClickedLike] = useState(inLiked);
   const like = () => {
     addLike(cardUsername);

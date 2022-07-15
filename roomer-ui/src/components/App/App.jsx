@@ -25,7 +25,7 @@ export default function App() {
   let [updateLikes, setUpdateLikes] = useState(false);
   let [currentUser, setCurrentUser] = useState(null);
   let [likedUsers, setLikedUsers] = useState([]);
-  let [likedUserInfo, setLikedUserInfo] = useState([]);;
+  let [likedUserInfo, setLikedUserInfo] = useState([]);
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -54,6 +54,20 @@ export default function App() {
     password: "",
   });
 
+  // Get all basic profile information of people in the db.
+  const updateInfo = () => {
+    axios({
+      method: "get",
+      url: BASE_API_URL + "/allBasic",
+    })
+      .then((res) => {
+        setAllUsers((allUsers = [...res.data.allBasicData]));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   // Add user to current user's list of liked people
   const addLike = (likedUser) => {
     axios
@@ -78,28 +92,27 @@ export default function App() {
       });
   };
 
-  // Get all basic profile information of people in the db.
-  const updateInfo = () => {
-    axios({
-      method: "get",
-      url: BASE_API_URL + "/allBasic",
-    })
-      .then((res) => {
-        setAllUsers((allUsers = [...res.data.allBasicData]));
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
   // Get the list of usernames associated with liked profiles by the currently logged in user
   const getLikedUsers = () => {
     axios({
       method: "get",
       url: `${BASE_API_URL}/likedUsers/${currentUser}`,
-    }).then((res) => {
-      setLikedUsers(res.data.likedUsers);
-    });
+    })
+      .then((res) => {
+        setLikedUsers((likedUsers = res.data.likedUsers));
+      })
+      .finally(() => {
+        getLikedUsersInfo(likedUsers);
+      });
+  };
+
+  // Get all basic profile information of liked users
+  const getLikedUsersInfo = (likedUsernames) => {
+    axios
+      .post(BASE_API_URL + "/likedUserInfo", { likedUsernames })
+      .then((res) => {
+        setLikedUserInfo((likedUserInfo = [...res.data.likedUserInfo]));
+      });
   };
 
   // Only when a new user is registered or the current user's information is updated is all basic information re-pulled.
@@ -222,16 +235,21 @@ export default function App() {
                 />
               }
             />
-            <Route path="/liked" element={<Liked 
-              isLoading={isLoading}
-              isLoggedIn={isLoggedIn}
-              currentUser={currentUser}
-              addLike={addLike}
-              removeLike={removeLike}
-              setIsUpdated={setIsUpdated}
-              likedUsers={likedUsers}
-              likedUserInfo={likedUserInfo}
-               />} />
+            <Route
+              path="/liked"
+              element={
+                <Liked
+                  isLoading={isLoading}
+                  isLoggedIn={isLoggedIn}
+                  currentUser={currentUser}
+                  addLike={addLike}
+                  removeLike={removeLike}
+                  setIsUpdated={setIsUpdated}
+                  likedUsers={likedUsers}
+                  likedUserInfo={likedUserInfo}
+                />
+              }
+            />
             <Route
               path="/logout"
               element={
