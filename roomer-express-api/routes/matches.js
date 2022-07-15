@@ -133,11 +133,9 @@ router.get("/getPfp/:username", authorization, async (req, res, next) => {
 // Add liked user to current user's list of liked people
 router.post("/addLike", authorization, async (req, res, next) => {
   try {
-    res
-      .status(200)
-      .send({
-        update: await Roomer.addLike(req.body.currentUser, req.body.likedUser),
-      });
+    res.status(200).send({
+      update: await Roomer.addLike(req.body.currentUser, req.body.likedUser),
+    });
   } catch (e) {
     return next(e);
   }
@@ -146,11 +144,12 @@ router.post("/addLike", authorization, async (req, res, next) => {
 // Remove liked user from current user's list of liked people
 router.post("/removeLike", authorization, async (req, res, next) => {
   try {
-    res
-      .status(200)
-      .send({
-        update: await Roomer.removeLike(req.body.currentUser, req.body.unlikedUser),
-      });
+    res.status(200).send({
+      update: await Roomer.removeLike(
+        req.body.currentUser,
+        req.body.unlikedUser
+      ),
+    });
   } catch (e) {
     return next(e);
   }
@@ -164,7 +163,7 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/logout", authorization, async (req, res) => {
+router.get("/logout", authorization, async (req, res, next) => {
   try {
     return res.clearCookie("token").status(200).send("Successfully logged out");
   } catch (e) {
@@ -172,13 +171,28 @@ router.get("/logout", authorization, async (req, res) => {
   }
 });
 
-router.get("/likedUsers/:username", authorization, async(req, res, next) => {
+// Get usernames associated with liked profiles
+router.get("/likedUsers/:username", authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send( { likedUsers: await Roomer.getLikes(username) })
+    const result = await Roomer.getLikes(username);
+    res.status(200).send({ likedUsers: result });
   } catch (e) {
     return next(e);
   }
-})
+});
+
+// Get all basic info associated with liked profiles
+router.post("/likedUserInfo", authorization, async (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .send({
+        likedUserInfo: await Roomer.getLikedUserInfo(req.body.likedUsernames),
+      });
+  } catch (e) {
+    return next(e);
+  }
+});
 
 module.exports = router;

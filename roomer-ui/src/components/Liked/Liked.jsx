@@ -24,9 +24,9 @@ export default function Liked({
             <NotAuthorized />
           ) : (
             <>
-              <h1>Welcome to the liked component</h1>
+              <h1>Your favorited profiles</h1>
 
-              <UserGrid
+              <UserGrid 
                 allUsers={likedUserInfo}
                 isLoading={isLoading}
                 isLoggedIn={isLoggedIn}

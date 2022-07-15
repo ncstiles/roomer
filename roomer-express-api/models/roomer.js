@@ -213,7 +213,7 @@ class Roomer {
       );
     }
   }
-
+  // get list of usernames associated with liked profiles
   static async getLikes(username) {
     try {
       await client.connect();
@@ -221,13 +221,38 @@ class Roomer {
         .db("roomer")
         .collection("all")
         .find({ username })
-        .project( { _id: 0, liked: 1 })
+        .project({ _id: 0, liked: 1 })
         .toArray();
-      return likedUsers[0].liked? likedUsers[0].liked : [];
-    } catch(e) {
+      return likedUsers[0].liked ? likedUsers[0].liked : [];
+    } catch (e) {
+      return new BadRequestError(`Failed to get likes for ${username}: ${e}`);
+    }
+  }
+
+  // get all basic information associated with liked profiles
+  static async getLikedUserInfo(usernames) {
+    try {
+      await client.connect();
+      const likedUserInfo = await client
+        .db("roomer")
+        .collection("all")
+        .find({ username: { $in: usernames } })
+        .project({
+          _id: 0,
+          username: 1,
+          firstName: 1,
+          age: 1,
+          gender: 1,
+          occupation: 1,
+          pfpSrc: 1,
+          contentType: 1,
+        })
+        .toArray();
+      return likedUserInfo;
+    } catch (e) {
       return new BadRequestError(
-        `Failed to get likes for ${username}: ${e}`
-      )
+        `Getting single user's basic data request didn't go through: ${e}`
+      );
     }
   }
 }
