@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./GridCard.css";
 import "../../css/card.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -10,6 +10,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 // display of card in main grid view.  Directs to DetailCard if card is clicked
 export default function GridCard({
   cardUsername,
+  inLiked,
   firstName,
   age,
   gender,
@@ -18,34 +19,27 @@ export default function GridCard({
   contentType,
   addLike,
   removeLike,
-  setIsUpdated
 }) {
   const nav = useNavigate();
-  let [clickedLike, setClickedLike] = useState(false);
+  
+  let [clickedLike, setClickedLike] = useState(inLiked);
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
-    setIsUpdated(prevVal=> !prevVal)
-  }
+  };
 
   const unlike = () => {
     removeLike(cardUsername);
     setClickedLike(false);
-    setIsUpdated(prevVal=> !prevVal)
-  }
+  };
+
   return (
     <>
       <div className="card user-card">
         {clickedLike ? (
-          <FavoriteIcon
-            className="heart"
-            onClick={unlike}
-          />
+          <FavoriteIcon className="heart" onClick={unlike} />
         ) : (
-          <FavoriteBorderOutlinedIcon
-            className="heart"
-            onClick={like}
-          />
+          <FavoriteBorderOutlinedIcon className="heart" onClick={like} />
         )}
         <div onClick={() => nav(`/introduce/${cardUsername}`)}>
           {pfpSrc ? (

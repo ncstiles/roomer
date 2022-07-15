@@ -4,18 +4,16 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { BASE_API_URL } from "../../constants";
-import { Toast, Button, Row, Col } from "react-bootstrap";
 import NotFound from "../NotFound/NotFound";
 import DetailCard from "../DetailCard/DetailCard";
 import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, addLike, removeLike, setIsUpdated }) {
-  // Iin Profile view we don't use useNavigate to get to the UserDetail component to display the card.
+export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, addLike, removeLike, likedUsers }) {
+  // In Profile view we don't use useNavigate to get to the UserDetail component to display the card.
   // Therefore to get the username of the person that the card is about, we must pass their username using the `cardUsername` prop.
   // In all other instances `cardUsername` is retrieved through useParams() (from within the useNavigate)
-
   const cardUsername = fromProfileCardUsername ? fromProfileCardUsername : useParams().cardUsername;
   let [basicInfo, setBasicInfo] = useState({});
   let [preferenceInfo, setPreferenceInfo] = useState({});
@@ -31,6 +29,7 @@ export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLi
   let [allInfo, setAllInfo] = useState([]);
   let [contentType, setContentType] = useState(null);
   let [pfpSrc, setPfpSrc] = useState(null);
+  const inLiked = null;
 
   /**
    * Execute a GET request to get an individual user's basic info.
@@ -178,7 +177,7 @@ export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLi
                         showLikeIcon={showLikeIcon}
                         addLike={addLike}
                         removeLike={removeLike}
-                        setIsUpdated={setIsUpdated}
+                        inLiked={likedUsers && likedUsers.includes(cardUsername)}
                       />
                       {/* numerical indicator */}
                       <span className="num-text">{slideIx + 1}/4</span>
