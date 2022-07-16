@@ -182,17 +182,4 @@ router.get("/likedUsers/:username", authorization, async (req, res, next) => {
   }
 });
 
-// Get all basic info associated with liked profiles
-router.post("/likedUserInfo", authorization, async (req, res, next) => {
-  try {
-    res
-      .status(200)
-      .send({
-        likedUserInfo: await Roomer.getLikedUserInfo(req.body.likedUsernames),
-      });
-  } catch (e) {
-    return next(e);
-  }
-});
-
 module.exports = router;

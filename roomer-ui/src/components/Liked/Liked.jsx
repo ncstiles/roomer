@@ -12,7 +12,7 @@ export default function Liked({
   removeLike,
   setIsUpdated,
   likedUsers,
-  likedUserInfo
+  likedUserInfo,
 }) {
   return (
     <div className="liked-view">
@@ -26,16 +26,20 @@ export default function Liked({
             <>
               <h1>Your favorited profiles</h1>
 
-              <UserGrid 
-                allUsers={likedUserInfo}
-                isLoading={isLoading}
-                isLoggedIn={isLoggedIn}
-                currentUser={currentUser}
-                addLike={addLike}
-                removeLike={removeLike}
-                setIsUpdated={setIsUpdated}
-                likedUsers={likedUsers}
-              />
+              {likedUserInfo.length === 0 ? (
+                <h2 className="no-likes">No liked users yet!</h2>
+              ) : (
+                <UserGrid
+                  allUsers={likedUserInfo}
+                  isLoading={isLoading}
+                  isLoggedIn={isLoggedIn}
+                  currentUser={currentUser}
+                  addLike={addLike}
+                  removeLike={removeLike}
+                  setIsUpdated={setIsUpdated}
+                  likedUsers={likedUsers}
+                />
+              )}
             </>
           )}
         </>
