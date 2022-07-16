@@ -94,24 +94,29 @@ export default function App() {
 
   // Get the list of usernames associated with liked profiles by the currently logged in user
   const getLikedUsers = () => {
+    let addedUser = null;
     axios({
       method: "get",
       url: `${BASE_API_URL}/likedUsers/${currentUser}`,
     })
       .then((res) => {
+        addedUser = res.data.likedUsers.length > likedUsers.length;
         setLikedUsers((likedUsers = res.data.likedUsers));
       })
       .finally(() => {
-        getLikedUsersInfo(likedUsers);
-      });
-  };
-
-  // Get all basic profile information of liked users
-  const getLikedUsersInfo = (likedUsernames) => {
-    axios
-      .post(BASE_API_URL + "/likedUserInfo", { likedUsernames })
-      .then((res) => {
-        setLikedUserInfo((likedUserInfo = [...res.data.likedUserInfo]));
+        if (addedUser) {
+          // user added
+          const updatedLikedInfo = allUsers.filter((person) =>
+            likedUsers.includes(person.username)
+          );
+          setLikedUserInfo((likedUserInfo = updatedLikedInfo));
+        } else {
+          // user removed
+          const updatedLikedInfo = likedUserInfo.filter((person) =>
+            likedUsers.includes(person.username)
+          );
+          setLikedUserInfo((likedUserInfo = updatedLikedInfo));
+        }
       });
   };
 

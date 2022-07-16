@@ -228,33 +228,6 @@ class Roomer {
       return new BadRequestError(`Failed to get likes for ${username}: ${e}`);
     }
   }
-
-  // get all basic information associated with liked profiles
-  static async getLikedUserInfo(usernames) {
-    try {
-      await client.connect();
-      const likedUserInfo = await client
-        .db("roomer")
-        .collection("all")
-        .find({ username: { $in: usernames } })
-        .project({
-          _id: 0,
-          username: 1,
-          firstName: 1,
-          age: 1,
-          gender: 1,
-          occupation: 1,
-          pfpSrc: 1,
-          contentType: 1,
-        })
-        .toArray();
-      return likedUserInfo;
-    } catch (e) {
-      return new BadRequestError(
-        `Getting single user's basic data request didn't go through: ${e}`
-      );
-    }
-  }
 }
 
 module.exports = Roomer;
