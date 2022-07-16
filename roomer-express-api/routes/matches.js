@@ -84,11 +84,7 @@ router.post("/update/:username", authorization, async (req, res, next) => {
 
 // change or add a user's selected profile picture
 //TODO: do authorization
-router.post(
-  "/uploadPfp",
-  authorization,
-  upload.single("pfpSrc"),
-  async function (req, res, next) {
+router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function (req, res, next) {
     try {
       const img = fs.readFileSync(req.file.path);
       const encodeImg = img.toString("base64");
@@ -155,6 +151,17 @@ router.post("/removeLike", authorization, async (req, res, next) => {
   }
 });
 
+// Get usernames associated with liked profiles
+router.get("/likedUsers/:username", authorization, async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    const result = await Roomer.getLikes(username);
+    res.status(200).send({ likedUsers: result });
+  } catch (e) {
+    return next(e);
+  }
+});
+
 router.post("/login", async (req, res, next) => {
   try {
     login(req.body.username, req.body.password, res);
@@ -166,17 +173,6 @@ router.post("/login", async (req, res, next) => {
 router.get("/logout", authorization, async (req, res, next) => {
   try {
     return res.clearCookie("token").status(200).send("Successfully logged out");
-  } catch (e) {
-    return next(e);
-  }
-});
-
-// Get usernames associated with liked profiles
-router.get("/likedUsers/:username", authorization, async (req, res, next) => {
-  try {
-    const username = req.params.username;
-    const result = await Roomer.getLikes(username);
-    res.status(200).send({ likedUsers: result });
   } catch (e) {
     return next(e);
   }

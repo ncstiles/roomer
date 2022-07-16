@@ -16,3 +16,26 @@
   height: 175px;
   margin: 30px auto;
 }
+
+.fade-heart {
+  animation: fadeout 0.5s linear forwards;
+  opacity: 0;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.hidden-heart {
+  color: #d4c0d5;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  transform: scale(1.3);
+  visibility: hidden;
+}

@@ -21,10 +21,10 @@
 
 .sidebar-items > li {
   margin-top: 30px;
+  cursor: pointer;
 }
 .content {
   margin: auto;
-  /* margin-top: 140px; */
   color: #9ba4a7;
   width: 90vw;
   padding: 0px 20px;
@@ -57,8 +57,6 @@ hr {
 
 .highlight {
   background-color: #798d93;
-  border-radius: 10px;
-  margin: 3px;
 }
 
 .pfp {

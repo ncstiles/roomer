@@ -5,6 +5,8 @@ import { useState } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import HeartBrokenOutlinedIcon from "@mui/icons-material/HeartBrokenOutlined";
+
 // DetailCard has 4 views: basic, housing, preferences, and extra info.
 // Only the basic view includes a profile picture, so there is a unique className `card-two-rows` to account for its styling.
 // All classes but extra info have two columns of text, so there is a unique className `two-cols` to account for their styling.
@@ -24,16 +26,20 @@ export default function DetailCard({
   // toggle className appropriately
   const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
   let [clickedLike, setClickedLike] = useState(inLiked);
+  let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
 
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
+    setBrokenHeart("hidden-heart");
   };
 
   const unlike = () => {
     removeLike(cardUsername);
     setClickedLike(false);
+    setBrokenHeart("heart fade-heart");
   };
+
   return (
     <div className={`card detail-card ${basicClass}`}>
       {allInfo && allInfo[0] ? (
@@ -46,10 +52,13 @@ export default function DetailCard({
                 {clickedLike ? (
                   <FavoriteIcon className="heart" onClick={unlike} />
                 ) : (
-                  <FavoriteBorderOutlinedIcon
-                    className="heart"
-                    onClick={like}
-                  />
+                  <>
+                    <HeartBrokenOutlinedIcon className={brokenHeart} />
+                    <FavoriteBorderOutlinedIcon
+                      className="heart"
+                      onClick={like}
+                    />
+                  </>
                 )}
               </>
             ) : null
