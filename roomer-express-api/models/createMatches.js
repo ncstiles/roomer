@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { googleApiKey, rentOptions } = require("../consts");
+const { googleApiKey, rentOptions, ageOptions } = require("../consts");
 class Match {
   constructor(currentUser) {
     this.units = "imperial";
@@ -11,6 +11,7 @@ class Match {
     this.origin = "";
     this.normalizedDistances = [];
     this.rentScore = [];
+    this.ageScore = [];
   }
 
   /**
@@ -84,6 +85,7 @@ class Match {
       .finally(() => {
         this.normalizeDistances(distances);
         this.rentMatch();
+        this.ageMatch();
       });
   }
 
@@ -112,8 +114,10 @@ class Match {
    * Assign a rental score depending on the difference between the users' rent range preferences.
    */
   rentMatch() {
-    let currentUserRent = -1;
+    let currentUserRent = null;
     let othersRent = [];
+
+    // put user's rent ranges into buckets
     this.allUserInfo.map((user) => {
       if (user.username == this.currentUser) {
         currentUserRent = rentOptions[user.rentRange];
@@ -121,6 +125,8 @@ class Match {
         othersRent.push(rentOptions[user.rentRange]);
       }
     });
+
+    //based on difference in buckets, calculate rent score
     this.rentScore = othersRent.map((otherUserRent) => {
       if (otherUserRent === currentUserRent) {
         return 1;
@@ -129,6 +135,59 @@ class Match {
       } else {
         return 1 - 0.1 * (currentUserRent - otherUserRent);
       }
+    });
+  }
+
+  /**
+   * Return the age bucket number that this user is in
+   *
+   * @param {*} age User A's age
+   */
+  ageCategory(age) {
+    if (age < 18) {
+      return 1;
+    } else if (age <= 22) {
+      return 2;
+    } else if (age <= 26) {
+      return 3;
+    } else if (age <= 35) {
+      return 4;
+    } else if (age <= 50) {
+      return 5;
+    } else if (age <= 65) {
+      return 6;
+    } else {
+      return 7;
+    }
+  }
+
+  /**
+   * Calculate each user's age score, which depends on the total difference between
+   * the current user's age and the other user's age preference and vice versa.
+   */
+  ageMatch() {
+    let currentAge = null;
+    let currentAgePref = null;
+    let othersAge = [];
+    let othersAgePref = [];
+
+    // assign each user's age and age preference to a bucket number
+    this.allUserInfo.map((user) => {
+      if (user.username == this.currentUser) {
+        currentAge = this.ageCategory(Number(user.age));
+        currentAgePref = ageOptions[user.agePref];
+      } else {
+        othersAge.push(this.ageCategory(Number(user.age)));
+        othersAgePref.push(ageOptions[user.agePref]);
+      }
+    });
+
+    // use the differences in the bucket numbers to assign a score
+    this.ageScore = othersAge.map((otherAge, ix) => {
+      const userPrefDiff = Math.abs(otherAge - currentAgePref) / 10;
+      const otherPrefDiff = Math.abs(currentAge - othersAgePref[ix]) / 10;
+
+      return 1 - (userPrefDiff + otherPrefDiff);
     });
   }
 }
