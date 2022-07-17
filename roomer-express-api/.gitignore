@@ -1,5 +1,6 @@
 node_modules
 mongodb-transfer
+google-api
 uploads
 *-lock.*
 *.lock

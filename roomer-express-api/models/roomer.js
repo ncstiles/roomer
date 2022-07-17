@@ -33,6 +33,36 @@ class Roomer {
     }
   }
 
+  // get the requisite info to create custom profile recommendations for a user
+  static async getMatchInfo() {
+    try {
+      await client.connect();
+      const allInfoArr = await client
+        .db("roomer")
+        .collection("all")
+        .find({})
+        .project({
+          _id: 0,
+          username: 1,
+          city: 1,
+          state: 1,
+          address: 1,
+          age: 1,
+          gender: 1,
+          rentRange: 1,
+          agePref: 1,
+          genderPref: 1,
+          locRad: 1,
+        })
+        .toArray();
+      return allInfoArr;
+    } catch (e) {
+      return new BadRequestError(
+        `Getting all of matching algo information failed.`
+      );
+    }
+  }
+
   // get information associated a user and break it up into the chunks that are displayed on separate cards in detail view
   static async getAllInfo(username) {
     try {

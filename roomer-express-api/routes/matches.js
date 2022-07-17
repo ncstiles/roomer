@@ -84,7 +84,11 @@ router.post("/update/:username", authorization, async (req, res, next) => {
 
 // change or add a user's selected profile picture
 //TODO: do authorization
-router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function (req, res, next) {
+router.post(
+  "/uploadPfp",
+  authorization,
+  upload.single("pfpSrc"),
+  async function (req, res, next) {
     try {
       const img = fs.readFileSync(req.file.path);
       const encodeImg = img.toString("base64");
@@ -155,9 +159,17 @@ router.post("/removeLike", authorization, async (req, res, next) => {
 router.get("/likedUsers/:username", authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    const result = await Roomer.getLikes(username);
-    res.status(200).send({ likedUsers: result });
+    res.status(200).send({ likedUsers: await Roomer.getLikes(username) });
   } catch (e) {
+    return next(e);
+  }
+});
+
+// get info necessary to provide match recommendations
+router.get("/getMatchInfo", authorization, async (req, res, next) => {
+  try {
+    res.status(200).send({ matchInfo: await Roomer.getMatchInfo() });
+  } catch {
     return next(e);
   }
 });
