@@ -2,5 +2,6 @@ node_modules
 mongodb-transfer
 google-api
 uploads
+consts.js
 *-lock.*
 *.lock

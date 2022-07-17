@@ -1,4 +1,4 @@
-const { mongo_pw } = require("../constants");
+const { mongo_pw } = require("../consts");
 const { BadRequestError } = require("../utils/errors");
 const bcrypt = require("bcrypt");
 const { MongoClient } = require("mongodb");
