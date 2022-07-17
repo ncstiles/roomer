@@ -178,7 +178,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn,
               <Form.Select aria-label="Select rent range" required>
                 <option> </option>
                 <option value="<$500">&#60;$500</option>
-                <option value="$500 - $1000">$500 - $1,000</option>
+                <option value="$500 - $1,000">$500 - $1,000</option>
                 <option value="$1,000 - $2,000">$1,000 - $2,000</option>
                 <option value="$2,000 - $3,000">$2,000 - $3,000</option>
                 <option value="$3,000 - $5,000">$3,000 - $5,000</option>
