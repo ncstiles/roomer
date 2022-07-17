@@ -1,4 +1,4 @@
-const { private_key } = require("../constants");
+const { private_key } = require("../consts");
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
@@ -166,7 +166,7 @@ router.get("/likedUsers/:username", authorization, async (req, res, next) => {
 });
 
 // get info necessary to provide match recommendations
-router.get("/getMatchInfo", authorization, async (req, res, next) => {
+router.get("/getMatchInfo", async (req, res, next) => {
   try {
     res.status(200).send({ matchInfo: await Roomer.getMatchInfo() });
   } catch {
