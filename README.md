@@ -4,6 +4,7 @@
 - Created liked profiles tab within navbar and profile view
 - Within the Liked component, users can view the basic information of the profiles they've liked.  This works both when navigated to from the navbar, and from within the profile view.
 - Keeping track of the status of each card's "heart react" up to date between different card views, and before and after each click of the heart react.  For example, after unliking a user in the grid or detail view, in the liked view, that user's card disappears. 
+- Added CSS styling details: after unliking a user, broken heart icon fades into the heart outline.  Added favicon as well as  mouse pointer on hover over clickable items. 
 
 **Feature 5: Profile tab + modify information**
 - Created profile tab within navbar
@@ -31,4 +32,4 @@
 
 **Demo video**
 
-[![demo youtube video](https://img.youtube.com/vi/JlB8H60KKVo/0.jpg)](https://youtu.be/JlB8H60KKVo)
+[![demo youtube video](https://img.youtube.com/vi/bo-nHKnLKFE/0.jpg)](https://youtu.be/bo-nHKnLKFE)
