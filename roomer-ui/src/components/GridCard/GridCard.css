@@ -1,6 +1,7 @@
 .user-card {
   width: 300px;
   min-width: 300px;
+  cursor: pointer;
 }
 
 #grid-pfp {
