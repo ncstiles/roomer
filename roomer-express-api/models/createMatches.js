@@ -12,6 +12,7 @@ class Match {
     this.normalizedDistances = [];
     this.rentScore = [];
     this.ageScore = [];
+    this.genderScore = [];
   }
 
   /**
@@ -86,6 +87,7 @@ class Match {
         this.normalizeDistances(distances);
         this.rentMatch();
         this.ageMatch();
+        this.genderMatch();
       });
   }
 
@@ -188,6 +190,36 @@ class Match {
       const otherPrefDiff = Math.abs(currentAge - othersAgePref[ix]) / 10;
 
       return 1 - (userPrefDiff + otherPrefDiff);
+    });
+  }
+
+  /**
+   * Calculate each user's gender score which depends on whether there is an exact 
+   * match between the two user's gender and gender preference
+   */
+  genderMatch() {
+    let currentGender = null;
+    let currentGenderPref = null;
+    let othersGender = [];
+    let othersGenderPref = [];
+
+    //get current user's gender and gender preference
+    this.allUserInfo.map((user) => {
+      if (user.username === this.currentUser) {
+        currentGender = user.gender;
+        currentGenderPref = user.genderPref;
+      } else {
+        othersGender.push(user.gender);
+        othersGenderPref.push(user.genderPref);
+      }
+    });
+
+    // calculate gender match score
+    this.genderScore = othersGender.map((otherGender, ix) => {
+      return currentGender === othersGenderPref[ix] &&
+        otherGender === currentGenderPref
+        ? 1
+        : 0.5;
     });
   }
 }

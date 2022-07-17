@@ -288,6 +288,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn,
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Non-binary">Non-binary</option>
+                <option value="Other">Other</option>
               </Form.Select>
               <Form.Control.Feedback type="invalid">
                 Please select a roommate gender preference.

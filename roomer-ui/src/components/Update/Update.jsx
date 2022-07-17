@@ -178,7 +178,7 @@ export default function Update({ currentUser, setIsUpdated }) {
                 <Form.Select>
                   <option> </option>
                   <option value="<$500">&#60;$500</option>
-                  <option value="$500 - $1000">$500 - $1,000</option>
+                  <option value="$500 - $1,000">$500 - $1,000</option>
                   <option value="$1,000 - $2,000">$1,000 - $2,000</option>
                   <option value="$2,000 - $3,000">$2,000 - $3,000</option>
                   <option value="$3,000 - $5,000">$3,000 - $5,000</option>
@@ -253,6 +253,8 @@ export default function Update({ currentUser, setIsUpdated }) {
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                   <option value="Non-binary">Non-binary</option>
+                  <option value="Other">Other</option>
+
                 </Form.Select>
               </Form.Group>
             </Col>
