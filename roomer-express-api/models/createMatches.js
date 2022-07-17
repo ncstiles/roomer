@@ -13,6 +13,7 @@ class Match {
     this.rentScore = [];
     this.ageScore = [];
     this.genderScore = [];
+    this.overallScore = [];
   }
 
   /**
@@ -57,7 +58,7 @@ class Match {
    *
    * @param {*} distances list of distances between the origin and all the destination locations
    */
-  normalizeDistances(distances) {
+  distanceMatch(distances) {
     const minDistance = Math.min(...distances);
     const maxDistance = Math.max(...distances);
     this.normalizedDistances = distances.map(
@@ -84,10 +85,7 @@ class Match {
         });
       })
       .finally(() => {
-        this.normalizeDistances(distances);
-        this.rentMatch();
-        this.ageMatch();
-        this.genderMatch();
+        this.calculateCategoryScores(distances);
       });
   }
 
@@ -194,7 +192,7 @@ class Match {
   }
 
   /**
-   * Calculate each user's gender score which depends on whether there is an exact 
+   * Calculate each user's gender score which depends on whether there is an exact
    * match between the two user's gender and gender preference
    */
   genderMatch() {
@@ -222,11 +220,63 @@ class Match {
         : 0.5;
     });
   }
+
+  /**
+   * Given the distance, rent, age, and gender score for each user, calculate their overall score
+   */
+  getOverallScore() {
+    this.overallScore = this.normalizedDistances.map((distanceScore, ix) => {
+      return (
+        0.5 * distanceScore +
+        0.25 * this.rentScore[ix] +
+        0.125 * this.ageScore[ix] +
+        0.125 * this.genderScore[ix]
+      );
+    });
+  }
+
+  /**
+   * Given all the user info, sort the users and return the usernames in score order from largest to smallest
+   */
+  sortUserInfo() {
+    const infoWithRanking = this.allUserInfo
+      .filter((userInfo) => userInfo.username !== this.currentUser)
+      .map((userInfo, ix) => {
+        return { userInfo: userInfo, val: this.overallScore[ix] };
+      });
+
+    infoWithRanking.sort((a, b) => {
+      return b.val - a.val;
+    });
+
+    this.sortedUsernames = infoWithRanking.map(info => info.userInfo.username);
+  }
+
+  getSortedUserNames() {
+    return this.sortedUsernames;
+  }
+
+  /**
+   * Get each subsection score - distance, rent, age, and gender - for each user.
+   * Use this information to create a total score, and then sort users from highest to lowest score.
+   * 
+   * @param {array[Number]} distances The raw distances in meters between each origin and desitination location
+   */
+  calculateCategoryScores(distances) {
+    this.distanceMatch(distances);
+    this.rentMatch();
+    this.ageMatch();
+    this.genderMatch();
+    this.getOverallScore();
+    this.sortUserInfo();
+  }
+
 }
 
 async function main() {
   const nstiles = new Match("nstiles");
   nstiles.getDistanceInfo();
+  nstiles.getSortedUserNames();
 }
 
 main();
