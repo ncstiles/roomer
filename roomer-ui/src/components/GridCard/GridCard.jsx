@@ -34,10 +34,8 @@ export default function GridCard({
   const unlike = () => {
     removeLike(cardUsername);
     setClickedLike(false);
-    console.log("in unlike");
     setBrokenHeart("heart fade-heart");
   };
-  console.log("broken heart classname:", brokenHeart);
   return (
     <>
       <div className="card user-card">
