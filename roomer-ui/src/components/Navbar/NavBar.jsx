@@ -13,24 +13,29 @@ export default function NavBar({ currentUser }) {
           ROOMER
         </span>
         <div className="navbar-links">
-          <span className="link" onClick={() => nav("/matches")}>
+          <span className="link" onClick={() => nav("/recommendations")}>
             RECOMMENDATIONS
           </span>
-          <span className="link" onClick={() => nav("/liked")}>LIKED</span>
-          <span className="link">MATCHES</span>
+          <span className="link" onClick={() => nav("/liked")}>
+            LIKED
+          </span>
+          <span className="link" onClick={() => nav("/matches")}>
+            MATCHES
+          </span>
         </div>
         {/*spacer to add distance between left/right sides of navbar */}
         <div className="spacer" />
         <div className="login-profile">
-          <span className="link" onClick={() => nav("/login")}>
-            LOGIN
-          </span>
-          <span className="link" onClick={() => nav("/register")}>
-            REGISTER
-          </span>
-          <span className="link" onClick={() => nav("/logout")}>
-            LOGOUT
-          </span>
+          {currentUser ? null : (
+            <>
+              <span className="link" onClick={() => nav("/login")}>
+                LOGIN
+              </span>
+              <span className="link" onClick={() => nav("/register")}>
+                REGISTER
+              </span>
+            </>
+          )}
 
           {!currentUser ? null : (
             <Button
@@ -41,6 +46,10 @@ export default function NavBar({ currentUser }) {
               {currentUser}
             </Button>
           )}
+
+          <span className="link" onClick={() => nav("/logout")}>
+            LOGOUT
+          </span>
         </div>
       </nav>
     </>
