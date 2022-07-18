@@ -32,8 +32,8 @@ class Roomer {
       );
     }
   }
-
-  // get the requisite info to create custom profile recommendations for a user
+  // Get the requisite info to create custom profile recommendations for a user.
+  // Includes both info needed for matching and info needed for generating basic profile
   static async getMatchInfo() {
     try {
       await client.connect();
@@ -44,11 +44,15 @@ class Roomer {
         .project({
           _id: 0,
           username: 1,
+          firstName: 1,
+          age: 1,
+          gender: 1,
+          occupation: 1,
+          pfpSrc: 1,
+          contentType: 1,
           city: 1,
           state: 1,
           address: 1,
-          age: 1,
-          gender: 1,
           rentRange: 1,
           agePref: 1,
           genderPref: 1,

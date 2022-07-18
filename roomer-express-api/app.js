@@ -1,6 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
-const matchRoute = require("./routes/matches");
+const matchRoute = require("./routes/routes");
 const cookieParser = require("cookie-parser");
 
 const app = express();
