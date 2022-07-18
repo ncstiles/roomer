@@ -15,6 +15,7 @@ import Profile from "../Profile/Profile";
 import Logout from "../Logout/Logout";
 import Update from "../Update/Update";
 import Liked from "../Liked/Liked";
+import Matches from "../Matches/Matches";
 
 export default function App() {
   axios.defaults.withCredentials = true;
@@ -155,7 +156,7 @@ export default function App() {
               }
             />
             <Route
-              path="/matches"
+              path="/recommendations"
               element={
                 <Home
                   allUsers={allUsers}
@@ -246,6 +247,21 @@ export default function App() {
               path="/liked"
               element={
                 <Liked
+                  isLoading={isLoading}
+                  isLoggedIn={isLoggedIn}
+                  currentUser={currentUser}
+                  addLike={addLike}
+                  removeLike={removeLike}
+                  setIsUpdated={setIsUpdated}
+                  likedUsers={likedUsers}
+                  likedUserInfo={likedUserInfo}
+                />
+              }
+            />
+            <Route
+              path="/matches"
+              element={
+                <Matches
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}

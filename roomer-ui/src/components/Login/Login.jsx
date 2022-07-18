@@ -49,7 +49,7 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
       })
       .finally(() => {
         setShowMsg(true);
-        nav("/matches");
+        nav("/recommendations");
       });
   };
 

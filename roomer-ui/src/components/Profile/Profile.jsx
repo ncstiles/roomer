@@ -9,6 +9,7 @@ import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import UserDetail from "../UserDetail/UserDetail";
 import UploadPfp from "../UploadPfp/UploadPfp";
 import Liked from "../Liked/Liked";
+import Matches from "../Matches/Matches";
 import axios from "axios";
 
 // depending on tab that is toggled, display the correct component
@@ -26,7 +27,7 @@ function Subview({
   addLike,
   removeLike,
   likedUsers,
-  likedUserInfo
+  likedUserInfo,
 }) {
   switch (viewComponent) {
     case "own":
@@ -41,7 +42,7 @@ function Subview({
           setIsUpdated={setIsUpdated}
         />
       );
-    case "matches":
+    case "recommendations":
       return (
         <UserGrid
           allUsers={allUsers}
@@ -55,16 +56,31 @@ function Subview({
         />
       );
     case "liked":
-      return <Liked 
-        isLoading={isLoading}
-        isLoggedIn={isLoggedIn}
-        currentUser={currentUser}
-        addLike={addLike}
-        removeLike={removeLike}
-        setIsUpdated={setIsUpdated}
-        likedUsers={likedUsers}
-        likedUserInfo={likedUserInfo}
-        />;
+      return (
+        <Liked
+          isLoading={isLoading}
+          isLoggedIn={isLoggedIn}
+          currentUser={currentUser}
+          addLike={addLike}
+          removeLike={removeLike}
+          setIsUpdated={setIsUpdated}
+          likedUsers={likedUsers}
+          likedUserInfo={likedUserInfo}
+        />
+      );
+    case "matches":
+      return (
+        <Matches
+          isLoading={isLoading}
+          isLoggedIn={isLoggedIn}
+          currentUser={currentUser}
+          addLike={addLike}
+          removeLike={removeLike}
+          setIsUpdated={setIsUpdated}
+          likedUsers={likedUsers}
+          likedUserInfo={likedUserInfo}
+        />
+      );
     case "messages":
       return <h1>Placeholder for message contacts</h1>;
     case "modify":
@@ -104,7 +120,7 @@ export default function Profile({
   addLike,
   removeLike,
   likedUsers,
-  likedUserInfo
+  likedUserInfo,
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -162,10 +178,14 @@ export default function Profile({
               Change profile picture
             </span>
           </li>
-          <li className={`${viewComponent === "matches" ? "highlight" : ""}`}>
+          <li
+            className={`${
+              viewComponent === "recommendations" ? "highlight" : ""
+            }`}
+          >
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("matches")}
+              onClick={() => setViewComponent("recommendations")}
             >
               Matches
             </span>
@@ -176,6 +196,14 @@ export default function Profile({
               onClick={() => setViewComponent("liked")}
             >
               Liked
+            </span>
+          </li>
+          <li className={`${viewComponent === "matches" ? "highlight" : ""}`}>
+            <span
+              className="nav-link text-white"
+              onClick={() => setViewComponent("matches")}
+            >
+              Matches
             </span>
           </li>
           <li className={`${viewComponent === "messages" ? "highlight" : ""}`}>
