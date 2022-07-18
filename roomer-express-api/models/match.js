@@ -73,20 +73,15 @@ class Match {
    * Then, make another get request to get the normalized distances between the origin and all destination locations.
    */
   async getDistanceInfo() {
-    axios({
+    const res = await axios({
       method: "get",
-      url: "http://localhost:3001/getMatchInfo",
-    })
-      .then((res) => {
-        const locations = [];
-        this.allUserInfo = res.data.matchInfo;
-        this.allUserInfo.map((user) => this.addInfo(user, locations));
-        this.destinations = locations.join("|");
-        return this.destinations;
-      })
-      .finally(async () => {
-        return await this.makeDistanceRequest();
-      });
+      url: "http://localhost:3001/matchInfo",
+    });
+    const locations = [];
+    this.allUserInfo = res.data.matchInfo;
+    this.allUserInfo.map((user) => this.addInfo(user, locations));
+    this.destinations = locations.join("|");
+    return await this.makeDistanceRequest();
   }
 
   /**
@@ -95,20 +90,15 @@ class Match {
    */
   async makeDistanceRequest() {
     const distances = [];
-
-    axios({
+    const res = await axios({
       method: "get",
       url: `https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${this.destinations}&origins=${this.origin}&units=${this.units}&key=${this.apiKey}`,
-    })
-      .then(function (res) {
-        const distanceDurationArr = res.data.rows[0].elements;
-        distanceDurationArr.map((distanceDuration) => {
-          distances.push(distanceDuration.distance.value);
-        });
-      })
-      .finally(() => {
-        return this.calculateCategoryScores(distances);
-      });
+    });
+    const distanceDurationArr = res.data.rows[0].elements;
+    distanceDurationArr.map((distanceDuration) => {
+      distances.push(distanceDuration.distance.value);
+    });
+    return this.calculateCategoryScores(distances);
   }
 
   /**
@@ -250,6 +240,7 @@ class Match {
     infoWithRanking.sort((a, b) => {
       return b.val - a.val;
     });
+
     this.sortedBasicInfo = infoWithRanking.map((info) => {
       return {
         username: info.userInfo.username,

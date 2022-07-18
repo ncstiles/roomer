@@ -20,6 +20,7 @@ export default function GridCard({
   contentType,
   addLike,
   removeLike,
+  score
 }) {
   const nav = useNavigate();
 
@@ -48,6 +49,7 @@ export default function GridCard({
           </>
         )}
         <div onClick={() => nav(`/introduce/${cardUsername}`)}>
+          <span>{score.toFixed(2)*100}% match  </span>
           {pfpSrc ? (
             <img
               className="card-pfp"

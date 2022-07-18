@@ -14,7 +14,7 @@ export default function NavBar({ currentUser }) {
         </span>
         <div className="navbar-links">
           <span className="link" onClick={() => nav("/matches")}>
-            MATCHES
+            RECOMMENDATIONS
           </span>
           <span className="link" onClick={() => nav("/liked")}>LIKED</span>
           <span className="link">GROUPS</span>

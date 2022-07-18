@@ -58,10 +58,10 @@ export default function App() {
   const updateInfo = () => {
     axios({
       method: "get",
-      url: BASE_API_URL + "/allBasic",
+      url: `${BASE_API_URL}/getRecs/${currentUser}`,
     })
       .then((res) => {
-        setAllUsers((allUsers = [...res.data.allBasicData]));
+        setAllUsers((allUsers = [...res.data.orderedBasicInfo]));
       })
       .finally(() => {
         setIsLoading(false);
@@ -123,7 +123,9 @@ export default function App() {
   // Only when a new user is registered or the current user's information is updated is all basic information re-pulled.
   useEffect(() => {
     setIsLoading(true);
-    updateInfo();
+    if (currentUser) {
+      updateInfo();
+    }
   }, [isUpdated]);
 
   // Get list of the current user's liked usernames whenever we have new or changed users, or when we navigate between pages (which is when we `updateLikes`)

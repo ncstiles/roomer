@@ -8,9 +8,7 @@ const dir = "uploads/";
 const upload = multer({ dest: dir });
 const Roomer = require("../models/roomer");
 const Match = require("../models/match");
-
 const jwt = require("jsonwebtoken");
-const main = require("../models/match");
 
 // extract and verify the token stored in `req`s cookie
 // if token doesn't exist or token cannot be successfully verified, send "forbidden" error.
@@ -43,21 +41,20 @@ const login = async (username, password, res) => {
   return res.status(200).send("cookie has been created!");
 };
 
+// get all users basic info
+router.get("/allBasic", authorization, async (req, res, next) => {
+  try {
+    res.status(200).send({ allBasicData: await Roomer.getAllBasic() });
+  } catch (e) {
+    return next(e);
+  }
+});
+
 // get all of a single user's info
 router.get("/allInfo/:username", authorization, async (req, res, next) => {
   const username = req.params.username;
-  const orderedUsernames = [
-    "sstiles",
-    "rhu",
-    "lanadr",
-    "hlee",
-    "bross",
-    "gwash",
-  ];
   try {
-    res
-      .status(200)
-      .send({ allInfo: await Roomer.getAllInfo(orderedUsernames) });
+    res.status(200).send({ allInfo: await Roomer.getAllInfo(username) });
   } catch (e) {
     return next(e);
   }
@@ -102,8 +99,7 @@ router.post(
         username: req.body.username,
       };
 
-      // multer uses the "uploads" dir to get the filepath
-      // files store
+      // multer uses the "uploads" dir to get the filepath that intermediate files are stored in
       fs.readdir(dir, (err, files) => {
         if (err) {
           throw err;
@@ -170,7 +166,7 @@ router.get("/likedUsers/:username", authorization, async (req, res, next) => {
 });
 
 // Get info necessary to provide match recommendations
-router.get("/getMatchInfo", async (req, res, next) => {
+router.get("/matchInfo", async (req, res, next) => {
   try {
     res.status(200).send({ matchInfo: await Roomer.getMatchInfo() });
   } catch {
@@ -179,20 +175,12 @@ router.get("/getMatchInfo", async (req, res, next) => {
 });
 
 // Get user's basic info sorted based on match score
-router.get("/getRecommendations/:username", async (req, res, next) => {
+router.get("/getRecs/:username", async (req, res, next) => {
   try {
     const currentUser = req.params.username;
     const user = new Match(currentUser);
-    res.status(200).send({ orderedBasicInfo: await user.getDistanceInfo() });
-  } catch (e) {
-    return next(e);
-  }
-});
-
-// get all users basic info
-router.get("/allBasic", authorization, async (req, res, next) => {
-  try {
-    res.status(200).send({ allBasicData: await Roomer.getAllBasic() });
+    const sortedMatches = await user.getDistanceInfo();
+    res.status(200).send({ orderedBasicInfo: sortedMatches });
   } catch (e) {
     return next(e);
   }
