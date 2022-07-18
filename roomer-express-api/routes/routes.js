@@ -134,7 +134,7 @@ router.get("/getPfp/:username", authorization, async (req, res, next) => {
 router.post("/addLike", authorization, async (req, res, next) => {
   try {
     res.status(200).send({
-      update: await Roomer.addLike(req.body.currentUser, req.body.likedUser),
+      update:  await Roomer.processLike(req.body.currentUser, req.body.likedUser),
     });
   } catch (e) {
     return next(e);

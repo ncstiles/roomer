@@ -17,7 +17,7 @@ export default function NavBar({ currentUser }) {
             RECOMMENDATIONS
           </span>
           <span className="link" onClick={() => nav("/liked")}>LIKED</span>
-          <span className="link">GROUPS</span>
+          <span className="link">MATCHES</span>
         </div>
         {/*spacer to add distance between left/right sides of navbar */}
         <div className="spacer" />
