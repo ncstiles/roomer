@@ -40,6 +40,7 @@ export default function UserGrid({
                       contentType={user.contentType ? user.contentType : null}
                       addLike={addLike}
                       removeLike={removeLike}
+                      score={user.score}
                     />
                   );
                 })}
