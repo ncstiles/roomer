@@ -126,7 +126,7 @@ export default function App() {
     if (currentUser) {
       updateInfo();
     }
-  }, [isUpdated]);
+  }, [isUpdated, currentUser]);
 
   // Get list of the current user's liked usernames whenever we have new or changed users, or when we navigate between pages (which is when we `updateLikes`)
   useEffect(() => {

@@ -209,6 +209,25 @@ class Roomer {
     }
   }
 
+  // add `matchedUser` to `user`s matched list
+  static async addMatch(user, matchedUser) {
+    try {
+      await client.connect();
+      await client
+        .db("roomer")
+        .collection("all")
+        .updateOne(
+          { username: user },
+          { $addToSet: { matches: matchedUser } },
+          { upsert: true }
+        );
+    } catch (e) {
+      return new BadRequestError(
+        `Failed to add ${matchedUser} to list of ${user}'s matches: ${e}`
+      );
+    }
+  }
+
   // add person to current user's list of liked people
   static async addLike(currentUser, likedUser) {
     try {
@@ -221,7 +240,6 @@ class Roomer {
           { $addToSet: { liked: likedUser } },
           { upsert: true }
         );
-      return `Added ${likedUser} to list of ${currentUser}'s liked people`;
     } catch (e) {
       return new BadRequestError(
         `Failed to add ${likedUser} to list of ${currentUser}'s liked people: ${e}`
@@ -240,13 +258,55 @@ class Roomer {
           { username: currentUser },
           { $pull: { liked: unlikedUser } }
         );
-      return `Removed ${unlikedUser} from list of ${currentUser}'s liked people`;
     } catch (e) {
       return new BadRequestError(
         `Failed to remove ${unlikedUser} from list of ${currentUser}'s liked people: ${e}`
       );
     }
   }
+
+  // check whether `otherUser` is in `user`s liked list.
+  static async inLikedList(user, otherUser) {
+    await client.connect();
+    const res = await client
+      .db("roomer")
+      .collection("all")
+      .find({ username: user })
+      .project({ _id: 0, liked: 1 })
+      .toArray();
+
+    if (!res[0].liked) {
+      return false; // liked list undefined when doing call - user has never liked anyone before
+    } else if (resres[0].liked.includes(otherUser)) {
+      return true; // otherUser in liked list
+    } else {
+      return false; // otherUser not in liked list
+    }
+  }
+
+  // determine whether the two users have a like or a match relationship
+  static async processLike(currentUser, likedUser) {
+    try {
+      const isLiked = await Roomer.inLikedList(likedUser, currentUser);
+
+      if (isLiked) {
+        await Roomer.addMatch(currentUser, likedUser); // add the liked user to this user's matched list
+        await Roomer.removeLike(likedUser, currentUser); // remove the current user from the liked user's liked list
+        await Roomer.addMatch(likedUser, currentUser); // instead, added them to their matched list
+        return "match";
+      }
+      // this is a one-way like
+      else {
+        await Roomer.addLike(currentUser, likedUser);
+        return "like";
+      }
+    } catch (e) {
+      return new BadRequestError(
+        `Failed to like/match ${currentUser} with ${likedUser}`
+      );
+    }
+  }
+
   // get list of usernames associated with liked profiles
   static async getLikes(username) {
     try {

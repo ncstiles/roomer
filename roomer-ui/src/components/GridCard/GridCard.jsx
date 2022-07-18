@@ -49,7 +49,8 @@ export default function GridCard({
           </>
         )}
         <div onClick={() => nav(`/introduce/${cardUsername}`)}>
-          <span>{score.toFixed(2)*100}% match  </span>
+          {/* round to nearest integer percentage */}
+          <span>{Math.round(score.toFixed(2)*100)}% match  </span>
           {pfpSrc ? (
             <img
               className="card-pfp"
