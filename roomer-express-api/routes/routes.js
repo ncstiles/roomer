@@ -84,12 +84,7 @@ router.post("/update/:username", authorization, async (req, res, next) => {
 });
 
 // change or add a user's selected profile picture
-//TODO: do authorization
-router.post(
-  "/uploadPfp",
-  authorization,
-  upload.single("pfpSrc"),
-  async function (req, res, next) {
+router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function (req, res, next) {
     try {
       const img = fs.readFileSync(req.file.path);
       const encodeImg = img.toString("base64");
@@ -165,6 +160,16 @@ router.get("/likedUsers/:username", authorization, async (req, res, next) => {
   }
 });
 
+// Get usernames associated with liked profiles
+router.get("/matchedUsers/:username", authorization, async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    res.status(200).send({ matchedUsers: await Roomer.getMatches(username) });
+  } catch (e) {
+    return next(e);
+  }
+});
+
 // Get info necessary to provide match recommendations
 router.get("/matchInfo", async (req, res, next) => {
   try {
@@ -175,7 +180,7 @@ router.get("/matchInfo", async (req, res, next) => {
 });
 
 // Get user's basic info sorted based on match score
-router.get("/getRecs/:username", async (req, res, next) => {
+router.get("/getRecs/:username", authorization, async (req, res, next) => {
   try {
     const currentUser = req.params.username;
     const user = new Match(currentUser);

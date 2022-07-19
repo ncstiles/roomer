@@ -268,19 +268,25 @@ class Roomer {
   // check whether `otherUser` is in `user`s liked list.
   static async inLikedList(user, otherUser) {
     await client.connect();
-    const res = await client
-      .db("roomer")
-      .collection("all")
-      .find({ username: user })
-      .project({ _id: 0, liked: 1 })
-      .toArray();
+    try {
+      const res = await client
+        .db("roomer")
+        .collection("all")
+        .find({ username: user })
+        .project({ _id: 0, liked: 1 })
+        .toArray();
 
-    if (!res[0].liked) {
-      return false; // liked list undefined when doing call - user has never liked anyone before
-    } else if (resres[0].liked.includes(otherUser)) {
-      return true; // otherUser in liked list
-    } else {
-      return false; // otherUser not in liked list
+      if (!res[0].liked) {
+        return false; // liked list undefined when doing call - user has never liked anyone before
+      } else if (res[0].liked.includes(otherUser)) {
+        return true; // otherUser in liked list
+      } else {
+        return false; // otherUser not in liked list
+      }
+    } catch (e) {
+      return new BadRequestError(
+        `Failed to determine if ${otherUser} is in ${user}s liked list`
+      );
     }
   }
 
@@ -294,15 +300,14 @@ class Roomer {
         await Roomer.removeLike(likedUser, currentUser); // remove the current user from the liked user's liked list
         await Roomer.addMatch(likedUser, currentUser); // instead, added them to their matched list
         return "match";
-      }
-      // this is a one-way like
-      else {
+      } else {
+        // this is a one-way like
         await Roomer.addLike(currentUser, likedUser);
         return "like";
       }
     } catch (e) {
       return new BadRequestError(
-        `Failed to like/match ${currentUser} with ${likedUser}`
+        `Failed to add ${likedUser} to ${currentUser} list of likes or match`
       );
     }
   }
@@ -318,6 +323,22 @@ class Roomer {
         .project({ _id: 0, liked: 1 })
         .toArray();
       return likedUsers[0].liked ? likedUsers[0].liked : [];
+    } catch (e) {
+      return new BadRequestError(`Failed to get likes for ${username}: ${e}`);
+    }
+  }
+
+  // get list of usernames associated with matched profiles
+  static async getMatches(username) {
+    try {
+      await client.connect();
+      const matchedUsers = await client
+        .db("roomer")
+        .collection("all")
+        .find({ username })
+        .project({ _id: 0, matches: 1 })
+        .toArray();
+      return matchedUsers[0].matches ? matchedUsers[0].matches : [];
     } catch (e) {
       return new BadRequestError(`Failed to get likes for ${username}: ${e}`);
     }

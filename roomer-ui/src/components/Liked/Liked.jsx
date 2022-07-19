@@ -16,12 +16,12 @@ export default function Liked({
 }) {
   return (
     <div className="liked-view">
-      {isLoading ? (
-        <Loading />
+      {!currentUser ? (
+        <NotAuthorized />
       ) : (
         <>
-          {!currentUser ? (
-            <NotAuthorized />
+          {isLoading ? (
+            <Loading />
           ) : (
             <>
               <h1>Your favorited profiles</h1>
