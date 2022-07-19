@@ -24,7 +24,7 @@ export default function Matches({
             <Loading />
           ) : (
             <>
-              <h1>Your favorited profiles</h1>
+              <h1>MATCHES</h1>
 
               {matchedUserInfo.length === 0 ? (
                 <h2 className="no-likes">No matches yet!</h2>
@@ -38,6 +38,7 @@ export default function Matches({
                   removeLike={removeLike}
                   setIsUpdated={setIsUpdated}
                   likedUsers={matchedUsers}
+                  type={'match'}
                 />
               )}
             </>

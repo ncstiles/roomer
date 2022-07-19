@@ -24,7 +24,7 @@ export default function Liked({
             <Loading />
           ) : (
             <>
-              <h1>Your favorited profiles</h1>
+              <h1>LIKES</h1>
 
               {likedUserInfo.length === 0 ? (
                 <h2 className="no-likes">No liked users yet!</h2>

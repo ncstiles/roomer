@@ -229,7 +229,7 @@ class Roomer {
   }
 
     // add `matchedUser` to `user`s matched list
-    static async removeMatch(user, unmatchedUser) {
+    static async removeMatch(currentUser, unmatchedUser) {
       try {
         await client.connect();
         await client
@@ -241,7 +241,7 @@ class Roomer {
           );
       } catch (e) {
         return new BadRequestError(
-          `Failed to remove ${unmatchedUser} from list of ${user}'s matches: ${e}`
+          `Failed to remove ${unmatchedUser} from list of ${currentUser}'s matches: ${e}`
         );
       }
     }
