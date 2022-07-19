@@ -140,7 +140,7 @@ router.post("/addLike", authorization, async (req, res, next) => {
 router.post("/removeLike", authorization, async (req, res, next) => {
   try {
     res.status(200).send({
-      update: await Roomer.removeLike(
+      update: await Roomer.processUnlike(
         req.body.currentUser,
         req.body.unlikedUser
       ),

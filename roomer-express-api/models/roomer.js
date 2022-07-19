@@ -228,6 +228,24 @@ class Roomer {
     }
   }
 
+    // add `matchedUser` to `user`s matched list
+    static async removeMatch(user, unmatchedUser) {
+      try {
+        await client.connect();
+        await client
+          .db("roomer")
+          .collection("all")
+          .updateOne(
+            { username: currentUser },
+            { $pull: { matches: unmatchedUser } }
+          );
+      } catch (e) {
+        return new BadRequestError(
+          `Failed to remove ${unmatchedUser} from list of ${user}'s matches: ${e}`
+        );
+      }
+    }
+
   // add person to current user's list of liked people
   static async addLike(currentUser, likedUser) {
     try {
@@ -290,6 +308,30 @@ class Roomer {
     }
   }
 
+    // check whether `otherUser` is in `user`s matches list.
+    static async inMatchesList(user, otherUser) {
+      await client.connect();
+      try {
+        const res = await client
+          .db("roomer")
+          .collection("all")
+          .find({ username: user })
+          .project({ _id: 0, matches: 1 })
+          .toArray();
+        if (!res[0].matches) {
+          return false; // matches list undefined when doing call - user has never matched with anyone before
+        } else if (res[0].matches.includes(otherUser)) {
+          return true; // otherUser in matches list
+        } else {
+          return false; // otherUser not in matches list
+        }
+      } catch (e) {
+        return new BadRequestError(
+          `Failed to determine if ${otherUser} is in ${user}s match list`
+        );
+      }
+    }
+
   // determine whether the two users have a like or a match relationship
   static async processLike(currentUser, likedUser) {
     try {
@@ -311,6 +353,27 @@ class Roomer {
       );
     }
   }
+
+    // given an un-heart click, carry out either an un-match or an unlike operation
+    static async processUnlike(currentUser, unlikedUser) {
+      try {
+        const isMatched = await Roomer.inMatchesList(currentUser, unlikedUser);
+        if (isMatched) {
+          await Roomer.removeMatch(currentUser, unlikedUser); // remove this unliked user from match list
+          await Roomer.removeMatch(unlikedUser, currentUser); // remove user from unliked user's match list
+          await Roomer.addLike(unlikedUser, currentUser); // instead, add the current user to unliked user's liked list
+          return "unmatch";
+        } else {
+          // remove like
+          await Roomer.removeLike(currentUser, unlikedUser);
+          return "unlike";
+        }
+      } catch (e) {
+        return new BadRequestError(
+          `Failed to remove ${unlikedUser} from ${currentUser}s list of likes or match`
+        );
+      }
+    }
 
   // get list of usernames associated with liked profiles
   static async getLikes(username) {
