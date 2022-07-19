@@ -12,6 +12,7 @@ export default function UserGrid({
   addLike,
   removeLike,
   likedUsers,
+  type
 }) {
   return (
     <>
@@ -41,6 +42,7 @@ export default function UserGrid({
                       addLike={addLike}
                       removeLike={removeLike}
                       score={user.score}
+                      type={type}
                     />
                   );
                 })}

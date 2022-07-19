@@ -83,13 +83,13 @@ export default function App() {
         likedUser: likedUser,
       })
       .then((res) => {
-        if (res.data.update === 'like') {
+        if (res.data.update === "like") {
           setUpdateLikes((prevVal) => !prevVal);
         }
-        if (res.data.update === 'match') {
+        if (res.data.update === "match") {
           setUpdateMatches((prevVal) => !prevVal);
         }
-      })
+      });
   };
 
   // Remove user from current user's list of liked people
@@ -100,7 +100,12 @@ export default function App() {
         unlikedUser: unlikedUser,
       })
       .then((res) => {
-        setUpdateLikes((prevVal) => !prevVal)
+        if (res.data.update === "unlike") {
+          setUpdateLikes((prevVal) => !prevVal);
+        }
+        if (res.data.update === "unmatch") {
+          setUpdateMatches((prevVal) => !prevVal);
+        }
       });
   };
 
@@ -112,56 +117,54 @@ export default function App() {
       url: `${BASE_API_URL}/likedUsers/${currentUser}`,
     })
       .then((res) => {
-        isUserAdded = res.data.likedUsers.length > likedUsers.length || !likedUsers; // determine if more users were added
+        isUserAdded =
+          res.data.likedUsers.length > likedUsers.length || !likedUsers; // determine if more users were added
         setLikedUsers((likedUsers = res.data.likedUsers));
       })
       .finally(() => {
-          if (isUserAdded) {
-            // user added, therefore to get new info, need to sort through all user info (updatedLikedInfo is superset of old liked info)
-            const updatedLikedInfo = allUsers.filter((person) =>
-              likedUsers.includes(person.username)
-            );
-            setLikedUserInfo((likedUserInfo = updatedLikedInfo));
-          } 
-          
-          else {
-            // user removed, so new set of liked users is subset of old liked user info
-            const updatedLikedInfo = likedUserInfo.filter((person) =>
-              likedUsers.includes(person.username)
-            );
-            setLikedUserInfo((likedUserInfo = updatedLikedInfo));
-          }
-        });
-        
+        if (isUserAdded) {
+          // user added, therefore to get new info, need to sort through all user info (updatedLikedInfo is superset of old liked info)
+          const updatedLikedInfo = allUsers.filter((person) =>
+            likedUsers.includes(person.username)
+          );
+          setLikedUserInfo((likedUserInfo = updatedLikedInfo));
+        } else {
+          // user removed, so new set of liked users is subset of old liked user info
+          const updatedLikedInfo = likedUserInfo.filter((person) =>
+            likedUsers.includes(person.username)
+          );
+          setLikedUserInfo((likedUserInfo = updatedLikedInfo));
+        }
+      });
   };
 
-    // Get the list of usernames associated with liked profiles by the currently logged in user
-    const getMatchedUsers = () => {
-      let isUserAdded = null;
-      axios({
-        method: "get",
-        url: `${BASE_API_URL}/matchedUsers/${currentUser}`,
+  // Get the list of usernames associated with liked profiles by the currently logged in user
+  const getMatchedUsers = () => {
+    let isUserAdded = null;
+    axios({
+      method: "get",
+      url: `${BASE_API_URL}/matchedUsers/${currentUser}`,
+    })
+      .then((res) => {
+        isUserAdded = res.data.matchedUsers.length > matchedUsers.length;
+        setMatchedUsers((matchedUsers = res.data.matchedUsers));
       })
-        .then((res) => {
-          isUserAdded = res.data.matchedUsers.length > matchedUsers.length;
-          setMatchedUsers((matchedUsers = res.data.matchedUsers));
-        })
-        .finally(() => {
-          if (isUserAdded) {
-            // user added
-            const updatedMatchInfo = allUsers.filter((person) =>
-              matchedUsers.includes(person.username)
-            );
-            setMatchedUserInfo((matchedUserInfo = updatedMatchInfo));
-          } else {
-            // user removed
-            const updatedMatchInfo = matchedUserInfo.filter((person) =>
-              matchedUsers.includes(person.username)
-            );
-            setMatchedUserInfo((matchedUserInfo = updatedMatchInfo));
-          }
-        });
-    };
+      .finally(() => {
+        if (isUserAdded) {
+          // user added
+          const updatedMatchInfo = allUsers.filter((person) =>
+            matchedUsers.includes(person.username)
+          );
+          setMatchedUserInfo((matchedUserInfo = updatedMatchInfo));
+        } else {
+          // user removed
+          const updatedMatchInfo = matchedUserInfo.filter((person) =>
+            matchedUsers.includes(person.username)
+          );
+          setMatchedUserInfo((matchedUserInfo = updatedMatchInfo));
+        }
+      });
+  };
 
   // Only when a new user is registered or the current user's information is updated is all basic information re-pulled.
   useEffect(() => {
@@ -174,16 +177,11 @@ export default function App() {
   // Get list of the current user's liked usernames whenever we have new or changed users, or when we navigate between pages (which is when we `updateLikes`)
   useEffect(() => {
     if (currentUser && allUsers.length > 0) {
+      getMatchedUsers();
       getLikedUsers();
     }
-  }, [currentUser, isUpdated, updateLikes, allUsers]);
-
-  // Get list of the current user's liked usernames whenever we have new or changed users, or when we navigate between pages (which is when we `updateLikes`)
-  useEffect(() => {
-    if (currentUser && allUsers.length > 0) {
-      getMatchedUsers();
-    }
-  }, [currentUser, isUpdated, updateMatches, allUsers]);
+    // need to update both the liked list and the matches list whenever one of them changes, because the changes spill over
+  }, [currentUser, isUpdated, updateLikes, updateMatches, allUsers]);
 
   return (
     <div className="app">

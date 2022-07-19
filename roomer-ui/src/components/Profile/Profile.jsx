@@ -187,7 +187,7 @@ export default function Profile({
               className="nav-link text-white"
               onClick={() => setViewComponent("recommendations")}
             >
-              Matches
+              Recommendations
             </span>
           </li>
           <li className={`${viewComponent === "liked" ? "highlight" : ""}`}>

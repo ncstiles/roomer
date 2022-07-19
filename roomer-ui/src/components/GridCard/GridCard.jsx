@@ -20,12 +20,13 @@ export default function GridCard({
   contentType,
   addLike,
   removeLike,
-  score
+  score,
+  type
 }) {
   const nav = useNavigate();
-
   let [clickedLike, setClickedLike] = useState(inLiked);
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
+  let heartClassName = type? "heart-match" : "heart" //heart-match is for hearts within the match tab
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
@@ -35,17 +36,17 @@ export default function GridCard({
   const unlike = () => {
     removeLike(cardUsername);
     setClickedLike(false);
-    setBrokenHeart("heart fade-heart");
+    setBrokenHeart(`${heartClassName} fade-heart`);
   };
   return (
     <>
       <div className="card user-card">
         {clickedLike ? (
-          <FavoriteIcon className="heart" onClick={unlike} />
+          <FavoriteIcon className={heartClassName} onClick={unlike} />
         ) : (
           <>
             <HeartBrokenOutlinedIcon className={brokenHeart} />
-            <FavoriteBorderOutlinedIcon className="heart" onClick={like} />
+            <FavoriteBorderOutlinedIcon className={heartClassName} onClick={like} />
           </>
         )}
         <div onClick={() => nav(`/introduce/${cardUsername}`)}>
