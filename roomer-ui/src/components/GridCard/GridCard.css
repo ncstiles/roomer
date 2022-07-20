@@ -19,7 +19,7 @@
 }
 
 .fade-heart {
-  animation: fadeout 0.5s linear forwards;
+  animation: fadeout 0.8s linear forwards;
   opacity: 0;
 }
 

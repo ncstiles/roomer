@@ -125,25 +125,22 @@ router.get("/getPfp/:username", authorization, async (req, res, next) => {
   }
 });
 
-// Add liked user to current user's list of liked people
-router.post("/addLike", authorization, async (req, res, next) => {
+// Add hearted user to current user's list of liked/matched people
+router.post("/heart", authorization, async (req, res, next) => {
   try {
     res.status(200).send({
-      update:  await Roomer.processLike(req.body.currentUser, req.body.likedUser),
+      update:  await Roomer.processHeart(req.body.currentUser, req.body.likedUser),
     });
   } catch (e) {
     return next(e);
   }
 });
 
-// Remove liked user from current user's list of liked people
-router.post("/removeLike", authorization, async (req, res, next) => {
+// Remove hearted user from current user's list of liked/matched people
+router.post("/unheart", authorization, async (req, res, next) => {
   try {
     res.status(200).send({
-      update: await Roomer.processUnlike(
-        req.body.currentUser,
-        req.body.unlikedUser
-      ),
+      update: await Roomer.processUnheart(req.body.currentUser, req.body.unlikedUser),
     });
   } catch (e) {
     return next(e);

@@ -18,35 +18,35 @@ export default function DetailCard({
   cardUsername,
   contentType,
   showLikeIcon,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   inLiked,
   inMatches
 }) {
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
   const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
-  let [clickedLike, setClickedLike] = useState(inLiked);
+  let [clickedHeart, setClickedHeart] = useState(inLiked);
   let [clickedMatch, setClickedMatch] = useState(inMatches)
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
   let heartClassName = inMatches ? "heart-match" : "heart"
-  const like = () => {
-    addLike(cardUsername, allInfo[0]); //allInfo[0] is firstname so we can display toast with firstname
-    setClickedLike(true);
+  
+  const heart = () => {
+    processHeart(cardUsername, allInfo[0]); //allInfo[0] is firstname so we can display toast
+    setClickedHeart(true); // only update setClickedHeart, not setClickedMatch because matches are a subset of likes - if like turns out to be match, it's updated in the useEffect
     setBrokenHeart(`${heartClassName} fade-heart`);
-
   };
 
-  const unlike = () => {
-    removeLike(cardUsername);
-    setClickedLike(false);
+  const unheart = () => {
+    processUnheart(cardUsername);
+    setClickedHeart(false);
     setBrokenHeart("heart fade-heart");
   };
 
-    // for the first render where clickedLike and clickedMatch are updated before inLiked and inMatches are populated with alluser data
+    // for the first render where clickedHeart and clickedMatch are updated before inLiked and inMatches are populated with alluser data
     useEffect(()=> {
-      setClickedLike(inLiked);
-      setClickedLike(inMatches);
+      setClickedHeart(inLiked);
+      setClickedMatch(inMatches);
     }, [inLiked, inMatches])
 
   return (
@@ -58,14 +58,14 @@ export default function DetailCard({
             // in all cases but within the profile, showLikeIcon is true.
             showLikeIcon ? (
               <>
-                {(clickedLike || clickedMatch) ? (
-                  <FavoriteIcon className={heartClassName} onClick={unlike} />
+                {(clickedHeart || clickedMatch) ? (
+                  <FavoriteIcon className={heartClassName} onClick={unheart} />
                 ) : (
                   <>
                     <HeartBrokenOutlinedIcon className={brokenHeart} />
                     <FavoriteBorderOutlinedIcon
                       className={heartClassName}
-                      onClick={like}
+                      onClick={heart}
                     />
                   </>
                 )}

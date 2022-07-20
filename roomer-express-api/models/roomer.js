@@ -333,7 +333,7 @@ class Roomer {
     }
 
   // determine whether the two users have a like or a match relationship
-  static async processLike(currentUser, likedUser) {
+  static async processHeart(currentUser, likedUser) {
     try {
       const isLiked = await Roomer.inLikedList(likedUser, currentUser);
 
@@ -355,7 +355,7 @@ class Roomer {
   }
 
     // given an un-heart click, carry out either an un-match or an unlike operation
-    static async processUnlike(currentUser, unlikedUser) {
+    static async processUnheart(currentUser, unlikedUser) {
       try {
         const isMatched = await Roomer.inMatchesList(currentUser, unlikedUser);
         if (isMatched) {
