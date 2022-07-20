@@ -5,7 +5,11 @@ import { Form, Row, Col, Button } from "react-bootstrap";
 import { BASE_API_URL } from "../../constants";
 import axios from "axios";
 
-export default function UploadPfp({ currentUser, setIsUpdated, setAvatarFile }) {
+export default function UploadPfp({
+  currentUser,
+  setIsUpdated,
+  setAvatarFile,
+}) {
   let [toShow, setToShow] = useState(false);
   let [submitted, setSubmitted] = useState(false);
   let [curAvatarFile, setCurAvatarFile] = useState(null);
@@ -14,16 +18,19 @@ export default function UploadPfp({ currentUser, setIsUpdated, setAvatarFile }) 
   const loadFile = (event) => {
     const image = document.getElementById("pfpPreview");
     const avatar = event.target.files[0];
-    const fileSize = avatar.size/1024/1024;
-    if (avatar.size/1024/1024 >= 16) {
-      alert(`This ${Math.round(fileSize * 100) / 100} MB file is too large, above our 16MB threshold. Please upload a smaller image.`);
+    const fileSize = avatar.size / 1024 / 1024;
+    if (avatar.size / 1024 / 1024 >= 16) {
+      alert(
+        `This ${
+          Math.round(fileSize * 100) / 100
+        } MB file is too large, above our 16MB threshold. Please upload a smaller image.`
+      );
     } else {
-        image.src = URL.createObjectURL(avatar);
-        setCurAvatarFile(avatar);
-        setToShow(true);
-        setSubmitted(false);
+      image.src = URL.createObjectURL(avatar);
+      setCurAvatarFile(avatar);
+      setToShow(true);
+      setSubmitted(false);
     }
-
   };
 
   /**
@@ -51,50 +58,51 @@ export default function UploadPfp({ currentUser, setIsUpdated, setAvatarFile }) 
         setIsUpdated((prevVal) => !prevVal);
         setSubmitted(true);
       })
-      .catch((e) => {
-      });
+      .catch((e) => {});
   };
 
   return (
-    <div className="update-card">
-      <Form onSubmit={(event) => handleSubmit(event)}>
-        <h2 className="upload-header">Upload a profile picture</h2>
-        <Row>
-          <Col className="mb-3 upload" sm={12} md={4}>
-            <Form.Group controlId="formFile">
-              <Form.Label>Upload your profile picture</Form.Label>
-              <input
-                className="form-control"
-                type="file"
-                id="formFile"
-                accept="image/*"
-                name="pfpSrc"
-                onChange={(event) => loadFile(event)}
-              />
-            </Form.Group>
-          </Col>
-          <Col className="mb-3" sm={12} md={4}>
-            <img className="pfp-preview" id="pfpPreview" />
-          </Col>
-        </Row>
+    <div>
+      <h1 className="tab-header">UPLOAD PROFILE PICTURE</h1>
+      <div className="update-card">
+        <Form onSubmit={(event) => handleSubmit(event)}>
+          <Row>
+            <Col className="mb-3 upload" sm={12} md={4}>
+              <Form.Group controlId="formFile">
+                <Form.Label>Upload your profile picture</Form.Label>
+                <input
+                  className="form-control"
+                  type="file"
+                  id="formFile"
+                  accept="image/*"
+                  name="pfpSrc"
+                  onChange={(event) => loadFile(event)}
+                />
+              </Form.Group>
+            </Col>
+            <Col className="mb-3" sm={12} md={4}>
+              <img className="pfp-preview" id="pfpPreview" />
+            </Col>
+          </Row>
 
-        {toShow ? (
-          <>
-            <Button
-              className="form-submit submit-pfp"
-              type="info"
-              variant="secondary"
-            >
-              Confirm as profile picture
-            </Button>
-            {submitted ? (
-              <p className="success updated">
-                Congrats! Your profile picture has been updated.
-              </p>
-            ) : null}
-          </>
-        ) : null}
-      </Form>
+          {toShow ? (
+            <>
+              <Button
+                className="form-submit submit-pfp"
+                type="info"
+                variant="secondary"
+              >
+                Confirm as profile picture
+              </Button>
+              {submitted ? (
+                <p className="success updated">
+                  Congrats! Your profile picture has been updated.
+                </p>
+              ) : null}
+            </>
+          ) : null}
+        </Form>
+      </div>
     </div>
   );
 }

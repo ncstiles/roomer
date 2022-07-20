@@ -41,12 +41,12 @@ export default function Update({ currentUser, setIsUpdated }) {
 
   return (
     <div className="update" id="register-component">
-      <h1 className="register-header">UPDATE YOUR INFO</h1>
+      <h1 className="tab-header">UPDATE YOUR INFO</h1>
 
       <Form onSubmit={(event) => handleSubmit(event)}>
         <div className="update-card">
           <Row>
-            <h2 className="update-header">Account Info</h2>
+            <h2 className="update-card-header">Account Info</h2>
           </Row>
 
           <Row>
@@ -87,7 +87,7 @@ export default function Update({ currentUser, setIsUpdated }) {
 
         <div className="update-card">
           <Row>
-            <h2 className="update-header">Profile</h2>
+            <h2 className="update-card-header">Profile</h2>
           </Row>
 
           <Row>
@@ -144,7 +144,7 @@ export default function Update({ currentUser, setIsUpdated }) {
         <div className="update-card">
           {/* bio + instagram handle */}
           <Row>
-            <h2 className="update-header">Extra</h2>
+            <h2 className="update-card-header">Extra</h2>
           </Row>
 
           <Row>
@@ -168,7 +168,7 @@ export default function Update({ currentUser, setIsUpdated }) {
 
         <div className="update-card">
           <Row>
-            <h2 className="update-header">Housing</h2>
+            <h2 className="update-card-header">Housing</h2>
           </Row>
           <Row>
             {/* rent price */}
@@ -225,7 +225,7 @@ export default function Update({ currentUser, setIsUpdated }) {
         </div>
         <div className="update-card">
           <Row>
-            <h2 className="update-header">Detailed preferences</h2>
+            <h2 className="update-card-header">Detailed preferences</h2>
           </Row>
           <Row>
             {/* age preference */}
@@ -254,7 +254,6 @@ export default function Update({ currentUser, setIsUpdated }) {
                   <option value="Female">Female</option>
                   <option value="Non-binary">Non-binary</option>
                   <option value="Other">Other</option>
-
                 </Form.Select>
               </Form.Group>
             </Col>

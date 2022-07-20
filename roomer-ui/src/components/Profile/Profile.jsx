@@ -29,36 +29,42 @@ function Subview({
   likedUsers,
   matchedUsers,
   likedUserInfo,
-  matchedUserInfo
+  matchedUserInfo,
 }) {
   switch (viewComponent) {
     case "own":
       // cardUsername is current user because within Profile we display the user's own info
       return (
-        <UserDetail
-          isLoggedIn={isLoggedIn}
-          showLikeIcon={false}
-          fromProfileCardUsername={currentUser}
-          processHeart={processHeart}
-          processUnheart={processUnheart}
-          setIsUpdated={setIsUpdated}
-          likedUsers={likedUsers}
-          matchedUsers={matchedUsers}
-        />
+        <>
+          <h1 className="tab-header">YOUR PROFILE</h1>
+          <UserDetail
+            isLoggedIn={isLoggedIn}
+            showLikeIcon={false}
+            fromProfileCardUsername={currentUser}
+            processHeart={processHeart}
+            processUnheart={processUnheart}
+            setIsUpdated={setIsUpdated}
+            likedUsers={likedUsers}
+            matchedUsers={matchedUsers}
+          />
+        </>
       );
     case "recommendations":
       return (
-        <UserGrid
-          allUsers={allUsers}
-          isLoading={isLoading}
-          isLoggedIn={isLoggedIn}
-          currentUser={currentUser}
-          processHeart={processHeart}
-          processUnheart={processUnheart}
-          setIsUpdated={setIsUpdated}
-          likedUsers={likedUsers}
-          matchedUsers={matchedUsers}
-        />
+        <>
+          <h1 className="tab-header">YOUR CUSTOM RECOMMENDATIONS</h1>
+          <UserGrid
+            allUsers={allUsers}
+            isLoading={isLoading}
+            isLoggedIn={isLoggedIn}
+            currentUser={currentUser}
+            processHeart={processHeart}
+            processUnheart={processUnheart}
+            setIsUpdated={setIsUpdated}
+            likedUsers={likedUsers}
+            matchedUsers={matchedUsers}
+          />
+        </>
       );
     case "liked":
       return (
@@ -89,7 +95,7 @@ function Subview({
         />
       );
     case "messages":
-      return <h1>Placeholder for message contacts</h1>;
+      return <h1 className="tab-header">MESSAGE PLACEHOLDER</h1>;
     case "modify":
       return (
         <Update
@@ -129,7 +135,7 @@ export default function Profile({
   likedUsers,
   matchedUsers,
   likedUserInfo,
-  matchedUserInfo
+  matchedUserInfo,
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -168,7 +174,7 @@ export default function Profile({
               className="nav-link text-white"
               onClick={() => setViewComponent("own")}
             >
-              My profile
+              Profile
             </span>
           </li>
           <li className={`${viewComponent === "modify" ? "highlight" : ""}`}>
@@ -176,7 +182,7 @@ export default function Profile({
               className="nav-link text-white"
               onClick={() => setViewComponent("modify")}
             >
-              Modify information
+              Update info
             </span>
           </li>
           <li className={`${viewComponent === "pfp" ? "highlight" : ""}`}>
@@ -204,7 +210,7 @@ export default function Profile({
               className="nav-link text-white"
               onClick={() => setViewComponent("liked")}
             >
-              Liked
+              Likes
             </span>
           </li>
           <li className={`${viewComponent === "matches" ? "highlight" : ""}`}>
