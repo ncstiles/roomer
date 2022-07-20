@@ -27,7 +27,6 @@ export default function GridCard({
   let [clickedHeart, setClickedHeart] = useState(inLiked);
   let [clickedMatch, setClickedMatch] = useState(inMatches);
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
-  //TODO: only on the heart match do we have a solid pink heart.  in all other cases it is just white heart
   let heartClassName = inMatches ? "heart-match" : "heart";
 
   const heart = () => {

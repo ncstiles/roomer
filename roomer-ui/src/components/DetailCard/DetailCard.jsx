@@ -32,15 +32,15 @@ export default function DetailCard({
   let heartClassName = inMatches ? "heart-match" : "heart"
   
   const heart = () => {
-    processHeart(cardUsername, allInfo[0]); //allInfo[0] is firstname so we can display toast
+    processHeart(cardUsername, allInfo[0]); // allInfo[0] is firstname so we can display toast
     setClickedHeart(true); // only update setClickedHeart, not setClickedMatch because matches are a subset of likes - if like turns out to be match, it's updated in the useEffect
-    setBrokenHeart(`${heartClassName} fade-heart`);
+    setBrokenHeart("hidden-heart");
   };
 
   const unheart = () => {
     processUnheart(cardUsername);
     setClickedHeart(false);
-    setBrokenHeart("heart fade-heart");
+    setBrokenHeart(`${heartClassName} fade-heart`);
   };
 
     // for the first render where clickedHeart and clickedMatch are updated before inLiked and inMatches are populated with alluser data
