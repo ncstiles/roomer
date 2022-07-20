@@ -10,9 +10,9 @@ export default function Liked({
   currentUser,
   addLike,
   removeLike,
-  setIsUpdated,
   likedUsers,
   likedUserInfo,
+  matchedUsers,
 }) {
   return (
     <div className="liked-view">
@@ -36,8 +36,8 @@ export default function Liked({
                   currentUser={currentUser}
                   addLike={addLike}
                   removeLike={removeLike}
-                  setIsUpdated={setIsUpdated}
                   likedUsers={likedUsers}
+                  matchedUsers={matchedUsers}
                 />
               )}
             </>

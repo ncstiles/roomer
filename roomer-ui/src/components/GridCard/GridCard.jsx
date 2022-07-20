@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./GridCard.css";
 import "../../css/card.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -21,16 +21,17 @@ export default function GridCard({
   contentType,
   addLike,
   removeLike,
-  score
+  score,
 }) {
   const nav = useNavigate();
-  let [clickedLike, setClickedLike] = useState(inLiked); 
-  let [clickedMatch, setClickedMatch] = useState(inMatches)
+  let [clickedLike, setClickedLike] = useState(inLiked);
+  let [clickedMatch, setClickedMatch] = useState(inMatches);
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
   //TODO: only on the heart match do we have a solid pink heart.  in all other cases it is just white heart
-  let heartClassName = inMatches ? "heart-match" : "heart"
+  let heartClassName = inMatches ? "heart-match" : "heart";
+
   const like = () => {
-    addLike(cardUsername);
+    addLike(cardUsername, firstName);
     setClickedLike(true);
     setBrokenHeart("hidden-heart");
   };
@@ -40,10 +41,17 @@ export default function GridCard({
     setClickedLike(false);
     setBrokenHeart(`${heartClassName} fade-heart`);
   };
+
+  // for the first render where clickedLike and clickedMatch are updated before inLiked and inMatches are populated with alluser data
+  useEffect(() => {
+    setClickedLike(inLiked);
+    setClickedMatch(inMatches);
+  }, [inLiked, inMatches]);
+
   return (
     <>
       <div className="card user-card">
-        {(clickedLike || clickedMatch) ? (
+        {clickedLike || clickedMatch ? (
           <FavoriteIcon className={heartClassName} onClick={unlike} />
         ) : (
           <>
