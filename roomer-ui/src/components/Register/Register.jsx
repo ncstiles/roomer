@@ -11,6 +11,8 @@ export default function Register({
   setRegisterForm,
   setIsLoggedIn,
   setIsUpdated,
+  setIsLoading,
+  setCurrentUser,
 }) {
   const nav = useNavigate();
   let [validated, setValidated] = useState(false);
@@ -60,15 +62,19 @@ export default function Register({
           username: event.target.username.value,
           password: event.target.password.value,
         };
+
         axios
           .post(BASE_API_URL + "/login", loginForm)
           .then(() => {
             setIsLoggedIn(true);
             setIsUpdated((prevVal) => !prevVal);
+            setIsLoading(false);
+            setCurrentUser(loginForm.username);
             nav("/recommendations");
           })
           .catch(() => {
             setIsLoggedIn(false);
+            nav("*");
           });
       })
       .catch(() => {

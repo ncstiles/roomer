@@ -16,7 +16,7 @@ export default function Matches({
 }) {
   return (
     <div>
-      {!currentUser ? (
+      {!currentUser || !isLoggedIn ? (
         <NotAuthorized />
       ) : (
         <>
@@ -39,7 +39,6 @@ export default function Matches({
                   setIsUpdated={setIsUpdated}
                   likedUsers={matchedUsers}
                   matchedUsers={matchedUsers}
-                  type={"match"}
                 />
               )}
             </>

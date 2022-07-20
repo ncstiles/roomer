@@ -204,7 +204,7 @@ export default function App() {
         </Toast>
       </ToastContainer>
       <BrowserRouter>
-        <Navbar currentUser={currentUser} />
+        <Navbar currentUser={currentUser} isLoggedIn={isLoggedIn} />
         <main>
           <Routes>
             <Route
@@ -261,6 +261,8 @@ export default function App() {
                   setRegisterForm={setRegisterForm}
                   setIsLoggedIn={setIsLoggedIn}
                   setIsUpdated={setIsUpdated}
+                  setIsLoading={setIsLoading}
+                  setCurrentUser={setCurrentUser}
                 />
               }
             />

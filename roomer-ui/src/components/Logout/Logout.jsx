@@ -34,7 +34,7 @@ export default function Logout({ setIsLoggedIn, setCurrentUser }) {
         onClick={() => {
           nav("/");
         }}>
-        Return to homepage
+        Return to home
       </Button>
     </div>
   );
