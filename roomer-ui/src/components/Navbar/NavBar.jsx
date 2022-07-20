@@ -3,7 +3,7 @@ import "./NavBar.css";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-export default function NavBar({ currentUser }) {
+export default function NavBar({ isLoggedIn, currentUser }) {
   const nav = useNavigate();
 
   return (
@@ -26,7 +26,7 @@ export default function NavBar({ currentUser }) {
         {/*spacer to add distance between left/right sides of navbar */}
         <div className="spacer" />
         <div className="login-profile">
-          {currentUser ? null : (
+          {isLoggedIn && currentUser ? null : (
             <>
               <span className="link" onClick={() => nav("/login")}>
                 LOGIN
@@ -37,7 +37,7 @@ export default function NavBar({ currentUser }) {
             </>
           )}
 
-          {!currentUser ? null : (
+          {!isLoggedIn || !currentUser ? null : (
             <Button
               className="link navbar-pfp"
               variant="secondary"
@@ -47,9 +47,13 @@ export default function NavBar({ currentUser }) {
             </Button>
           )}
 
-          <span className="link" onClick={() => nav("/logout")}>
-            LOGOUT
-          </span>
+          <>
+            {isLoggedIn && currentUser ? (
+              <span className="link" onClick={() => nav("/logout")}>
+                LOGOUT
+              </span>
+            ) : null}
+          </>
         </div>
       </nav>
     </>

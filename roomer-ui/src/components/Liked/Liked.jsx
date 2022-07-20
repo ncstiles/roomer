@@ -16,7 +16,7 @@ export default function Liked({
 }) {
   return (
     <div>
-      {!currentUser ? (
+      {!currentUser || !isLoggedIn ? (
         <NotAuthorized />
       ) : (
         <>
