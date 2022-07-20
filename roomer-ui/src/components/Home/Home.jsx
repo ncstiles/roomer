@@ -8,8 +8,8 @@ export default function Home({
   isLoading,
   isLoggedIn,
   currentUser,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   setIsUpdated,
   likedUsers,
   matchedUsers
@@ -24,8 +24,8 @@ export default function Home({
             isLoading={isLoading}
             isLoggedIn={isLoggedIn}
             currentUser={currentUser}
-            addLike={addLike}
-            removeLike={removeLike}
+            processHeart={processHeart}
+            processUnheart={processUnheart}
             setIsUpdated={setIsUpdated}
             likedUsers={likedUsers}
             matchedUsers={matchedUsers}

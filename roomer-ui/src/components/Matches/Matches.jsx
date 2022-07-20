@@ -8,8 +8,8 @@ export default function Matches({
   isLoading,
   isLoggedIn,
   currentUser,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   setIsUpdated,
   matchedUsers,
   matchedUserInfo,
@@ -34,8 +34,8 @@ export default function Matches({
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   setIsUpdated={setIsUpdated}
                   likedUsers={matchedUsers}
                   matchedUsers={matchedUsers}

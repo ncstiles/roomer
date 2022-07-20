@@ -79,10 +79,10 @@ export default function App() {
       });
   };
 
-  // Add user to current user's list of liked people
-  const addLike = (likedUser, firstName) => {
+  // Add user to current user's list of liked/matched people
+  const processHeart = (likedUser, firstName) => {
     axios
-      .post(BASE_API_URL + "/addLike", {
+      .post(BASE_API_URL + "/heart", {
         currentUser: currentUser,
         likedUser: likedUser,
       })
@@ -98,10 +98,10 @@ export default function App() {
       });
   };
 
-  // Remove user from current user's list of liked people
-  const removeLike = (unlikedUser) => {
+  // Remove user from current user's list of liked/matched people
+  const processUnheart = (unlikedUser) => {
     axios
-      .post(BASE_API_URL + "/removeLike", {
+      .post(BASE_API_URL + "/unheart", {
         currentUser: currentUser,
         unlikedUser: unlikedUser,
       })
@@ -228,8 +228,8 @@ export default function App() {
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   setIsUpdated={setIsUpdated}
                   likedUsers={likedUsers}
                   matchedUsers={matchedUsers}
@@ -244,8 +244,8 @@ export default function App() {
                   isLoggedIn={isLoggedIn}
                   fromProfileCardUsername={null}
                   showLikeIcon={true}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   setIsUpdated={setIsUpdated}
                   likedUsers={likedUsers}
                   matchedUsers={matchedUsers}
@@ -303,8 +303,8 @@ export default function App() {
                   setIsLoggedIn={setIsLoggedIn}
                   setIsUpdated={setIsUpdated}
                   currentUser={currentUser}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   likedUsers={likedUsers}
                   matchedUsers={matchedUsers}
                   likedUserInfo={likedUserInfo}
@@ -319,8 +319,8 @@ export default function App() {
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   likedUsers={likedUsers}
                   likedUserInfo={likedUserInfo}
                   matchedUsers={matchedUsers}
@@ -334,8 +334,8 @@ export default function App() {
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   setIsUpdated={setIsUpdated}
                   matchedUsers={matchedUsers}
                   matchedUserInfo={matchedUserInfo}

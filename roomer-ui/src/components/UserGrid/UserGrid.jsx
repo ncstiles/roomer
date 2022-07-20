@@ -9,8 +9,8 @@ export default function UserGrid({
   isLoading,
   isLoggedIn,
   currentUser,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   likedUsers,
   matchedUsers
 }) {
@@ -40,8 +40,8 @@ export default function UserGrid({
                         user.pfpSrc ? user.pfpSrc.toString("base64") : null
                       }
                       contentType={user.contentType ? user.contentType : null}
-                      addLike={addLike}
-                      removeLike={removeLike}
+                      processHeart={processHeart}
+                      processUnheart={processUnheart}
                       score={user.score}
                     />
                   );

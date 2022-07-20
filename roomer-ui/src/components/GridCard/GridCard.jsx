@@ -19,44 +19,47 @@ export default function GridCard({
   occupation,
   pfpSrc,
   contentType,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   score,
 }) {
   const nav = useNavigate();
-  let [clickedLike, setClickedLike] = useState(inLiked);
+  let [clickedHeart, setClickedHeart] = useState(inLiked);
   let [clickedMatch, setClickedMatch] = useState(inMatches);
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
   //TODO: only on the heart match do we have a solid pink heart.  in all other cases it is just white heart
   let heartClassName = inMatches ? "heart-match" : "heart";
 
-  const like = () => {
-    addLike(cardUsername, firstName);
-    setClickedLike(true);
+  const heart = () => {
+    processHeart(cardUsername, firstName);
+    setClickedHeart(true); // only update setClickedHeart, not setClickedMatch because matches are a subset of likes - if like turns out to be match, it's updated in the useEffect
     setBrokenHeart("hidden-heart");
   };
 
-  const unlike = () => {
-    removeLike(cardUsername);
-    setClickedLike(false);
+  const unheart = () => {
+    processUnheart(cardUsername);
+    setClickedHeart(false);
     setBrokenHeart(`${heartClassName} fade-heart`);
   };
 
-  // for the first render where clickedLike and clickedMatch are updated before inLiked and inMatches are populated with alluser data
+  // for the first render where clickedHeart and clickedMatch are updated before inLiked and inMatches are populated with allUser data
   useEffect(() => {
-    setClickedLike(inLiked);
+    setClickedHeart(inLiked);
     setClickedMatch(inMatches);
   }, [inLiked, inMatches]);
 
   return (
     <>
       <div className="card user-card">
-        {clickedLike || clickedMatch ? (
-          <FavoriteIcon className={heartClassName} onClick={unlike} />
+        {clickedHeart || clickedMatch ? (
+          <FavoriteIcon className={heartClassName} onClick={unheart} />
         ) : (
           <>
             <HeartBrokenOutlinedIcon className={brokenHeart} />
-            <FavoriteBorderOutlinedIcon className={heartClassName} onClick={like} />
+            <FavoriteBorderOutlinedIcon
+              className={heartClassName}
+              onClick={heart}
+            />
           </>
         )}
         <div onClick={() => nav(`/introduce/${cardUsername}`)}>

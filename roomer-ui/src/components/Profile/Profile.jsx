@@ -24,8 +24,8 @@ function Subview({
   setIsUpdated,
   setAvatarFile,
   currentUser,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   likedUsers,
   matchedUsers,
   likedUserInfo,
@@ -39,8 +39,8 @@ function Subview({
           isLoggedIn={isLoggedIn}
           showLikeIcon={false}
           fromProfileCardUsername={currentUser}
-          addLike={addLike}
-          removeLike={removeLike}
+          processHeart={processHeart}
+          processUnheart={processUnheart}
           setIsUpdated={setIsUpdated}
           likedUsers={likedUsers}
           matchedUsers={matchedUsers}
@@ -53,8 +53,8 @@ function Subview({
           isLoading={isLoading}
           isLoggedIn={isLoggedIn}
           currentUser={currentUser}
-          addLike={addLike}
-          removeLike={removeLike}
+          processHeart={processHeart}
+          processUnheart={processUnheart}
           setIsUpdated={setIsUpdated}
           likedUsers={likedUsers}
           matchedUsers={matchedUsers}
@@ -66,8 +66,8 @@ function Subview({
           isLoading={isLoading}
           isLoggedIn={isLoggedIn}
           currentUser={currentUser}
-          addLike={addLike}
-          removeLike={removeLike}
+          processHeart={processHeart}
+          processUnheart={processUnheart}
           setIsUpdated={setIsUpdated}
           likedUsers={likedUsers}
           likedUserInfo={likedUserInfo}
@@ -79,8 +79,8 @@ function Subview({
           isLoading={isLoading}
           isLoggedIn={isLoggedIn}
           currentUser={currentUser}
-          addLike={addLike}
-          removeLike={removeLike}
+          processHeart={processHeart}
+          processUnheart={processUnheart}
           setIsUpdated={setIsUpdated}
           likedUsers={likedUsers}
           likedUserInfo={likedUserInfo}
@@ -124,8 +124,8 @@ export default function Profile({
   setIsLoggedIn,
   setIsUpdated,
   currentUser,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   likedUsers,
   matchedUsers,
   likedUserInfo,
@@ -246,8 +246,8 @@ export default function Profile({
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
           currentUser={currentUser}
-          addLike={addLike}
-          removeLike={removeLike}
+          processHeart={processHeart}
+          processUnheart={processUnheart}
           likedUsers={likedUsers}
           matchedUsers={matchedUsers}
           likedUserInfo={likedUserInfo}

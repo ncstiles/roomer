@@ -10,7 +10,7 @@ import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, addLike, removeLike, likedUsers, matchedUsers }) {
+export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, processHeart, processUnheart, likedUsers, matchedUsers }) {
   // In Profile view we don't use useNavigate to get to the UserDetail component to display the card.
   // Therefore to get the username of the person that the card is about, we must pass their username using the `cardUsername` prop.
   // In all other instances `cardUsername` is retrieved through useParams() (from within the useNavigate)
@@ -29,7 +29,6 @@ export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLi
   let [allInfo, setAllInfo] = useState([]);
   let [contentType, setContentType] = useState(null);
   let [pfpSrc, setPfpSrc] = useState(null);
-  const inLiked = null;
 
   /**
    * Execute a GET request to get an individual user's basic info.
@@ -175,8 +174,8 @@ export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLi
                         cardUsername={cardUsername}
                         pfpSrc={pfpSrc}
                         showLikeIcon={showLikeIcon}
-                        addLike={addLike}
-                        removeLike={removeLike}
+                        processHeart={processHeart}
+                        processUnheart={processUnheart}
                         inLiked={likedUsers && likedUsers.includes(cardUsername)}
                         inMatches={matchedUsers && matchedUsers.includes(cardUsername)}
                       />

@@ -8,8 +8,8 @@ export default function Liked({
   isLoading,
   isLoggedIn,
   currentUser,
-  addLike,
-  removeLike,
+  processHeart,
+  processUnheart,
   likedUsers,
   likedUserInfo,
   matchedUsers,
@@ -34,8 +34,8 @@ export default function Liked({
                   isLoading={isLoading}
                   isLoggedIn={isLoggedIn}
                   currentUser={currentUser}
-                  addLike={addLike}
-                  removeLike={removeLike}
+                  processHeart={processHeart}
+                  processUnheart={processUnheart}
                   likedUsers={likedUsers}
                   matchedUsers={matchedUsers}
                 />
