@@ -27,7 +27,9 @@ function Subview({
   addLike,
   removeLike,
   likedUsers,
+  matchedUsers,
   likedUserInfo,
+  matchedUserInfo
 }) {
   switch (viewComponent) {
     case "own":
@@ -40,6 +42,8 @@ function Subview({
           addLike={addLike}
           removeLike={removeLike}
           setIsUpdated={setIsUpdated}
+          likedUsers={likedUsers}
+          matchedUsers={matchedUsers}
         />
       );
     case "recommendations":
@@ -53,6 +57,7 @@ function Subview({
           removeLike={removeLike}
           setIsUpdated={setIsUpdated}
           likedUsers={likedUsers}
+          matchedUsers={matchedUsers}
         />
       );
     case "liked":
@@ -79,6 +84,8 @@ function Subview({
           setIsUpdated={setIsUpdated}
           likedUsers={likedUsers}
           likedUserInfo={likedUserInfo}
+          matchedUsers={matchedUsers}
+          matchedUserInfo={matchedUserInfo}
         />
       );
     case "messages":
@@ -120,7 +127,9 @@ export default function Profile({
   addLike,
   removeLike,
   likedUsers,
+  matchedUsers,
   likedUserInfo,
+  matchedUserInfo
 }) {
   //default is just to view one's own profile
   const [viewComponent, setViewComponent] = useState("own");
@@ -240,7 +249,9 @@ export default function Profile({
           addLike={addLike}
           removeLike={removeLike}
           likedUsers={likedUsers}
+          matchedUsers={matchedUsers}
           likedUserInfo={likedUserInfo}
+          matchedUserInfo={matchedUserInfo}
         />
       </div>
     </div>

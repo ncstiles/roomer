@@ -21,17 +21,20 @@ export default function DetailCard({
   addLike,
   removeLike,
   inLiked,
+  inMatches
 }) {
   // basic card includes pfp, so we need two "rows" of content on the card.
   // toggle className appropriately
   const basicClass = cardType === "basic" ? "card-two-rows" : "card-one-row";
   let [clickedLike, setClickedLike] = useState(inLiked);
+  let [clickedMatch, setClickedMatch] = useState(inMatches)
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
-
+  let heartClassName = inMatches ? "heart-match" : "heart"
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
-    setBrokenHeart("hidden-heart");
+    setBrokenHeart(`${heartClassName} fade-heart`);
+
   };
 
   const unlike = () => {
@@ -49,13 +52,13 @@ export default function DetailCard({
             // in all cases but within the profile, showLikeIcon is true.
             showLikeIcon ? (
               <>
-                {clickedLike ? (
-                  <FavoriteIcon className="heart" onClick={unlike} />
+                {(clickedLike || clickedMatch) ? (
+                  <FavoriteIcon className={heartClassName} onClick={unlike} />
                 ) : (
                   <>
                     <HeartBrokenOutlinedIcon className={brokenHeart} />
                     <FavoriteBorderOutlinedIcon
-                      className="heart"
+                      className={heartClassName}
                       onClick={like}
                     />
                   </>

@@ -214,6 +214,7 @@ export default function App() {
                   removeLike={removeLike}
                   setIsUpdated={setIsUpdated}
                   likedUsers={likedUsers}
+                  matchedUsers={matchedUsers}
                 />
               }
             />
@@ -229,6 +230,7 @@ export default function App() {
                   removeLike={removeLike}
                   setIsUpdated={setIsUpdated}
                   likedUsers={likedUsers}
+                  matchedUsers={matchedUsers}
                 />
               }
             />
@@ -286,7 +288,9 @@ export default function App() {
                   addLike={addLike}
                   removeLike={removeLike}
                   likedUsers={likedUsers}
+                  matchedUsers={matchedUsers}
                   likedUserInfo={likedUserInfo}
+                  matchedUserInfo={matchedUserInfo}
                 />
               }
             />

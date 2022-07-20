@@ -38,6 +38,7 @@ export default function Matches({
                   removeLike={removeLike}
                   setIsUpdated={setIsUpdated}
                   likedUsers={matchedUsers}
+                  matchedUsers={matchedUsers}
                   type={'match'}
                 />
               )}
