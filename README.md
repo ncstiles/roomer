@@ -1,6 +1,12 @@
 # Roomer
 
-**[CURRENT] Feature 6: Liked profiles**
+**[CURRENT] Feature 7: Custom recommendations**
+- Used Google's Distance Matrix API to compute distances between user and potential matches
+- Distance between the user and potential match's location  + the user's gender, rent, and age preferences are used to assign all users a % match score.  Scoring algorithm described [here](https://docs.google.com/document/d/1cFLCVHdUN3qbUD7JeYchRDv0my_3aGKTJBg5wGpieS4/edit#heading=h.b9ncrzykkd1y)
+- Recommendations are sorted highest to lowest score. 
+
+
+Feature 6: Liked profiles
 - Created liked profiles tab within navbar and profile view
 - Within the Liked component, users can view the basic information of the profiles they've liked.  This works both when navigated to from the navbar, and from within the profile view.
 - Keeping track of the status of each card's "heart react" up to date between different card views, and before and after each click of the heart react.  For example, after unliking a user in the grid or detail view, in the liked view, that user's card disappears. 
