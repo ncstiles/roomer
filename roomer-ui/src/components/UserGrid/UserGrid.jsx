@@ -12,7 +12,7 @@ export default function UserGrid({
   addLike,
   removeLike,
   likedUsers,
-  type
+  matchedUsers
 }) {
   return (
     <>
@@ -29,6 +29,7 @@ export default function UserGrid({
                     <GridCard
                       key={user.username}
                       inLiked={likedUsers && likedUsers.includes(user.username)}
+                      inMatches={matchedUsers && matchedUsers.includes(user.username)}
                       currentUser={currentUser}
                       cardUsername={user.username}
                       firstName={user.firstName}
@@ -42,7 +43,6 @@ export default function UserGrid({
                       addLike={addLike}
                       removeLike={removeLike}
                       score={user.score}
-                      type={type}
                     />
                   );
                 })}

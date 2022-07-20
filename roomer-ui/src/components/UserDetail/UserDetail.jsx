@@ -10,7 +10,7 @@ import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, addLike, removeLike, likedUsers }) {
+export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, addLike, removeLike, likedUsers, matchedUsers }) {
   // In Profile view we don't use useNavigate to get to the UserDetail component to display the card.
   // Therefore to get the username of the person that the card is about, we must pass their username using the `cardUsername` prop.
   // In all other instances `cardUsername` is retrieved through useParams() (from within the useNavigate)
@@ -178,6 +178,7 @@ export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLi
                         addLike={addLike}
                         removeLike={removeLike}
                         inLiked={likedUsers && likedUsers.includes(cardUsername)}
+                        inMatches={matchedUsers && matchedUsers.includes(cardUsername)}
                       />
                       {/* numerical indicator */}
                       <span className="num-text">{slideIx + 1}/4</span>

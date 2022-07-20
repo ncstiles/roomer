@@ -12,6 +12,7 @@ export default function Home({
   removeLike,
   setIsUpdated,
   likedUsers,
+  matchedUsers
 }) {
   return (
     <>
@@ -27,6 +28,7 @@ export default function Home({
             removeLike={removeLike}
             setIsUpdated={setIsUpdated}
             likedUsers={likedUsers}
+            matchedUsers={matchedUsers}
           />
         </>
       ) : (

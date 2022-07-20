@@ -12,6 +12,7 @@ import HeartBrokenOutlinedIcon from "@mui/icons-material/HeartBrokenOutlined";
 export default function GridCard({
   cardUsername,
   inLiked,
+  inMatches,
   firstName,
   age,
   gender,
@@ -20,13 +21,14 @@ export default function GridCard({
   contentType,
   addLike,
   removeLike,
-  score,
-  type
+  score
 }) {
   const nav = useNavigate();
-  let [clickedLike, setClickedLike] = useState(inLiked);
+  let [clickedLike, setClickedLike] = useState(inLiked); 
+  let [clickedMatch, setClickedMatch] = useState(inMatches)
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
-  let heartClassName = type? "heart-match" : "heart" //heart-match is for hearts within the match tab
+  //TODO: only on the heart match do we have a solid pink heart.  in all other cases it is just white heart
+  let heartClassName = inMatches ? "heart-match" : "heart"
   const like = () => {
     addLike(cardUsername);
     setClickedLike(true);
@@ -41,7 +43,7 @@ export default function GridCard({
   return (
     <>
       <div className="card user-card">
-        {clickedLike ? (
+        {(clickedLike || clickedMatch) ? (
           <FavoriteIcon className={heartClassName} onClick={unlike} />
         ) : (
           <>
