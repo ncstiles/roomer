@@ -16,6 +16,7 @@ import Logout from "../Logout/Logout";
 import Update from "../Update/Update";
 import Liked from "../Liked/Liked";
 import Matches from "../Matches/Matches";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 export default function App() {
   axios.defaults.withCredentials = true;
@@ -27,11 +28,14 @@ export default function App() {
   let [updateMatches, setUpdateMatches] = useState(false);
 
   let [currentUser, setCurrentUser] = useState(null);
+  let [newlyMatchedUser, setNewlyMatchedUser] = useState("");
   let [likedUsers, setLikedUsers] = useState([]);
   let [likedUserInfo, setLikedUserInfo] = useState([]);
 
   let [matchedUsers, setMatchedUsers] = useState([]);
   let [matchedUserInfo, setMatchedUserInfo] = useState([]);
+
+  let [showToast, setShowToast] = useState(false);
 
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
@@ -76,7 +80,7 @@ export default function App() {
   };
 
   // Add user to current user's list of liked people
-  const addLike = (likedUser) => {
+  const addLike = (likedUser, firstName) => {
     axios
       .post(BASE_API_URL + "/addLike", {
         currentUser: currentUser,
@@ -88,6 +92,8 @@ export default function App() {
         }
         if (res.data.update === "match") {
           setUpdateMatches((prevVal) => !prevVal);
+          setNewlyMatchedUser(firstName);
+          setShowToast(true);
         }
       });
   };
@@ -108,6 +114,7 @@ export default function App() {
         }
       });
   };
+
 
   // Get the list of usernames associated with liked profiles by the currently logged in user
   const getLikedUsers = () => {
@@ -174,17 +181,36 @@ export default function App() {
     }
   }, [isUpdated, currentUser]);
 
-  // Get list of the current user's liked usernames whenever we have new or changed users, or when we navigate between pages (which is when we `updateLikes`)
+  // update the user's list of liked/matched people's usernames and profiles
   useEffect(() => {
     if (currentUser && allUsers.length > 0) {
       getMatchedUsers();
       getLikedUsers();
     }
     // need to update both the liked list and the matches list whenever one of them changes, because the changes spill over
+    // ex: like becomes match, therefore liked list loses user, matched list gains one
   }, [currentUser, isUpdated, updateLikes, updateMatches, allUsers]);
 
   return (
     <div className="app">
+      <ToastContainer>
+        <Toast
+          className="toast"
+          bg="primary"
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+        >
+          <Toast.Header className="p-3 toast-header">
+            <strong className="me-auto fs-4">Congrats!</strong>
+          </Toast.Header>
+          <Toast.Body className="fs-5">
+            {" "}
+            You just matched with {newlyMatchedUser}!{" "}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
       <BrowserRouter>
         <Navbar currentUser={currentUser} />
         <main>
@@ -303,9 +329,9 @@ export default function App() {
                   currentUser={currentUser}
                   addLike={addLike}
                   removeLike={removeLike}
-                  setIsUpdated={setIsUpdated}
                   likedUsers={likedUsers}
                   likedUserInfo={likedUserInfo}
+                  matchedUsers={matchedUsers}
                 />
               }
             />

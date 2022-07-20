@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./DetailCard.css";
 import "../../css/card.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -31,7 +31,7 @@ export default function DetailCard({
   let [brokenHeart, setBrokenHeart] = useState("hidden-heart");
   let heartClassName = inMatches ? "heart-match" : "heart"
   const like = () => {
-    addLike(cardUsername);
+    addLike(cardUsername, allInfo[0]); //allInfo[0] is firstname so we can display toast with firstname
     setClickedLike(true);
     setBrokenHeart(`${heartClassName} fade-heart`);
 
@@ -42,6 +42,12 @@ export default function DetailCard({
     setClickedLike(false);
     setBrokenHeart("heart fade-heart");
   };
+
+    // for the first render where clickedLike and clickedMatch are updated before inLiked and inMatches are populated with alluser data
+    useEffect(()=> {
+      setClickedLike(inLiked);
+      setClickedLike(inMatches);
+    }, [inLiked, inMatches])
 
   return (
     <div className={`card detail-card ${basicClass}`}>
