@@ -32,6 +32,7 @@ class Roomer {
       );
     }
   }
+  
   // Get the requisite info to create custom profile recommendations for a user.
   // Includes both info needed for matching and info needed for generating basic profile
   static async getMatchInfo() {
@@ -209,45 +210,15 @@ class Roomer {
     }
   }
 
-  // add `matchedUser` to `user`s matched list
-  static async addMatch(user, matchedUser) {
-    try {
-      await client.connect();
-      await client
-        .db("roomer")
-        .collection("all")
-        .updateOne(
-          { username: user },
-          { $addToSet: { matches: matchedUser } },
-          { upsert: true }
-        );
-    } catch (e) {
-      return new BadRequestError(
-        `Failed to add ${matchedUser} to list of ${user}'s matches: ${e}`
-      );
-    }
-  }
-
-    // add `matchedUser` to `user`s matched list
-    static async removeMatch(currentUser, unmatchedUser) {
-      try {
-        await client.connect();
-        await client
-          .db("roomer")
-          .collection("all")
-          .updateOne(
-            { username: currentUser },
-            { $pull: { matches: unmatchedUser } }
-          );
-      } catch (e) {
-        return new BadRequestError(
-          `Failed to remove ${unmatchedUser} from list of ${currentUser}'s matches: ${e}`
-        );
-      }
-    }
-
-  // add person to current user's list of liked people
-  static async addLike(currentUser, likedUser) {
+  /**
+   * Add `addedUser` to `currentUser`s like or match list depending on `infoType`
+   *
+   * @param {string} infoType either "like" or "match" - the field type to update in the db
+   * @param {*} currentUser the user's whose info we're updating
+   * @param {*} addedUser the user who we're adding to the liked or match list
+   */
+  static async addLikeMatch(infoType, currentUser, addedUser) {
+    const dbField = infoType === "like" ? "liked" : "matches";
     try {
       await client.connect();
       await client
@@ -255,18 +226,25 @@ class Roomer {
         .collection("all")
         .updateOne(
           { username: currentUser },
-          { $addToSet: { liked: likedUser } },
+          { $addToSet: { [dbField]: addedUser } },
           { upsert: true }
         );
     } catch (e) {
       return new BadRequestError(
-        `Failed to add ${likedUser} to list of ${currentUser}'s liked people: ${e}`
+        `Failed to add ${addedUser} to list of ${currentUser}'s ${infoType} people: ${e}`
       );
     }
   }
 
-  // remove person from current user's list of liked people
-  static async removeLike(currentUser, unlikedUser) {
+  /**
+   * Remove `removedUser` from `currentUser`s like or match list depending on `infoType`
+   *
+   * @param {string} infoType either "like" or "match" - the field type to update in the db
+   * @param {*} currentUser the user's whose info we're updating
+   * @param {*} removedUser the user who we're removing from the liked or match list
+   */
+  static async removeLikeMatch(infoType, currentUser, removedUser) {
+    const dbField = infoType === "like" ? "liked" : "matches";
     try {
       await client.connect();
       await client
@@ -274,136 +252,137 @@ class Roomer {
         .collection("all")
         .updateOne(
           { username: currentUser },
-          { $pull: { liked: unlikedUser } }
+          { $pull: { [dbField]: removedUser } }
         );
     } catch (e) {
       return new BadRequestError(
-        `Failed to remove ${unlikedUser} from list of ${currentUser}'s liked people: ${e}`
+        `Failed to remove ${removedUser} from list of ${currentUser}'s ${infoType} people: ${e}`
       );
     }
   }
 
-  // check whether `otherUser` is in `user`s liked list.
-  static async inLikedList(user, otherUser) {
+  /**
+   * Check whether `otherUser` is in `username`s like or match list depending on `infoType`
+   *
+   * @param {string} infoType either "like" or "match" - the array in the db we want check if `otherUser` is part of
+   * @param {string} username the person we're checking the like/match list for
+   * @param {string} otherUser the username of the person we're checking to see if is in the like/match list
+   * @returns whether `otherUser` is in `username`s liked/matched list
+   */
+  static async inLikeMatchList(infoType, username, otherUser) {
     await client.connect();
     try {
       const res = await client
         .db("roomer")
         .collection("all")
-        .find({ username: user })
-        .project({ _id: 0, liked: 1 })
+        .find({ username })
+        .project({ _id: 0, liked: 1, matches: 1 })
         .toArray();
 
-      if (!res[0].liked) {
-        return false; // liked list undefined when doing call - user has never liked anyone before
-      } else if (res[0].liked.includes(otherUser)) {
-        return true; // otherUser in liked list
+      const usernames = infoType === "like" ? res[0].liked : res[0].matches;
+
+      if (!usernames) {
+        return false; // like/match list undefined when doing call - user has never liked/matched with anyone before
+      } else if (usernames.includes(otherUser)) {
+        return true; // otherUser in liked/match list
       } else {
-        return false; // otherUser not in liked list
+        return false; // otherUser not in liked/match list
       }
     } catch (e) {
       return new BadRequestError(
-        `Failed to determine if ${otherUser} is in ${user}s liked list`
+        `Failed to determine if ${otherUser} is in ${user}s ${infoType} list`
       );
     }
   }
 
-    // check whether `otherUser` is in `user`s matches list.
-    static async inMatchesList(user, otherUser) {
-      await client.connect();
-      try {
-        const res = await client
-          .db("roomer")
-          .collection("all")
-          .find({ username: user })
-          .project({ _id: 0, matches: 1 })
-          .toArray();
-        if (!res[0].matches) {
-          return false; // matches list undefined when doing call - user has never matched with anyone before
-        } else if (res[0].matches.includes(otherUser)) {
-          return true; // otherUser in matches list
-        } else {
-          return false; // otherUser not in matches list
-        }
-      } catch (e) {
-        return new BadRequestError(
-          `Failed to determine if ${otherUser} is in ${user}s match list`
-        );
-      }
-    }
-
-  // determine whether the two users have a like or a match relationship
-  static async processHeart(currentUser, likedUser) {
+  /**
+   * Determine whether to add `heartedUser` to the liked or matched list.
+   *
+   * @param {string} currentUser username of person currently signed in
+   * @param {string} likedUser username of person whose card was hearted
+   * @returns "match" or "like" depending on whether `heartedUser` was added to match or liked list, respectively
+   */
+  static async processHeart(currentUser, heartedUser) {
     try {
-      const isLiked = await Roomer.inLikedList(likedUser, currentUser);
-
+      const isLiked = await Roomer.inLikeMatchList(
+        "like",
+        heartedUser,
+        currentUser
+      );
       if (isLiked) {
-        await Roomer.addMatch(currentUser, likedUser); // add the liked user to this user's matched list
-        await Roomer.removeLike(likedUser, currentUser); // remove the current user from the liked user's liked list
-        await Roomer.addMatch(likedUser, currentUser); // instead, added them to their matched list
+        await Roomer.addLikeMatch("match", currentUser, heartedUser); // add the liked user to this user's matched list
+        await Roomer.removeLikeMatch("like", heartedUser, currentUser); // remove the current user from the liked user's liked list
+        await Roomer.addLikeMatch("match", heartedUser, currentUser); // instead, add them to their matched list
         return "match";
       } else {
         // this is a one-way like
-        await Roomer.addLike(currentUser, likedUser);
+        await Roomer.addLikeMatch("like", currentUser, heartedUser);
         return "like";
       }
     } catch (e) {
       return new BadRequestError(
-        `Failed to add ${likedUser} to ${currentUser} list of likes or match`
+        `Failed to add ${heartedUser} to ${currentUser} list of likes or matches`
       );
     }
   }
 
-    // given an un-heart click, carry out either an un-match or an unlike operation
-    static async processUnheart(currentUser, unlikedUser) {
-      try {
-        const isMatched = await Roomer.inMatchesList(currentUser, unlikedUser);
-        if (isMatched) {
-          await Roomer.removeMatch(currentUser, unlikedUser); // remove this unliked user from match list
-          await Roomer.removeMatch(unlikedUser, currentUser); // remove user from unliked user's match list
-          await Roomer.addLike(unlikedUser, currentUser); // instead, add the current user to unliked user's liked list
-          return "unmatch";
-        } else {
-          // remove like
-          await Roomer.removeLike(currentUser, unlikedUser);
-          return "unlike";
-        }
-      } catch (e) {
-        return new BadRequestError(
-          `Failed to remove ${unlikedUser} from ${currentUser}s list of likes or match`
-        );
-      }
-    }
-
-  // get list of usernames associated with liked profiles
-  static async getLikes(username) {
+  /**
+   * Determine whether to remove `unheartedUser` from the liked or matched list.
+   *
+   * @param {string} currentUser username of person currently signed in
+   * @param {string} unlikedUser username of person whose card was unhearted
+   * @returns "unmatch" or "unlike" depending on whether `unheartedUser` was removed from match or liked list, respectively
+   */
+  static async processUnheart(currentUser, unheartedUser) {
     try {
-      await client.connect();
-      const likedUsers = await client
-        .db("roomer")
-        .collection("all")
-        .find({ username })
-        .project({ _id: 0, liked: 1 })
-        .toArray();
-      return likedUsers[0].liked ? likedUsers[0].liked : [];
+      const isMatched = await Roomer.inLikeMatchList(
+        "match",
+        currentUser,
+        unheartedUser
+      );
+      if (isMatched) {
+        await Roomer.removeLikeMatch("match", currentUser, unheartedUser); // remove this unliked user from match list
+        await Roomer.removeLikeMatch("match", unheartedUser, currentUser); // remove user from unliked user's match list
+        await Roomer.addLikeMatch("like", unheartedUser, currentUser); // instead, add the current user to unliked user's liked list
+        return "unmatch";
+      } else {
+        // remove like
+        await Roomer.removeLikeMatch("like", currentUser, unheartedUser);
+        return "unlike";
+      }
     } catch (e) {
-      return new BadRequestError(`Failed to get likes for ${username}: ${e}`);
+      return new BadRequestError(
+        `Failed to remove ${unheartedUser} from ${currentUser}s list of likes or matches`
+      );
     }
   }
 
-  // get list of usernames associated with matched profiles
-  static async getMatches(username) {
+  /**
+   * Get all the usernames that this user has liked/matched with depending on `infoType`
+   *
+   * @param {string} infoType either "likes" or "matches" - refers to the matches/likes field in the database
+   * @param {string} username the username of the person we're getting like/match for
+   * @returns an array of usernames of all people in the like/match list
+   */
+  static async getLikesMatches(infoType, username) {
     try {
       await client.connect();
-      const matchedUsers = await client
+      const userInfo = await client
         .db("roomer")
         .collection("all")
         .find({ username })
-        .project({ _id: 0, matches: 1 })
+        .project({ _id: 0, liked: 1, matches: 1 })
         .toArray();
-      return matchedUsers[0].matches ? matchedUsers[0].matches : [];
+      if (infoType === "like") {
+        return userInfo[0].liked ? userInfo[0].liked : [];
+      }
+      if (infoType === "match") {
+        return userInfo[0].matches ? userInfo[0].matches : [];
+      }
     } catch (e) {
-      return new BadRequestError(`Failed to get likes for ${username}: ${e}`);
+      return new BadRequestError(
+        `Failed to get ${infoType} for ${username}: ${e}`
+      );
     }
   }
 }

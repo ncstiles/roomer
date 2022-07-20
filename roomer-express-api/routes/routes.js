@@ -151,17 +151,17 @@ router.post("/unheart", authorization, async (req, res, next) => {
 router.get("/likedUsers/:username", authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send({ likedUsers: await Roomer.getLikes(username) });
+    res.status(200).send({ likedUsers: await Roomer.getLikesMatches("like", username) });
   } catch (e) {
     return next(e);
   }
 });
 
-// Get usernames associated with liked profiles
+// Get usernames associated with matched profiles
 router.get("/matchedUsers/:username", authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send({ matchedUsers: await Roomer.getMatches(username) });
+    res.status(200).send({ matchedUsers: await Roomer.getLikesMatches("match", username) });
   } catch (e) {
     return next(e);
   }
