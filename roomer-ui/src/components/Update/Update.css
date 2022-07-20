@@ -1,11 +1,9 @@
 .update {
   color: #686666;
-  padding: 20px;
   text-align: start;
-  margin: 100px;
 }
 
-.update-header {
+.update-card-header {
   text-align: center;
 }
 

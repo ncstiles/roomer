@@ -18,7 +18,7 @@ export default function Home({
     <>
       {isLoggedIn ? (
         <>
-          <h1 className="matches-header">YOUR CUSTOM RECOMMENDATIONS</h1>
+          <h1 className="tab-header">YOUR CUSTOM RECOMMENDATIONS</h1>
           <UserGrid
             allUsers={allUsers}
             isLoading={isLoading}

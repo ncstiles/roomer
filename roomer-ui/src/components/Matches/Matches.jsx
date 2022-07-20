@@ -15,7 +15,7 @@ export default function Matches({
   matchedUserInfo,
 }) {
   return (
-    <div className="liked-view">
+    <div>
       {!currentUser ? (
         <NotAuthorized />
       ) : (
@@ -24,10 +24,10 @@ export default function Matches({
             <Loading />
           ) : (
             <>
-              <h1>MATCHES</h1>
+              <h1 className="tab-header">MATCHES</h1>
 
               {matchedUserInfo.length === 0 ? (
-                <h2 className="no-likes">No matches yet!</h2>
+                <h2 className="no-results">No matches yet!</h2>
               ) : (
                 <UserGrid
                   allUsers={matchedUserInfo}
@@ -39,7 +39,7 @@ export default function Matches({
                   setIsUpdated={setIsUpdated}
                   likedUsers={matchedUsers}
                   matchedUsers={matchedUsers}
-                  type={'match'}
+                  type={"match"}
                 />
               )}
             </>

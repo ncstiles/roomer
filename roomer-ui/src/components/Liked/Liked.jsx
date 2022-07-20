@@ -15,7 +15,7 @@ export default function Liked({
   matchedUsers,
 }) {
   return (
-    <div className="liked-view">
+    <div>
       {!currentUser ? (
         <NotAuthorized />
       ) : (
@@ -24,10 +24,10 @@ export default function Liked({
             <Loading />
           ) : (
             <>
-              <h1>LIKES</h1>
+              <h1 className='tab-header'>LIKES</h1>
 
               {likedUserInfo.length === 0 ? (
-                <h2 className="no-likes">No liked users yet!</h2>
+                <h2 className="no-results">No liked users yet!</h2>
               ) : (
                 <UserGrid
                   allUsers={likedUserInfo}
