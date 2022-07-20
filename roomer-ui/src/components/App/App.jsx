@@ -115,60 +115,52 @@ export default function App() {
       });
   };
 
-
-  // Get the list of usernames associated with liked profiles by the currently logged in user
-  const getLikedUsers = () => {
+  /**
+   * Update the user's list of liked or matched usernames + profiles after heart icon is clicked/unclicked
+   *
+   * @param {string} endpoint either "likedUsers" or "matchedUsers"
+   * @param {Array} usernames existing state variable of usernames in liked/matched list
+   * @param {Array} userInfo existing state variable of userInfo in liked/matched list
+   * @param {function} setUsernames function to set the usernames state variable
+   * @param {function} setInfo function to set the userInfo state variable
+   */
+  const updateLikesMatches = (
+    endpoint,
+    usernames,
+    userInfo,
+    setUsernames,
+    setInfo
+  ) => {
     let isUserAdded = null;
     axios({
       method: "get",
-      url: `${BASE_API_URL}/likedUsers/${currentUser}`,
+      url: `${BASE_API_URL}/${endpoint}/${currentUser}`,
     })
       .then((res) => {
+        // determine if we need to filter from all users, or if we can just filter from previous subset of liked users
+        const resResponse =
+          endpoint === "likedUsers"
+            ? res.data.likedUsers
+            : res.data.matchedUsers;
         isUserAdded =
-          res.data.likedUsers.length > likedUsers.length || !likedUsers; // determine if more users were added
-        setLikedUsers((likedUsers = res.data.likedUsers));
+          resResponse.length > usernames.length ||
+          usernames.length === 0 || //usernames and userInfo updated independently hence both cases are included
+          userInfo.length === 0;
+        setUsernames((usernames = resResponse));
       })
       .finally(() => {
         if (isUserAdded) {
           // user added, therefore to get new info, need to sort through all user info (updatedLikedInfo is superset of old liked info)
-          const updatedLikedInfo = allUsers.filter((person) =>
-            likedUsers.includes(person.username)
+          const updatedInfo = allUsers.filter((person) =>
+            usernames.includes(person.username)
           );
-          setLikedUserInfo((likedUserInfo = updatedLikedInfo));
+          setInfo((userInfo = updatedInfo));
         } else {
           // user removed, so new set of liked users is subset of old liked user info
-          const updatedLikedInfo = likedUserInfo.filter((person) =>
-            likedUsers.includes(person.username)
+          const updatedInfo = userInfo.filter((person) =>
+            usernames.includes(person.username)
           );
-          setLikedUserInfo((likedUserInfo = updatedLikedInfo));
-        }
-      });
-  };
-
-  // Get the list of usernames associated with liked profiles by the currently logged in user
-  const getMatchedUsers = () => {
-    let isUserAdded = null;
-    axios({
-      method: "get",
-      url: `${BASE_API_URL}/matchedUsers/${currentUser}`,
-    })
-      .then((res) => {
-        isUserAdded = res.data.matchedUsers.length > matchedUsers.length;
-        setMatchedUsers((matchedUsers = res.data.matchedUsers));
-      })
-      .finally(() => {
-        if (isUserAdded) {
-          // user added
-          const updatedMatchInfo = allUsers.filter((person) =>
-            matchedUsers.includes(person.username)
-          );
-          setMatchedUserInfo((matchedUserInfo = updatedMatchInfo));
-        } else {
-          // user removed
-          const updatedMatchInfo = matchedUserInfo.filter((person) =>
-            matchedUsers.includes(person.username)
-          );
-          setMatchedUserInfo((matchedUserInfo = updatedMatchInfo));
+          setInfo((userInfo = updatedInfo));
         }
       });
   };
@@ -181,11 +173,11 @@ export default function App() {
     }
   }, [isUpdated, currentUser]);
 
-  // update the user's list of liked/matched people's usernames and profiles
+  // update the user's list of liked/matched people's usernames and profile info
   useEffect(() => {
     if (currentUser && allUsers.length > 0) {
-      getMatchedUsers();
-      getLikedUsers();
+      updateLikesMatches("likedUsers", likedUsers, likedUserInfo, setLikedUsers, setLikedUserInfo);
+      updateLikesMatches( "matchedUsers", matchedUsers, matchedUserInfo, setMatchedUsers, setMatchedUserInfo);
     }
     // need to update both the liked list and the matches list whenever one of them changes, because the changes spill over
     // ex: like becomes match, therefore liked list loses user, matched list gains one
