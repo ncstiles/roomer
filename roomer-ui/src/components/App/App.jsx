@@ -16,6 +16,7 @@ import Logout from "../Logout/Logout";
 import Update from "../Update/Update";
 import Liked from "../Liked/Liked";
 import Matches from "../Matches/Matches";
+import ResetPassword from "../ResetPassword/ResetPassword";
 import { Toast, ToastContainer } from "react-bootstrap";
 
 export default function App() {
@@ -36,7 +37,7 @@ export default function App() {
   let [matchedUserInfo, setMatchedUserInfo] = useState([]);
 
   let [showToast, setShowToast] = useState(false);
-
+  
   let [registerForm, setRegisterForm] = useState({
     firstName: "",
     lastName: "",
@@ -341,6 +342,13 @@ export default function App() {
                   setIsUpdated={setIsUpdated}
                   matchedUsers={matchedUsers}
                   matchedUserInfo={matchedUserInfo}
+                />
+              }
+            />
+            <Route
+              path="/resetPassword"
+              element={
+                <ResetPassword
                 />
               }
             />
