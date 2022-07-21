@@ -16,6 +16,7 @@ import Logout from "../Logout/Logout";
 import Update from "../Update/Update";
 import Liked from "../Liked/Liked";
 import Matches from "../Matches/Matches";
+import RequestReset from "../RequestReset/RequestReset";
 import ResetPassword from "../ResetPassword/ResetPassword";
 import { Toast, ToastContainer } from "react-bootstrap";
 
@@ -348,8 +349,14 @@ export default function App() {
             <Route
               path="/resetPassword"
               element={
-                <ResetPassword
+                <RequestReset
                 />
+              }
+            />
+            <Route
+              path="/passwordReset"
+              element={
+                <ResetPassword/>
               }
             />
             <Route

@@ -1,10 +1,18 @@
 const { mongo_pw } = require("../consts");
 const { BadRequestError } = require("../utils/errors");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const { MongoClient } = require("mongodb");
 const uri = `mongodb+srv://nstiles:${mongo_pw}@cluster0.rlw7w8u.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
-
+const clientURL = process.env.CLIENT_URL;
+const bcryptSalt = process.env.BCRYPT_SALT;
+const randByteSize = 20;
+const {
+  requestSubject,
+  requestBody,
+  sendEmail,
+} = require("../utils/email");
 class Roomer {
   // all basic information (first name, username, age, gender, occupation) associated with every user in db
   static async getAllBasic() {
@@ -32,7 +40,7 @@ class Roomer {
       );
     }
   }
-  
+
   // Get the requisite info to create custom profile recommendations for a user.
   // Includes both info needed for matching and info needed for generating basic profile
   static async getMatchInfo() {
@@ -382,6 +390,62 @@ class Roomer {
     } catch (e) {
       return new BadRequestError(
         `Failed to get ${infoType} for ${username}: ${e}`
+      );
+    }
+  }
+
+  /**
+   * Attempt to send the requested user an email with a link to reset their password
+   *  
+   * @param {string} username username entered into password reset
+   * @returns whether sending the email was sent successfully
+   */
+  static async requestReset(username) {
+    try {
+      await client.connect();
+
+      //try to retrieve the whole user object corresponding to this username
+      const user = await client
+        .db("roomer")
+        .collection("all")
+        .findOne({ username });
+
+      if (!user) {
+        return new BadRequestError(`${username} does not exist in database`)
+      }
+
+      // delete old token if it exists
+      await client
+        .db("roomer")
+        .collection("all")
+        .findOneAndUpdate(
+          { username },
+          { $unset: { token: 1, tokenExpiration: 1 } }
+        );
+
+      //add new hashed token + its expiration to db
+      const unhashedToken = crypto.randomBytes(randByteSize).toString("hex");
+      const token = await bcrypt.hash(unhashedToken, Number(bcryptSalt));
+      const tokenExpiration = Date.now() + 60 * 60 * 1000; //expires in an hour
+      await client
+        .db("roomer")
+        .collection("all")
+        .updateOne(
+          { username },
+          { $set: { token, tokenExpiration } },
+          { upsert: true }
+        );
+
+      const resetLink = `${clientURL}/passwordReset?token=${unhashedToken}&username=${user.username}`;      
+      sendEmail(
+        user.email,
+        requestSubject,
+        requestBody(user.firstName, resetLink)
+      );
+      return "success";
+    } catch (e) {
+      return new BadRequestError(
+        `Failed to verify whether ${username} is in db: ${e}`
       );
     }
   }
