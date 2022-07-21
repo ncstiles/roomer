@@ -1,6 +1,9 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 
+// There are two types of emails: emails containing a link to reset password (requestSubject/ requestBody)
+// and emails confirming password reset (confirmationSubject/confirmationBody)
+
 const requestSubject = "Your password reset request";
 const requestBody = (firstName, resetLink) => {
   return `
@@ -11,6 +14,16 @@ const requestBody = (firstName, resetLink) => {
     <p>Thanks!</p>
     <p>The Roomer Team</p>
     `;
+};
+
+const confirmationSubject = "Password has been reset!";
+const confirmationBody = (firstName) => {
+  return `
+        <p> Hello ${firstName}! </p>
+        <p>This is a notification that your password has been successfully reset.</p>
+        <p>Thanks!</p>
+        <p>The Roomer Team</p>
+        `;
 };
 
 async function sendEmail(sendTo, subject, body) {
@@ -45,4 +58,6 @@ module.exports = {
   sendEmail,
   requestSubject,
   requestBody,
+  confirmationSubject,
+  confirmationBody,
 };

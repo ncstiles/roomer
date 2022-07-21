@@ -11,6 +11,8 @@ const randByteSize = 20;
 const {
   requestSubject,
   requestBody,
+  confirmationSubject,
+  confirmationBody,
   sendEmail,
 } = require("../utils/email");
 class Roomer {
@@ -448,6 +450,65 @@ class Roomer {
         `Failed to verify whether ${username} is in db: ${e}`
       );
     }
+  }
+
+  /**
+   * Determine if the token the user sends over hasn't exired and is in the database.
+   * If so, reset their password and delete the token.
+   * @param {string} username username from URL given in reset password email
+   * @param {string} token token from URL given in reset password email
+   * @param {string} password new password entered by user
+   * @returns whether password update was successful
+   */
+   static async resetPassword(username, token, password) {
+    await client.connect();
+    const res = await client
+      .db("roomer")
+      .collection("all")
+      .find({ username })
+      .project({ _id: 0 })
+      .toArray();
+
+    const user = res[0];
+
+    const dbToken = user.token;
+    const dbExpiration = user.tokenExpiration;
+
+    if (!res) {
+      return new BadRequestError(`Cannot find user ${username}`);
+    }
+    if (Date.now() > dbExpiration) {
+      return new BadRequestError("Token has expired");
+    }
+    if (!dbToken || !dbExpiration) {
+      return new BadRequestError("Token or token expiration date doesnt exist");
+    }
+    const tokensMatch = await bcrypt.compare(token, dbToken);
+    if (!tokensMatch) {
+      throw new BadRequestError("Provided token and token in db dont match");
+    }
+
+    const newPasswordHash = await bcrypt.hash(password, Number(bcryptSalt));
+    await client
+      .db("roomer")
+      .collection("auth")
+      .updateOne(
+        { username: username },
+        { $set: { password: newPasswordHash } }
+      );
+
+    sendEmail(
+      user.email,
+      confirmationSubject,
+      confirmationBody(user.firstName)
+    );
+
+    await client
+      .db("roomer")
+      .collection("all")
+      .updateOne({ username }, { $unset: { token: 1, tokenExpiration: 1 } });
+
+    return "password reset successful";
   }
 }
 
