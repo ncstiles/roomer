@@ -7,69 +7,83 @@ import { BASE_API_URL } from "../../constants";
 
 export default function ResetPassword() {
   const [validated, setValidated] = useState(false);
-  let [username, setUsername] = useState("");
+  let [password, setPassword] = useState(null);
   const [showMsg, setShowMsg] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const username = urlParams.get("username");
+  const token = urlParams.get("token");
 
   const handleSubmit = (event) => {
-    console.log('within handle submit')
+    setShowMsg(false);
     const form = event.currentTarget;
-    if (form.checkValidity() === false){
-      event.preventDefault();
-      event.stopPropagation();
-    }
+    event.preventDefault();
+    event.stopPropagation();
     setValidated(true);
+
     if (form.checkValidity() === true) {
       event.preventDefault();
       event.stopPropagation();
-      setUsername(event.target.username.value);
+      setPassword((password = event.target.password.value));
       resetPassword();
     }
   };
 
+  /**
+   * Check if user exists in database and if token matches.  If so reset password and send
+   * confirmation email.
+   */
   const resetPassword = () => {
-    axios({
-      method: "get",
-      url: `${BASE_API_URL}/resetPassword/${username}`,
-    })
+    setShowMsg(true);
+    axios
+      .post(BASE_API_URL + "/resetPassword", { username, token, password })
       .then((res) => {
-        showMsg(true);
+        const isSuccess = res.data.resetStatus === "success" ? true : false;
+        setSuccess(isSuccess);
       })
       .catch((e) => {
-        showMsg(false);
+        setSuccess(false);
       })
+      .finally(() => {
+        setUsername(null);
+        setShowMsg(true);
+      });
   };
 
-  console.log("inside reset password");
   return (
     <div>
-      <h1 className="tab-header">Reset your password</h1>
+      <h1 className="tab-header">Confirmation new password</h1>
       <div className="reset-wrapper">
-            <h1></h1>
-            <Form
-              noValidate
-              validated={validated}
-              onSubmit={(event) => handleSubmit(event)}>
-              {/* username */}
-              <Form.Group controlId="username" className="mb-3">
-                <Form.Label className="reset-text">
-                  Enter your username
-                </Form.Label>
-                <Form.Control required/>
-                <Form.Control.Feedback type="invalid">
-                  Please enter your username
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Button size="lg" type="submit" className="mb-3">
-                Reset password
-              </Button>
+        <h1></h1>
+        <Form
+          noValidate
+          validated={validated}
+          onSubmit={(event) => handleSubmit(event)}
+        >
+          {/* password */}
+          <Form.Group controlId="password" className="mb-3">
+            <Form.Label className="reset-text">
+              Enter your new password
+            </Form.Label>
+            <Form.Control type="password" required onChange={()=> setShowMsg(false)}/>
+            <Form.Control.Feedback type="invalid">
+              Please enter your new password
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Button size="lg" type="submit" className="mb-3">
+            Confirm
+          </Button>
 
-                {showMsg 
-                ? 
-                <p className="success">Check your email for a password reset link!</p>
-                :
-                <p className="reset-text">Not a registered user.  Please register first!</p>
-                }
-            </Form>
+          {showMsg ? (
+            success ? (
+              <p className="success">Password updated!</p>
+            ) : (
+              <p className="failure">Error updating password</p>
+            )
+          ) : null}
+        </Form>
       </div>
     </div>
   );

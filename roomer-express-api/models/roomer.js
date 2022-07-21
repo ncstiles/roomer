@@ -508,7 +508,7 @@ class Roomer {
       .collection("all")
       .updateOne({ username }, { $unset: { token: 1, tokenExpiration: 1 } });
 
-    return "password reset successful";
+    return "success";
   }
 }
 
