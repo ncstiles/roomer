@@ -151,7 +151,7 @@ router.post("/unheart", authorization, async (req, res, next) => {
 router.get("/likedUsers/:username", authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send({ likedUsers: await Roomer.getLikesMatches("like", username) });
+    res.status(200).send({ likedUsers: await Roomer.getLikesMatches("like", username) });  
   } catch (e) {
     return next(e);
   }
@@ -183,6 +183,30 @@ router.get("/getRecs/:username", authorization, async (req, res, next) => {
     const user = new Match(currentUser);
     const sortedMatches = await user.getDistanceInfo();
     res.status(200).send({ orderedBasicInfo: sortedMatches });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.get("/requestReset/:username", async (req, res, next) => {
+  try {
+    const username = req.params.username.trim();
+    res.status(200).send({ requestStatus: await Roomer.requestReset(username) });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.post("/resetPassword", async (req, res, next) => {
+  try {
+    const username = req.body.username;
+    const token = req.body.token;
+    const password = req.body.password;
+    res
+      .status(200)
+      .send({
+        resetStatus: await Roomer.resetPassword(username, token, password),
+      });
   } catch (e) {
     return next(e);
   }

@@ -132,8 +132,8 @@ export default function Register({
           {/* email */}
           <Col sm={12} lg={6} className="mb-3">
             <Form.Group className="mb-3" as={Col} controlId="email">
-              <Form.Label>Email (optional)</Form.Label>
-              <Form.Control />
+              <Form.Label>Email</Form.Label>
+              <Form.Control required/>
             </Form.Group>
           </Col>
         </Row>
