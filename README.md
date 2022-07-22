@@ -1,12 +1,18 @@
 # Roomer
 
-**[CURRENT] Feature 8: Matching
+**[CURRENT] Feature 9: Password Reset**
+- Created requestReset and resetPassword components to handle asking for password reset and entering in new password
+- Send email containing link to reset email upon request
+- Send confirmation email upon successful completion of password reset
+
+Feature 8: Matching
 - Created component for matches (two-way likes) in both regular and profile view
 - User A unmatching with user B causes user B to be removed from A's match list, and causes user A to be moved from B's matched list to their liked list. 
 - Updated heart color to be pink when it's a match and white when it's a like
 - Created toast to alert user upon successful match
+- [Demo video](https://youtu.be/4Pi3LNKCnIo)
 
-Feature 7: Custom recommendations**
+Feature 7: Custom recommendations
 - Used Google's Distance Matrix API to compute distances between user and potential matches
 - Distance between the user and potential match's location  + the user's gender, rent, and age preferences are used to assign all users a % match score.  Scoring algorithm described [here](https://docs.google.com/document/d/1cFLCVHdUN3qbUD7JeYchRDv0my_3aGKTJBg5wGpieS4/edit#heading=h.b9ncrzykkd1y)
 - Recommendations are sorted highest to lowest score. 
@@ -44,4 +50,4 @@ Feature 6: Liked profiles
 
 **Demo video**
 
-[![demo youtube video](https://img.youtube.com/vi/4Pi3LNKCnIo/0.jpg)](https://youtu.be/4Pi3LNKCnIo)
+[![demo youtube video](https://img.youtube.com/vi/qUnSXHh_unc/0.jpg)](https://youtu.be/qUnSXHh_unc)
