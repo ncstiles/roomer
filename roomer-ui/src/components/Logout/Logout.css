@@ -1,0 +1,19 @@
+.logout {
+  text-align: center;
+  margin-top: 200px;
+  padding: 10px;
+  color: #80abbd;
+  text-align: center;
+}
+
+.logout > .redirect {
+  margin: 40px;
+  background-color: #80abbd;
+  border: none;
+}
+
+.logout > .redirect:hover {
+  margin: 40px;
+  background-color: #639fb8;
+  border: none;
+}
