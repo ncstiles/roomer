@@ -10,8 +10,11 @@ import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn }) {
-  let { username } = useParams();
+export default function UserDetail({ isLoggedIn, fromProfileCardUsername, showLikeIcon, processHeart, processUnheart, likedUsers, matchedUsers }) {
+  // In Profile view we don't use useNavigate to get to the UserDetail component to display the card.
+  // Therefore to get the username of the person that the card is about, we must pass their username using the `cardUsername` prop.
+  // In all other instances `cardUsername` is retrieved through useParams() (from within the useNavigate)
+  const cardUsername = fromProfileCardUsername ? fromProfileCardUsername : useParams().cardUsername;
   let [basicInfo, setBasicInfo] = useState({});
   let [preferenceInfo, setPreferenceInfo] = useState({});
   let [housingInfo, setHousingInfo] = useState({});
@@ -24,71 +27,31 @@ export default function UserDetail({ isLoggedIn }) {
   let [cardType, setCardType] = useState("basic");
   let [labels, setLabels] = useState([]);
   let [allInfo, setAllInfo] = useState([]);
+  let [contentType, setContentType] = useState(null);
+  let [pfpSrc, setPfpSrc] = useState(null);
 
   /**
    * Execute a GET request to get an individual user's basic info.
    * Set the `basicInfo` state variable to the contents of the response.
    */
-  const getBasicInfo = async () => {
+  const getAllUserInfo = async () => {
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/basic/${username}`,
+      url: `${BASE_API_URL}/allInfo/${cardUsername}`,
     })
       .then((res) => {
-        setBasicInfo((basicInfo = res.data.basicData));
+        const allInfo = res.data.allInfo;
+        const basicInfo = allInfo.basic;
+        setContentType(basicInfo.contentType);
+        setPfpSrc(basicInfo.pfpSrc);
+        delete basicInfo.contentType;
+        delete basicInfo.pfpSrc;
+        setBasicInfo(basicInfo);
+        setPreferenceInfo(allInfo.preferences);
+        setHousingInfo(allInfo.housing);
+        setExtraInfo(allInfo.extra);
       })
-      .catch(() => {
-        setSuccess(false);
-      });
-  };
-
-  /**
-   * Execute a GET request to get an individual housing information.
-   * Set the `housingInfo` state variable to the contents of the response.
-   */
-  const getHousingInfo = async () => {
-    return axios({
-      method: "get",
-      url: `${BASE_API_URL}/housing/${username}`,
-    })
-      .then((res) => {
-        setHousingInfo((housingInfo = res.data.housingData));
-      })
-      .catch(() => {
-        setSuccess(false);
-      });
-  };
-
-  /**
-   * Execute a GET request to get an individual user's preferences.
-   * Set the `preferenceInfo` state variable to the contents of the response.
-   */
-  const getPreferenceInfo = async () => {
-    return axios({
-      method: "get",
-      url: `${BASE_API_URL}/preferences/${username}`,
-    })
-      .then((res) => {
-        setPreferenceInfo((preferenceInfo = res.data.preferenceData));
-      })
-      .catch(() => {
-        setSuccess(false);
-      });
-  };
-
-  /**
-   * Execute a GET request to get an individual user's extra info.
-   * Set the `extraInfo` state variable to the contents of the response.
-   */
-  const getExtraInfo = async () => {
-    return axios({
-      method: "get",
-      url: `${BASE_API_URL}/extra/${username}`,
-    })
-      .then((res) => {
-        setExtraInfo((extraInfo = res.data.extraData));
-      })
-      .catch(() => {
+      .catch((e) => {
         setSuccess(false);
       });
   };
@@ -98,16 +61,12 @@ export default function UserDetail({ isLoggedIn }) {
    */
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([
-      getBasicInfo(),
-      getHousingInfo(),
-      getPreferenceInfo(),
-      getExtraInfo(),
-    ]).then(() => {
+    getAllUserInfo().then(() => {
       setIsLoading(false);
     });
   }, []);
 
+  // for each card, upload the requisite data and labels, and set the correct "dot" indicator
   useEffect(() => {
     // only update `labels` and `allInfo` after we've received all our information
     if (!isLoading) {
@@ -197,7 +156,7 @@ export default function UserDetail({ isLoggedIn }) {
               {/* after all information is finished loading render the card */}
               {success && allInfo ? (
                 <>
-                  <div className="slideshow-container">
+                  <div className="slideshow-container">       
                     {/* back arrow */}
                     <ArrowForwardIosRoundedIcon
                       fontSize="large"
@@ -211,6 +170,14 @@ export default function UserDetail({ isLoggedIn }) {
                         cardType={cardType}
                         labels={labels}
                         allInfo={allInfo}
+                        contentType={contentType}
+                        cardUsername={cardUsername}
+                        pfpSrc={pfpSrc}
+                        showLikeIcon={showLikeIcon}
+                        processHeart={processHeart}
+                        processUnheart={processUnheart}
+                        inLiked={likedUsers && likedUsers.includes(cardUsername)}
+                        inMatches={matchedUsers && matchedUsers.includes(cardUsername)}
                       />
                       {/* numerical indicator */}
                       <span className="num-text">{slideIx + 1}/4</span>

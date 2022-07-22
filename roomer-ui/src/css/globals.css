@@ -25,3 +25,11 @@ a {
 .hidden {
   visibility: hidden;
 }
+
+.tab-header {
+  text-align: center;
+  color: #80abbd;
+  font-style: bold;
+  letter-spacing: 2px;
+  margin-top: 100px;
+}

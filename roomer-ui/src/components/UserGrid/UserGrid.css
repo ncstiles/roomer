@@ -1,4 +1,4 @@
-#user-grid {
+.user-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 40px;
@@ -7,18 +7,11 @@
 }
 
 @media (max-width: 768px) {
-  #user-grid {
+  .user-grid {
     margin-top: 180px;
   }
 }
 
 .matches {
   margin-top: 100px;
-}
-
-.matches-header {
-  text-align: center;
-  color: #80abbd;
-  font-style: bold;
-  letter-spacing: 2px;
 }

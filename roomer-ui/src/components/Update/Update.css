@@ -1,0 +1,20 @@
+.update {
+  color: #686666;
+  text-align: start;
+}
+
+.update-card-header {
+  text-align: center;
+}
+
+.update-card {
+  background-color: #c6d3d9;
+  padding: 20px;
+  margin: 30px 0px;
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.4) 0px 0px 2px 2px;
+}
+
+.success {
+  color: rgb(125, 154, 125);
+}

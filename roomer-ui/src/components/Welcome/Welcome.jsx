@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./Welcome.css";
 import Login from "../Login/Login";
-export default function Welcome({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn }) {
+export default function Welcome({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn, setIsUpdated, setCurrentUser }) {
   return (
     <div className="welcome-page">
       <div className="welcome-message">
@@ -17,6 +17,8 @@ export default function Welcome({ loginForm, setLoginForm, isLoggedIn, setIsLogg
         setLoginForm={setLoginForm}
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
+        setIsUpdated={setIsUpdated}
+        setCurrentUser={setCurrentUser}
       />
     </div>
   );
