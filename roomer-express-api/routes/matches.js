@@ -19,6 +19,22 @@ const authorization = (req, res, next) => {
   }
 };
 
+// authenticate user, and then if authentication is successful, create cookie containing token
+const login = async (username, password, res) => {
+  const authorized = await Roomer.getAuthorizationStatus(username, password);
+  if (!authorized) {
+    res.sendStatus(403);
+  }
+  const token = jwt.sign(username, private_key);
+  res.cookie("token", token, {
+    httpOnly: true,
+    maxAge: 60 * 60 * 1000, //token expires after 1 hour
+    secure: true,
+    sameSite: "lax",
+  });
+  return res.status(200).send("cookie has been created!");
+};
+
 // get all users basic info
 router.get("/allBasic", authorization, async (req, res, next) => {
   try{
@@ -80,20 +96,17 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-const login = async (username, password, res) => {
-  const authorized = await Roomer.getAuthorizationStatus(username, password);
-  if (!authorized) {
-    res.sendStatus(403);
+// // update database with new user's info
+router.post("/update/:username", async (req, res, next) => {
+  try {
+    const updateForm = req.body.updateForm;
+    const username=req.params.username;
+    res.status(200).send({ update: await Roomer.updateUserInfo(updateForm, username)});
+  } catch (e) {
+    return next(e);
   }
-  const token = jwt.sign(username, private_key);
-  res.cookie("token", token, {
-    httpOnly: true,
-    maxAge: 60 * 60 * 1000, //token expires after 1 hour
-    secure: true,
-    sameSite: "lax",
-  });
-  return res.status(200).send("cookie has been created!");
-};
+});
+
 
 router.post("/login", async (req, res, next) => {
   try {
