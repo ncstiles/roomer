@@ -304,7 +304,6 @@ export default function App() {
                   registerForm={registerForm}
                   setRegisterForm={setRegisterForm}
                   isLoggedIn={isLoggedIn}
-                  setIsLoggedIn={setIsLoggedIn}
                   setIsUpdated={setIsUpdated}
                   currentUser={currentUser}
                   processHeart={processHeart}

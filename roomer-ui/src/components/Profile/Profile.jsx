@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import { BASE_API_URL } from "../../constants";
 import UserGrid from "../UserGrid/UserGrid";
 import Update from "../Update/Update";
-import Logout from "../Logout/Logout";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import UserDetail from "../UserDetail/UserDetail";
 import UploadPfp from "../UploadPfp/UploadPfp";
 import Liked from "../Liked/Liked";
 import Matches from "../Matches/Matches";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // depending on tab that is toggled, display the correct component
 function Subview({
@@ -20,7 +20,6 @@ function Subview({
   registerForm,
   setRegisterForm,
   isLoggedIn,
-  setIsLoggedIn,
   setIsUpdated,
   setAvatarFile,
   currentUser,
@@ -114,8 +113,6 @@ function Subview({
           setAvatarFile={setAvatarFile}
         />
       );
-    case "logout":
-      return <Logout setIsLoggedIn={setIsLoggedIn} />;
     default:
       return null;
   }
@@ -127,7 +124,6 @@ export default function Profile({
   registerForm,
   setRegisterForm,
   isLoggedIn,
-  setIsLoggedIn,
   setIsUpdated,
   currentUser,
   processHeart,
@@ -159,7 +155,7 @@ export default function Profile({
       }
     });
   }, [avatarFile]);
-
+  const nav = useNavigate();
   return isLoggedIn ? (
     <div className="profile">
       <div className="sidebar">
@@ -233,7 +229,7 @@ export default function Profile({
           <li className={`${viewComponent === "logout" ? "highlight" : ""}`}>
             <span
               className="nav-link text-white"
-              onClick={() => setViewComponent("logout")}
+              onClick={() => nav("/logout")}
             >
               Log out
             </span>
@@ -248,7 +244,6 @@ export default function Profile({
           registerForm={registerForm}
           setRegisterForm={setRegisterForm}
           isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn}
           setIsUpdated={setIsUpdated}
           setAvatarFile={setAvatarFile}
           currentUser={currentUser}

@@ -3,7 +3,6 @@ const nodemailer = require("nodemailer");
 
 // There are two types of emails: emails containing a link to reset password (requestSubject/ requestBody)
 // and emails confirming password reset (confirmationSubject/confirmationBody)
-
 const requestSubject = "Your password reset request";
 const requestBody = (firstName, resetLink) => {
   return `
@@ -33,13 +32,13 @@ async function sendEmail(sendTo, subject, body) {
     port: 587,
     secure: false,
     auth: {
-      user: "roomerteam@outlook.com",
-      pass: "R00mer!!",
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PW,
     },
   });
 
   const mailOptions = {
-    from: "roomerteam@outlook.com",
+    from: "Roomer Team <roomerteam@outlook.com>",
     to: sendTo,
     subject: subject,
     html: body,

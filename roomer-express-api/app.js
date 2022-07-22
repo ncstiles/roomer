@@ -16,10 +16,6 @@ app.use(
 app.use(morgan("tiny"));
 app.use(express.json());
 
-app.get("/tester", (req, res) => {
-  res.status(200).send({ hai: "bai" });
-});
-
 app.use("", matchRoute);
 
 app.use((req, res, next) => {

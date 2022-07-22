@@ -43,14 +43,13 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
         setIsLoggedIn(true);
         setIsUpdated((prevVal) => !prevVal);
         setCurrentUser(loginForm.username);
-      })
-      .catch((e) => {
-        setIsLoggedIn(false);
-      })
-      .finally(() => {
         setShowMsg(true);
         nav("/recommendations");
-      });
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setShowMsg(true);
+      })
   };
 
   return (
