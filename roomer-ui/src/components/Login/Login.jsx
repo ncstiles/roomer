@@ -8,7 +8,7 @@ import { BASE_API_URL } from "../../constants";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
-export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn }) {
+export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLoggedIn, setUsername }) {
   const nav = useNavigate();
   let [validated, setValidated] = useState(false);
   let [showMsg, setShowMsg] = useState(false);
@@ -35,12 +35,13 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
     }
   };
 
-  // Submit username+password and if authorized+authenticated properly, allow user to view their recommended matches
+  // Submit username + password and if authorized + authenticated properly, allow user to view their recommended matches
   const postSigninForm = (loginForm) => {
     axios
       .post(BASE_API_URL + "/login", loginForm)
       .then(() => {
         setIsLoggedIn(true);
+        setUsername(loginForm.username)
         nav("/matches");
       })
       .catch(() => {
@@ -99,6 +100,7 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
           Sign in
         </Button>
 
+        {/* only show success/failure message after form submission */}
         <Row>
           {showMsg ? (
             <>

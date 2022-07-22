@@ -6,7 +6,11 @@ import { BASE_API_URL } from "../../constants";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
-export default function Register({ registerForm, setRegisterForm, setIsLoggedIn }) {
+export default function Register({
+  registerForm,
+  setRegisterForm,
+  setIsLoggedIn,
+}) {
   const nav = useNavigate();
   let [validated, setValidated] = useState(false);
   const regFormKeys = Object.keys(registerForm);
@@ -71,7 +75,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
   };
 
   return (
-    <div className="register card">
+    <div className="register card" id="register-component">
       <h1 className="register-header">CREATE AN ACCOUNT</h1>
 
       <Form
@@ -145,7 +149,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
 
         <Row>
           {/* age */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="age">
               <Form.Label>Age</Form.Label>
               <Form.Control.Feedback type="invalid">
@@ -155,7 +159,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* gender */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="gender">
               <Form.Label>Gender</Form.Label>
               <Form.Select aria-label="Select gender" required>
@@ -171,7 +175,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* rent price */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="rentRange">
               <Form.Label>Rent/mo</Form.Label>
               <Form.Select aria-label="Select rent range" required>
@@ -192,7 +196,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
 
         <Row>
           {/* occupation */}
-          <Col className="mb-3" xs={12} sm={6}>
+          <Col className="mb-3" sm={12} md={6}>
             <Form.Group controlId="occupation">
               <Form.Label>Occupation</Form.Label>
               <Form.Select aria-label="Default select example" required>
@@ -210,7 +214,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* profession */}
-          <Col className="mb-3" xs={12} sm={6}>
+          <Col className="mb-3" sm={12} md={6}>
             <Form.Group controlId="profession">
               <Form.Label>Profession, e.g. designer (optional)</Form.Label>
               <Form.Control />
@@ -226,7 +230,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
 
         <Row>
           {/* state */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="city">
               <Form.Label>City</Form.Label>
               <Form.Control required />
@@ -236,7 +240,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* city */}
-          <Col className="mb-3" xs={6} sm={4}>
+          <Col className="mb-3" sm={6} md={4}>
             <Form.Group controlId="state">
               <Form.Label>State</Form.Label>
               <Form.Control required />
@@ -246,7 +250,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* zip */}
-          <Col className="mb-3" xs={6} sm={4}>
+          <Col className="mb-3" sm={6} md={4}>
             <Form.Group controlId="zip">
               <Form.Label>Zip</Form.Label>
               <Form.Control />
@@ -260,7 +264,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
 
         <Row>
           {/* age preference */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="agePref">
               <Form.Label>Age preference</Form.Label>
               <Form.Select aria-label="Default select example" required>
@@ -279,7 +283,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* gender preference */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="genderPref">
               <Form.Label>Gender preference</Form.Label>
               <Form.Select aria-label="Default select example" required>
@@ -294,7 +298,7 @@ export default function Register({ registerForm, setRegisterForm, setIsLoggedIn 
             </Form.Group>
           </Col>
           {/* location preference */}
-          <Col className="mb-3" xs={12} sm={4}>
+          <Col className="mb-3" sm={12} md={4}>
             <Form.Group controlId="locRad">
               <Form.Label>Location radius</Form.Label>
               <Form.Select aria-label="Default select example" required>
