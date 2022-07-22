@@ -10,8 +10,18 @@ import Loading from "../Loading/Loading";
 import NotAuthorized from "../NotAuthorized/NotAuthorized";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
-export default function UserDetail({ isLoggedIn }) {
-  let { username } = useParams();
+export default function UserDetail({ isLoggedIn, username }) {
+  let newUsername = '';
+  //default for `username` state variable is '' (set in App.jsx)
+  // `username` is only not empty string when being called by the Profile compnent
+  if (username) {
+    newUsername = username;
+    console.log('passed username not nothing:', newUsername)
+  } else {
+    let {username} = useParams();
+    newUsername = username;
+    console.log('no passed username, using useParams', newUsername);
+  }
   let [basicInfo, setBasicInfo] = useState({});
   let [preferenceInfo, setPreferenceInfo] = useState({});
   let [housingInfo, setHousingInfo] = useState({});
@@ -30,9 +40,10 @@ export default function UserDetail({ isLoggedIn }) {
    * Set the `basicInfo` state variable to the contents of the response.
    */
   const getBasicInfo = async () => {
+    console.log('new username:', newUsername)
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/basic/${username}`,
+      url: `${BASE_API_URL}/basic/${newUsername}`,
     })
       .then((res) => {
         setBasicInfo((basicInfo = res.data.basicData));
@@ -49,7 +60,7 @@ export default function UserDetail({ isLoggedIn }) {
   const getHousingInfo = async () => {
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/housing/${username}`,
+      url: `${BASE_API_URL}/housing/${newUsername}`,
     })
       .then((res) => {
         setHousingInfo((housingInfo = res.data.housingData));
@@ -66,7 +77,7 @@ export default function UserDetail({ isLoggedIn }) {
   const getPreferenceInfo = async () => {
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/preferences/${username}`,
+      url: `${BASE_API_URL}/preferences/${newUsername}`,
     })
       .then((res) => {
         setPreferenceInfo((preferenceInfo = res.data.preferenceData));
@@ -83,7 +94,7 @@ export default function UserDetail({ isLoggedIn }) {
   const getExtraInfo = async () => {
     return axios({
       method: "get",
-      url: `${BASE_API_URL}/extra/${username}`,
+      url: `${BASE_API_URL}/extra/${newUsername}`,
     })
       .then((res) => {
         setExtraInfo((extraInfo = res.data.extraData));
