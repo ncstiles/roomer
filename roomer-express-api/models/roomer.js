@@ -147,17 +147,19 @@ class Roomer {
   static async getAuthorizationStatus(username, password) {
     try {
       await client.connect();
-      const actualPW = await client
+      const res = await client
         .db("roomer")
         .collection("auth")
         .find({ username })
         .project({ _id: 0, username: 0 })
         .toArray();
-      if (actualPW.length === 0) {
+      if (res.length === 0) {
         return false;
       }
-      const pwMatches = await bcrypt.compare(password, actualPW[0]);
-      return pwMatches;
+      const dbPassword = res[0].password
+      const isMatch = await bcrypt.compare(password, dbPassword);
+      return isMatch;
+
     } catch (e) {
       return new BadRequestError(
         `Getting single user's password request didn't go through: ${e}`

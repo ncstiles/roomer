@@ -36,7 +36,6 @@ export default function ResetPassword() {
    * confirmation email.
    */
   const resetPassword = () => {
-    setShowMsg(true);
     axios
       .post(BASE_API_URL + "/resetPassword", { username, token, password })
       .then((res) => {
@@ -45,9 +44,10 @@ export default function ResetPassword() {
       })
       .catch((e) => {
         setSuccess(false);
+
       })
       .finally(() => {
-        setUsername(null);
+        setPassword(null);
         setShowMsg(true);
       });
   };
