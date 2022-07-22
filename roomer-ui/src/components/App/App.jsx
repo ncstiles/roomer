@@ -347,7 +347,7 @@ export default function App() {
               }
             />
             <Route
-              path="/resetPassword"
+              path="/requestReset"
               element={
                 <RequestReset
                 />

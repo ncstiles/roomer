@@ -166,9 +166,21 @@ class Roomer {
   }
 
   // update the specified collection with data/preferences the user wants updated.
-  static async updateUserInfo(updateForm, username) {
+  static async updateUserInfo(updateForm, username) {    
     try {
       await client.connect();
+      //password is in "auth" collection - must be dealt with separately
+      if ("password" in updateForm) {
+        await client
+        .db("roomer")
+        .collection("auth")
+        .updateOne(
+          { username: username },
+          { $set: {password: updateForm.password} },
+          { upsert: true }
+        );
+        delete updateForm.password
+      }
       await client
         .db("roomer")
         .collection("all")

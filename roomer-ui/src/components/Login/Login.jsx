@@ -92,7 +92,7 @@ export default function Login({ loginForm, setLoginForm, isLoggedIn, setIsLogged
             <Col className="mb-3 center-text" lg={12}>
               <Form.Group
                 controlId="Forgot password?"
-                onClick={() => nav("resetPassword")}
+                onClick={() => nav("/requestReset")}
               >
                 <a href="#.">Forgot password?</a>
               </Form.Group>
