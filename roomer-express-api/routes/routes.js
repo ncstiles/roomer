@@ -1,4 +1,4 @@
-const { private_key } = require("../consts");
+const { private_key, successCode } = require("../consts");
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
@@ -38,30 +38,36 @@ const login = async (username, password, res) => {
     secure: true,
     sameSite: "lax",
   });
-  return res.status(200).send("cookie has been created!");
+  return res.status(successCode).send("cookie has been created!");
 };
 
+// depending on whether the URL has a paramater, append "username" as the parameter
+const genPageURL = (base, hasParam=false) => {
+  const parameter = hasParam ? ":username" : "";
+  return `/${base}/${parameter}`
+}
+
 // get all users basic info
-router.get("/allBasic", authorization, async (req, res, next) => {
+router.get(genPageURL("allBasic"), authorization, async (req, res, next) => {
   try {
-    res.status(200).send({ allBasicData: await Roomer.getAllBasic() });
+    res.status(successCode).send({ allBasicData: await Roomer.getAllBasic() });
   } catch (e) {
     return next(e);
   }
 });
 
 // get all of a single user's info
-router.get("/allInfo/:username", authorization, async (req, res, next) => {
+router.get(genPageURL("allInfo", true), authorization, async (req, res, next) => {
   const username = req.params.username;
   try {
-    res.status(200).send({ allInfo: await Roomer.getAllInfo(username) });
+    res.status(successCode).send({ allInfo: await Roomer.getAllInfo(username) });
   } catch (e) {
     return next(e);
   }
 });
 
 // update database with new user's info
-router.post("/register", async (req, res, next) => {
+router.post(genPageURL("register"), async (req, res, next) => {
   try {
     const info = req.body.registerForm;
     res.status(201).send({ registration: await Roomer.registerNewUser(info) });
@@ -71,12 +77,12 @@ router.post("/register", async (req, res, next) => {
 });
 
 // update database with new user's info
-router.post("/update/:username", authorization, async (req, res, next) => {
+router.post(genPageURL("update", true), authorization, async (req, res, next) => {
   try {
     const updateForm = req.body.updateForm;
     const username = req.params.username;
     res
-      .status(200)
+      .status(successCode)
       .send({ update: await Roomer.updateUserInfo(updateForm, username) });
   } catch (e) {
     return next(e);
@@ -84,7 +90,7 @@ router.post("/update/:username", authorization, async (req, res, next) => {
 });
 
 // change or add a user's selected profile picture
-router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function (req, res, next) {
+router.post(genPageURL("uploadPfp"), authorization, upload.single("pfpSrc"), async function (req, res, next) {
     try {
       const img = fs.readFileSync(req.file.path);
       const encodeImg = img.toString("base64");
@@ -115,20 +121,20 @@ router.post("/uploadPfp", authorization, upload.single("pfpSrc"), async function
 );
 
 // Given a user, return their profile picture.
-router.get("/getPfp/:username", authorization, async (req, res, next) => {
+router.get(genPageURL("getPfp", true), authorization, async (req, res, next) => {
   const username = req.params.username;
   try {
     const ret = await Roomer.getPfp(username);
-    res.status(200).send({ file: ret });
+    res.status(successCode).send({ file: ret });
   } catch (e) {
     return next(e);
   }
 });
 
 // Add hearted user to current user's list of liked/matched people
-router.post("/heart", authorization, async (req, res, next) => {
+router.post(genPageURL("heart"), authorization, async (req, res, next) => {
   try {
-    res.status(200).send({
+    res.status(successCode).send({
       update:  await Roomer.processHeart(req.body.currentUser, req.body.likedUser),
     });
   } catch (e) {
@@ -137,9 +143,9 @@ router.post("/heart", authorization, async (req, res, next) => {
 });
 
 // Remove hearted user from current user's list of liked/matched people
-router.post("/unheart", authorization, async (req, res, next) => {
+router.post(genPageURL("unheart"), authorization, async (req, res, next) => {
   try {
-    res.status(200).send({
+    res.status(successCode).send({
       update: await Roomer.processUnheart(req.body.currentUser, req.body.unlikedUser),
     });
   } catch (e) {
@@ -148,62 +154,62 @@ router.post("/unheart", authorization, async (req, res, next) => {
 });
 
 // Get usernames associated with liked profiles
-router.get("/likedUsers/:username", authorization, async (req, res, next) => {
+router.get(genPageURL("likedUsers", true), authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send({ likedUsers: await Roomer.getLikesMatches("like", username) });  
+    res.status(successCode).send({ likedUsers: await Roomer.getLikesMatches("like", username) });  
   } catch (e) {
     return next(e);
   }
 });
 
 // Get usernames associated with matched profiles
-router.get("/matchedUsers/:username", authorization, async (req, res, next) => {
+router.get(genPageURL("matchedUsers", true), authorization, async (req, res, next) => {
   try {
     const username = req.params.username;
-    res.status(200).send({ matchedUsers: await Roomer.getLikesMatches("match", username) });
+    res.status(successCode).send({ matchedUsers: await Roomer.getLikesMatches("match", username) });
   } catch (e) {
     return next(e);
   }
 });
 
 // Get info necessary to provide match recommendations
-router.get("/matchInfo", async (req, res, next) => {
+router.get(genPageURL("matchInfo"), async (req, res, next) => {
   try {
-    res.status(200).send({ matchInfo: await Roomer.getMatchInfo() });
+    res.status(successCode).send({ matchInfo: await Roomer.getMatchInfo() });
   } catch {
     return next(e);
   }
 });
 
 // Get user's basic info sorted based on match score
-router.get("/getRecs/:username", authorization, async (req, res, next) => {
+router.get(genPageURL("getRecs", true), authorization, async (req, res, next) => {
   try {
     const currentUser = req.params.username;
     const user = new Match(currentUser);
     const sortedMatches = await user.getDistanceInfo();
-    res.status(200).send({ orderedBasicInfo: sortedMatches });
+    res.status(successCode).send({ orderedBasicInfo: sortedMatches });
   } catch (e) {
     return next(e);
   }
 });
 
-router.get("/requestReset/:username", async (req, res, next) => {
+router.get(genPageURL("requestReset", true), async (req, res, next) => {
   try {
     const username = req.params.username.trim();
-    res.status(200).send({ requestStatus: await Roomer.requestReset(username) });
+    res.status(successCode).send({ requestStatus: await Roomer.requestReset(username) });
   } catch (e) {
     return next(e);
   }
 });
 
-router.post("/resetPassword", async (req, res, next) => {
+router.post(genPageURL("resetPassword"), async (req, res, next) => {
   try {
     const username = req.body.username;
     const token = req.body.token;
     const password = req.body.password;
     res
-      .status(200)
+      .status(successCode)
       .send({
         resetStatus: await Roomer.resetPassword(username, token, password),
       });
@@ -212,7 +218,7 @@ router.post("/resetPassword", async (req, res, next) => {
   }
 });
 
-router.post("/login", async (req, res, next) => {
+router.post(genPageURL("login"), async (req, res, next) => {
   try {
     login(req.body.username, req.body.password, res);
   } catch (e) {
@@ -220,9 +226,9 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.get("/logout", authorization, async (req, res, next) => {
+router.get(genPageURL("logout"), authorization, async (req, res, next) => {
   try {
-    return res.clearCookie("token").status(200).send("Successfully logged out");
+    return res.clearCookie("token").status(successCode).send("Successfully logged out");
   } catch (e) {
     return next(e);
   }

@@ -74,7 +74,7 @@ export default function GridCard({
           )}
           <div className="text-info">
             <span className="bold-text">{firstName}</span>
-            <span> {age}</span>
+            <span>{age}</span>
             <span>{gender}</span>
             <span>{occupation}</span>
           </div>
