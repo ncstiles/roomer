@@ -7,7 +7,8 @@ import NotAuthorized from "../NotAuthorized/NotAuthorized";
 export default function UserGrid({ allUsers, isLoading, isLoggedIn }) {
   return (
     <>
-      {isLoggedIn ? (
+      {/* is possible for user to be authenticated but userinfo isn't populated */}
+      {isLoggedIn && allUsers.length > 0 ? (
         <>
           {isLoading ? (
             <Loading />
