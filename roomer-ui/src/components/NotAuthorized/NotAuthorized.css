@@ -9,6 +9,10 @@
   text-align: center;
 }
 
+.redirect {
+  width: 190px;
+}
+
 .unauthorized-page > .redirect {
   margin: 40px;
   background-color: #80abbd;
